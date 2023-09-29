@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1024.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" >
+   <children>
+      <TextField layoutX="810.0" layoutY="33.0" prefHeight="27.0" prefWidth="183.0" promptText="Tìm kiếm sản phẩm" style="-fx-background-color: #ffffff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" />
+      <ImageView fitHeight="17.0" fitWidth="16.0" layoutX="969.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/icons8_Search_52px.png" />
+         </image>
+      </ImageView>
+
+      <ScrollPane layoutX="14.0" layoutY="64.0" prefHeight="579.0" prefWidth="991.0" stylesheets="@css/style.css">
+         <content>
+            <VBox fx:id="pnItems" prefHeight="576.0" prefWidth="988.0" spacing="5.0" style="-fx-background-color: #ffffff;">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
+         </content>
+      </ScrollPane>
+
+   </children>
+</Pane>

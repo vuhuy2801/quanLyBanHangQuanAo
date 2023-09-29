@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox fx:id="itemC" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="1000.0" spacing="80.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label layoutX="10.0" layoutY="28.0" prefHeight="18.0" prefWidth="26.0" text="1" textAlignment="JUSTIFY" textFill="#b7c3d7">
+            <HBox.margin>
+                <Insets left="40.0" />
+            </HBox.margin></Label>
+        <Label prefHeight="18.0" prefWidth="193.0" text="Áo khoác nam" textFill="#b7c3d7" />
+        <Label prefHeight="18.0" prefWidth="164.0" text="245,000 vnđ" textFill="#b7c3d7">
+            <HBox.margin>
+                <Insets />
+            </HBox.margin>
+        </Label>
+        <Label prefHeight="18.0" prefWidth="104.0" text="700,000 vnđ" textFill="#b7c3d7">
+            <HBox.margin>
+                <Insets />
+            </HBox.margin>
+        </Label>
+        <Label prefHeight="18.0" prefWidth="98.0" text="10" textFill="#b7c3d7">
+            <HBox.margin>
+                <Insets />
+            </HBox.margin>
+        </Label>
+        <Label layoutX="544.0" layoutY="28.0" prefHeight="18.0" prefWidth="94.0" text="3" textFill="#b7c3d7" />
+    </children>
+    <effect>
+        <DropShadow blurType="GAUSSIAN" height="5.0" radius="2.0" width="5.0" />
+    </effect>
+    <cursor>
+        <Cursor fx:constant="HAND" />
+    </cursor>
+</HBox>

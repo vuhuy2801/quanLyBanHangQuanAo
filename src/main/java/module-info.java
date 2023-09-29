@@ -7,4 +7,5 @@ module com.quanlybanhangquanao.quanlybanhangquanao {
 
     opens com.quanlybanhangquanao.quanlybanhangquanao to javafx.fxml;
     exports com.quanlybanhangquanao.quanlybanhangquanao;
+
 }
