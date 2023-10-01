@@ -198,7 +198,7 @@
       <Separator layoutX="1.0" layoutY="56.0" prefHeight="11.0" prefWidth="1024.0" />
       <HBox alignment="TOP_RIGHT" layoutX="814.0" layoutY="10.0" prefHeight="39.0" prefWidth="200.0">
          <children>
-            <Button fx:id="BtnThem" contentDisplay="RIGHT" mnemonicParsing="false" onMouseClicked="#handleBtnThemClick" text="Thêm sản phẩm">
+            <Button id="themSanPham" fx:id="BtnThem" contentDisplay="RIGHT" mnemonicParsing="false" onMouseClicked="#handleBtnThemClick" text="Thêm sản phẩm">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>

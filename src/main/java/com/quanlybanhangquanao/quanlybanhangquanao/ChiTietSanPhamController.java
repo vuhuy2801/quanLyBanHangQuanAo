@@ -2,6 +2,7 @@ package com.quanlybanhangquanao.quanlybanhangquanao;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -9,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.io.IOException;
 
@@ -69,8 +71,21 @@ public class ChiTietSanPhamController {
         inputThuongHieu.setText(thuongHieu);
     }
 
-    public void setTextButtonThem(String text) {
+    public String[] getDataSanPham() {
+        return new String[]{inputMaSanPham.getText(),
+                inputTenSanPham.getText(),
+                inputGiaBan.getText(),
+                inputGiaVon.getText(),
+                inputTonKho.getText(),
+                inputTrongLuong.getText(),
+                inputNhomSanPham.getText(),
+                inputThuongHieu.getText(),
+        };
+    }
+
+    public void setTextButtonThem(String text, String id) {
         BtnThem.setText(text);
+        BtnThem.setId(id);
     }
 
     public void disableTextFieldEditing() {
@@ -98,7 +113,6 @@ public class ChiTietSanPhamController {
     }
 
 
-
     @FXML
     void handleBtnQuayLaiClick() {
         quanLySanPhamController.handleChiTietSanPhamClick("BtnQuayLai");
@@ -106,7 +120,58 @@ public class ChiTietSanPhamController {
 
     @FXML
     void handleBtnThemClick() {
-        quanLySanPhamController.handleChiTietSanPhamClick("BtnAdd");
+        String id = BtnThem.getId();
+        if (id.equals("submitEdit")) {
+            if (handleUpdateSanPham(true)) {
+                setTextButtonThem("Sửa sản phẩm", "view");
+                disableTextFieldEditing();
+                thongBao("Thành công", "Sản phẩm đã được cập nhật thành công");
+            }
+
+        } else if (id.equals("view")) {
+            enableTextFieldEditing();
+            setTextButtonThem("Lưu", "submitEdit");
+
+        } else if (id.equals("themSanPham")) {
+            if (handleThemSanPham()) {
+                thongBao("Thành công", "Sản phẩm đã được thêm thành công");
+                quanLySanPhamController.handleChiTietSanPhamClick("BtnQuayLai");
+            }
+
+        }
+    }
+
+    void thongBao(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Thông báo");
+        alert.setHeaderText(title);
+        alert.setContentText(content);
+        alert.showAndWait();
+
+    }
+
+    boolean handleThemSanPham() {
+        String[] data = getDataSanPham();
+        for (int i = 0; i < data.length; i++) {
+            if (data[i].equals("")) {
+                thongBao("lỗi", "dữ liệu không đc để trống");
+                return false;
+            } else {
+                System.out.println(data[i]);
+            }
+        }
+        return true;
+    }
+
+    boolean handleUpdateSanPham(boolean isSuccess) {
+        if (isSuccess) {
+            String[] data = getDataSanPham();
+            for (int i = 0; i < data.length; i++) {
+                System.out.println(data[i]);
+            }
+            return true;
+        }
+        return false;
     }
 
 

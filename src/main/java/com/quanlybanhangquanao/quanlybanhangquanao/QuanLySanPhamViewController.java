@@ -89,16 +89,16 @@ public class QuanLySanPhamViewController {
         }
 
     }
-
-
+    @FXML
+   void handleBtnThemClick(){
+        loadScreen("ChiTietSanPham.fxml", subPane, "themSanPham");
+        subPane.toFront();
+    }
 
     public void handleChiTietSanPhamClick(String typeButton) {
         if (typeButton.equals("BtnQuayLai")) {
             subPane.getChildren().clear();
             mainPane.toFront();
-        } else if (typeButton.equals("BtnAdd")) {
-         
-            System.out.println("xu ly add data");
         }
     }
 
@@ -112,10 +112,10 @@ public class QuanLySanPhamViewController {
             itemController.setQuanLySanPhamController(this);
 
             if (TypeButton.equals("edit")) {
-                itemController.setTextButtonThem("Lưu");
+                itemController.setTextButtonThem("Lưu", "submitEdit");
                 itemController.setDataSanPham(String.valueOf("SP00"), productNames[0], prices[0], prices[0], "quần", "coolmate", String.valueOf(quantities[0]), String.valueOf(0 + 3));
             } else if (TypeButton.equals("view")) {
-                itemController.setTextButtonThem("Sửa sản phẩm");
+                itemController.setTextButtonThem("Sửa sản phẩm", "view");
                 itemController.disableTextFieldEditing();
                 itemController.setDataSanPham(String.valueOf("SP00"), productNames[0], prices[0], prices[0], "quần", "coolmate", String.valueOf(quantities[0]), String.valueOf(0 + 3));
             }

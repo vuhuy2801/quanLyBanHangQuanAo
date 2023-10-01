@@ -64,7 +64,7 @@
                </Label>
             </children>
          </HBox>
-         <Button layoutX="746.0" layoutY="34.0" mnemonicParsing="false" styleClass="btnAdd" text="Thêm" textFill="WHITE">
+         <Button fx:id="btnThem" layoutX="746.0" layoutY="34.0" mnemonicParsing="false" onMouseClicked="#handleBtnThemClick" styleClass="btnAdd" text="Thêm" textFill="WHITE">
             <cursor>
                <Cursor fx:constant="HAND" />
             </cursor>
