@@ -3,36 +3,75 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<HBox fx:id="itemC" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="1000.0" spacing="80.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:id="itemC" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="990.0" spacing="10.0" style="-fx-background-color: #ffffff; -fx-border-width: 0 0 0.1 0; -fx-border-color: #000000;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.ItemListSanPhamController">
     <children>
-        <Label layoutX="10.0" layoutY="28.0" prefHeight="18.0" prefWidth="26.0" text="1" textAlignment="JUSTIFY" textFill="#b7c3d7">
+        <Label fx:id="stt" alignment="CENTER" layoutX="10.0" layoutY="28.0" prefHeight="27.0" prefWidth="70.0" text="1">
             <HBox.margin>
                 <Insets left="40.0" />
-            </HBox.margin></Label>
-        <Label prefHeight="18.0" prefWidth="193.0" text="Áo khoác nam" textFill="#b7c3d7" />
-        <Label prefHeight="18.0" prefWidth="164.0" text="245,000 vnđ" textFill="#b7c3d7">
+            </HBox.margin>
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+        <Label fx:id="ten" alignment="CENTER" prefHeight="25.0" prefWidth="220.0" text="Áo khoác nam">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+        <Label fx:id="giaBan" alignment="CENTER" prefHeight="27.0" prefWidth="147.0" text="245,000 vnđ">
             <HBox.margin>
                 <Insets />
             </HBox.margin>
+         <font>
+            <Font size="16.0" />
+         </font>
         </Label>
-        <Label prefHeight="18.0" prefWidth="104.0" text="700,000 vnđ" textFill="#b7c3d7">
+        <Label fx:id="giaGoc" alignment="CENTER" prefHeight="27.0" prefWidth="146.0" text="700,000 vnđ">
             <HBox.margin>
                 <Insets />
             </HBox.margin>
+         <font>
+            <Font size="16.0" />
+         </font>
         </Label>
-        <Label prefHeight="18.0" prefWidth="98.0" text="10" textFill="#b7c3d7">
+        <Label fx:id="tonKho" alignment="CENTER" prefHeight="27.0" prefWidth="56.0" text="10">
             <HBox.margin>
                 <Insets />
             </HBox.margin>
+         <font>
+            <Font size="16.0" />
+         </font>
         </Label>
-        <Label layoutX="544.0" layoutY="28.0" prefHeight="18.0" prefWidth="94.0" text="3" textFill="#b7c3d7" />
+        <Label fx:id="soLuongDaBan" alignment="CENTER" layoutX="544.0" layoutY="28.0" prefHeight="27.0" prefWidth="130.0" text="3">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+      <ImageView fx:id="penIcon" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#handlePenIconClick" styleClass="iconButton">
+         <image>
+            <Image url="@images/pen-to-square-solid.png" />
+         </image>
+         <viewport>
+            <Rectangle2D width="60.0" />
+         </viewport>
+      </ImageView>
+      <ImageView fx:id="eyeIcon" fitHeight="20.0" fitWidth="26.0" onMouseClicked="#handleEyeIconClick" styleClass="iconButton">
+         <image>
+            <Image url="@images/eye-solid.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="trashIcon" fitHeight="20.0" fitWidth="17.0" onMouseClicked="#handleTrashIconClick" styleClass="iconButton">
+         <image>
+            <Image url="@images/trash-solid.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="printIcon" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#handlePrintIconClick" styleClass="iconButton">
+         <image>
+            <Image url="@images/print-solid.png" />
+         </image>
+      </ImageView>
     </children>
-    <effect>
-        <DropShadow blurType="GAUSSIAN" height="5.0" radius="2.0" width="5.0" />
-    </effect>
     <cursor>
         <Cursor fx:constant="HAND" />
     </cursor>
