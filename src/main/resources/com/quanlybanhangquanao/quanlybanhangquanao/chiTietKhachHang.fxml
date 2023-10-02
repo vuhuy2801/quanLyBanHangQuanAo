@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1024.0" style="-fx-background-color: #ffffff;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.ChiTietKhachHangController">
+    <children>
+        <Button fx:id="btnQuayLai" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#handleBtnQuayLaiClick" text="Quay lại">
+            <graphic>
+                <ImageView fitHeight="20.0" fitWidth="20.0">
+                    <image>
+                        <Image url="@images/arrow-left.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Button>
+        <VBox alignment="TOP_CENTER" layoutX="8.0" layoutY="95.0" prefHeight="584.0" prefWidth="512.0" spacing="20.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="512.0">
+                    <children>
+                        <Label prefHeight="25.0" prefWidth="149.0" text="Mã khách hàng:">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="inputMaKhachHang" prefHeight="40.0" prefWidth="300.0">
+                            <HBox.margin>
+                                <Insets left="20.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </TextField>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="10.0" />
+                    </VBox.margin>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="512.0">
+                    <children>
+                        <Label prefHeight="25.0" prefWidth="150.0" text="Tên khách hàng:">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="inputTenKhachHang" prefHeight="40.0" prefWidth="300.0">
+                            <HBox.margin>
+                                <Insets left="20.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </TextField>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="10.0" />
+                    </VBox.margin>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="512.0">
+                    <children>
+                        <Label prefHeight="25.0" prefWidth="150.0" text="Số điện thoại:">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="inputDienThoai" prefHeight="40.0" prefWidth="300.0">
+                            <HBox.margin>
+                                <Insets left="20.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </TextField>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="10.0" />
+                    </VBox.margin>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="512.0">
+                    <children>
+                        <Label prefHeight="25.0" prefWidth="150.0" text="Ngày sinh:">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="inputNgaySinh" prefHeight="40.0" prefWidth="300.0">
+                            <HBox.margin>
+                                <Insets left="20.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </TextField>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="10.0" />
+                    </VBox.margin>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="512.0">
+                    <children>
+                        <Label prefHeight="25.0" prefWidth="150.0" text="Giới tính:">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="inputGioiTinh" prefHeight="40.0" prefWidth="300.0">
+                            <HBox.margin>
+                                <Insets left="20.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </TextField>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="10.0" />
+                    </VBox.margin>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="512.0">
+                    <children>
+                        <Label prefHeight="25.0" prefWidth="150.0" text="Địa chỉ:">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="inputDiaChi" prefHeight="40.0" prefWidth="300.0">
+                            <HBox.margin>
+                                <Insets left="20.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </TextField>
+                    </children>
+                    <VBox.margin>
+                        <Insets left="10.0" />
+                    </VBox.margin>
+                </HBox>
+            </children>
+        </VBox>
+        <Separator layoutX="1.0" layoutY="56.0" prefHeight="11.0" prefWidth="1024.0" />
+        <HBox alignment="TOP_RIGHT" layoutX="814.0" layoutY="10.0" prefHeight="39.0" prefWidth="200.0">
+            <children>
+                <Button id="themKhachHang" fx:id="btnThem" contentDisplay="RIGHT" mnemonicParsing="false" onMouseClicked="#handleBtnThemClick" text="Thêm khách hàng">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0">
+                            <image>
+                                <Image url="@images/arrow-right.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </children>
+        </HBox>
+    </children>
+</Pane>

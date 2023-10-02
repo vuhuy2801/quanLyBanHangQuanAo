@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<HBox fx:id="itemC" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="990.0" spacing="10.0" style="-fx-background-color: #ffffff; -fx-border-width: 0 0 0.1 0; -fx-border-color: #000000;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.ItemListDonHangController">
+    <children>
+        <Label fx:id="maDonHang" alignment="CENTER" prefHeight="26.0" prefWidth="110.0" text="DH001">
+            <font>
+                <Font size="16.0" />
+            </font></Label>
+        <Label fx:id="thoiGian" alignment="CENTER" prefHeight="27.0" prefWidth="203.0" text="2023-01-15 10:30">
+            <HBox.margin>
+                <Insets />
+            </HBox.margin>
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+        <Label fx:id="khachHang" alignment="CENTER" prefHeight="27.0" prefWidth="207.0" text="Khách hàng 1">
+            <HBox.margin>
+                <Insets />
+            </HBox.margin>
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+        <Label fx:id="tongTien" alignment="CENTER" prefHeight="27.0" prefWidth="164.0" text="500,000 vnđ">
+            <HBox.margin>
+                <Insets />
+            </HBox.margin>
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Label>
+        <Label fx:id="giamGia" alignment="CENTER" layoutX="544.0" layoutY="28.0" prefHeight="27.0" prefWidth="145.0" text="50,000 vnđ">
+            <font>
+                <Font size="16.0" />
+            </font></Label>
+        <ImageView fx:id="penIcon" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#handlePenIconClick" styleClass="iconButton">
+            <image>
+                <Image url="@images/pen-to-square-solid.png" />
+            </image>
+            <viewport>
+                <Rectangle2D width="60.0" />
+            </viewport>
+        </ImageView>
+        <ImageView fx:id="eyeIcon" fitHeight="20.0" fitWidth="26.0" onMouseClicked="#handleEyeIconClick" styleClass="iconButton">
+            <image>
+                <Image url="@images/eye-solid.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="trashIcon" fitHeight="20.0" fitWidth="17.0" onMouseClicked="#handleTrashIconClick" styleClass="iconButton">
+            <image>
+                <Image url="@images/trash-solid.png" />
+            </image>
+        </ImageView>
+        <ImageView fx:id="printIcon" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#handlePrintIconClick" styleClass="iconButton">
+            <image>
+                <Image url="@images/print-solid.png" />
+            </image>
+        </ImageView>
+    </children>
+    <cursor>
+        <Cursor fx:constant="HAND" />
+    </cursor>
+</HBox>

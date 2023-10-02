@@ -17,7 +17,7 @@ public class ItemListSanPhamController {
     private HBox itemC;
 
     @FXML
-    private Label stt;
+    private Label maSanPham;
 
     @FXML
     private Label ten;
@@ -47,7 +47,7 @@ public class ItemListSanPhamController {
     private ImageView printIcon;
 
     public void setProductData(String sttText, String tenText, String giaBanText, String giaGocText, String tonKhoText, String soLuongDaBanText) {
-        stt.setText(sttText);
+        maSanPham.setText(sttText);
         ten.setText(tenText);
         giaBan.setText(giaBanText);
         giaGoc.setText(giaGocText);
@@ -58,24 +58,24 @@ public class ItemListSanPhamController {
     @FXML
     private void handlePenIconClick() {
         // Gọi callback và truyền id (stt) vào QuanLySanPhamController
-        quanLySanPhamController.handleIconClick(stt.getText(), "edit");
+        quanLySanPhamController.handleIconClick(maSanPham.getText(), "edit");
     }
 
     @FXML
     private void handleTrashIconClick() {
         // Gọi callback và truyền id (stt) vào QuanLySanPhamController
-        quanLySanPhamController.handleIconClick(stt.getText(), "delete");
+        quanLySanPhamController.handleIconClick(maSanPham.getText(), "delete");
     }
 
     @FXML
     private void handleEyeIconClick() {
         // Gọi callback và truyền id (stt) vào QuanLySanPhamController
-        quanLySanPhamController.handleIconClick(stt.getText(),"view");
+        quanLySanPhamController.handleIconClick(maSanPham.getText(),"view");
     }
     @FXML
     private void handlePrintIconClick() {
         // Gọi callback và truyền id (stt) vào QuanLySanPhamController
-        quanLySanPhamController.handleIconClick(stt.getText(), "print");
+        quanLySanPhamController.handleIconClick(maSanPham.getText(), "print");
     }
 
 }

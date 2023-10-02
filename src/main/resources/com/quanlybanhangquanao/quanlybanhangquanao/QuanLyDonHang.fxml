@@ -1,19 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import javafx.scene.image.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1024.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1024.0" style="-fx-background-color: #ffffff;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.QuanLyDonHangController">
    <children>
-      <TextField layoutX="590.0" layoutY="47.0" prefHeight="27.0" prefWidth="183.0" promptText="search" style="-fx-background-color: #ffffff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" />
-      <ImageView fitHeight="17.0" fitWidth="16.0" layoutX="749.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@images/icons8_Search_52px.png" />
-         </image>
-      </ImageView>
-
+      <Pane fx:id="subPane" prefHeight="200.0" prefWidth="200.0" />
+      <Pane fx:id="mainPane" prefHeight="720.0" prefWidth="1024.0">
+         <children>
+            <TextField layoutX="810.0" layoutY="33.0" prefHeight="27.0" prefWidth="183.0" promptText="Tìm kiếm đơn hàng" style="-fx-background-color: #ffffff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" />
+            <ImageView fitHeight="17.0" fitWidth="16.0" layoutX="967.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/icons8_Search_52px.png" />
+               </image>
+            </ImageView>
+            <ScrollPane hbarPolicy="NEVER" layoutX="6.0" layoutY="116.0" prefHeight="601.0" prefWidth="1010.0">
+               <content>
+                  <VBox fx:id="ListDonHang" prefHeight="585.0" prefWidth="1006.0" spacing="5.0" style="-fx-background-color: #ffffff;" />
+               </content>
+            </ScrollPane>
+            <HBox alignment="CENTER_LEFT" layoutX="-1.0" layoutY="76.0" prefHeight="49.0" prefWidth="1024.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="110.0" text="Mã Hóa đơn">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefHeight="26.0" prefWidth="229.0" text="Thời gian">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefHeight="26.0" prefWidth="211.0" text="Khách hàng">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefHeight="26.0" prefWidth="163.0" text="Tổng tiền hàng">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefHeight="26.0" prefWidth="125.0" text="Giảm giá">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" prefHeight="26.0" prefWidth="175.0" text="Thao tác">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <Button fx:id="btnThem" layoutX="746.0" layoutY="34.0" mnemonicParsing="false" onMouseClicked="#handleBtnThemClick" styleClass="btnAdd" text="Thêm" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </children>
+      </Pane>
    </children>
-</Pane>
+</StackPane>

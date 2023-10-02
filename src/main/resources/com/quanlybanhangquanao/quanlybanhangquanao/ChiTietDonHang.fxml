@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1024.0" style="-fx-background-color: #ffffff;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.ChiTietDonHangController">
+   <children>
+      <Button fx:id="btnQuayLai" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#handleBtnQuayLaiClick" text="Quay lại">
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="20.0">
+               <image>
+                  <Image url="@images/arrow-left.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font></Button>
+      <VBox alignment="TOP_CENTER" layoutX="8.0" layoutY="95.0" prefHeight="235.0" prefWidth="512.0" spacing="20.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="512.0">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="149.0" text="Mã hóa đơn:">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="valueMaHoaDon" prefHeight="25.0" prefWidth="149.0">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="512.0">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="150.0" text="Thời gian:">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="valueThoiGian" prefHeight="25.0" prefWidth="150.0">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="512.0">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="150.0" text="Khách hàng:">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="valueKhachHang" prefHeight="25.0" prefWidth="150.0">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="512.0">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="150.0" text="Người bán:">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="valueNguoiBan" prefHeight="25.0" prefWidth="150.0">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+      <Separator layoutX="1.0" layoutY="56.0" prefHeight="11.0" prefWidth="1024.0" />
+      <HBox alignment="TOP_RIGHT" layoutX="814.0" layoutY="10.0" prefHeight="39.0" prefWidth="200.0">
+         <children>
+            <Button id="themSanPham" fx:id="BtnSuaHoaDon" contentDisplay="RIGHT" mnemonicParsing="false" onMouseClicked="#handleBtnThemClick" text="Sửa hóa đơn">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0">
+                     <image>
+                        <Image url="@images/arrow-right.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+      <Pane layoutX="15.0" layoutY="342.0" prefHeight="365.0" prefWidth="997.0">
+         <children>
+            <TableView fx:id="tableViewChiTietDonHang" prefHeight="373.0" prefWidth="997.0">
+               <columns>
+                  <TableColumn prefWidth="174.0" text="Mã Hàng">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="maHang" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn prefWidth="167.0" text="Tên Hàng">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="tenHang" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn prefWidth="147.0" text="Số lượng">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="soLuong" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn prefWidth="175.0" text="Đơn Giá">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="donGia" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn prefWidth="173.0" text="Giảm giá">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="giamGia" />
+                     </cellValueFactory>
+                  </TableColumn>
+                  <TableColumn prefWidth="160.0" text="Thành Tiền">
+                     <cellValueFactory>
+                        <PropertyValueFactory property="thanhTien" />
+                     </cellValueFactory>
+                  </TableColumn>
+               </columns>
+            </TableView>
+         </children></Pane>
+      <VBox alignment="TOP_CENTER" layoutX="498.0" layoutY="95.0" prefHeight="235.0" prefWidth="512.0" spacing="20.0">
+         <children>
+            <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="512.0">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="149.0" text="Tổng số lượng:">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="valueTongSoLuong" prefHeight="25.0" prefWidth="149.0" text="0">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="512.0">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="150.0" text="Giảm giá:">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="valueGiamGia" prefHeight="25.0" prefWidth="150.0" text="0">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="512.0">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="150.0" text="Tổng tiền hàng:">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="valueTongTienHang" prefHeight="25.0" prefWidth="150.0" text="0">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="512.0">
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+      
+   </children>
+</Pane>

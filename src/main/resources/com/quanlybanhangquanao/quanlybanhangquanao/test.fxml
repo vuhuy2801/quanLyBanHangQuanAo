@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="your.package.name.YourControllerClass"
+            prefHeight="967.0" prefWidth="1501.0">
+
+    <center>
+        <VBox spacing="10">
+            <TableView fx:id="tableViewChiTietDonHang" prefHeight="347.0" prefWidth="1435.0">
+                <columns>
+                    <TableColumn text="Mã Hàng">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="maHang" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Tên Hàng">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="tenHang" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Số lượng">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="soLuong" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Đơn Giá">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="donGia" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Giảm giá">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="giamGia" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn text="Thành Tiền">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="thanhTien" />
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>
