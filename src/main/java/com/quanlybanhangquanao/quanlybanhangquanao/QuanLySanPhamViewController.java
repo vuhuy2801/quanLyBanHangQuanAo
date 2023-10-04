@@ -1,5 +1,6 @@
 package com.quanlybanhangquanao.quanlybanhangquanao;
 
+import com.quanlybanhangquanao.quanlybanhangquanao.models.SanPham;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -11,15 +12,10 @@ import javafx.scene.layout.VBox;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-
-
-
-
-
-
 
 public class QuanLySanPhamViewController {
 
@@ -37,27 +33,22 @@ public class QuanLySanPhamViewController {
     private Pane subPane;
 
 
-    String[] productNames = {"Áo khoác nam", "Áo thun nam", "Quần jean nam", "Quần jean nam", "Quần jean nam", "Quần jean nam", "Quần jean nam", "Quần jean nam", "Quần jean nam", "Quần jean nam", "Quần jean nam", "Quần jean nam"};
-    String[] prices = {"245,000 vnđ", "150,000 vnđ", "350,000 vnđ", "350,000 vnđ", "350,000 vnđ", "350,000 vnđ", "350,000 vnđ", "350,000 vnđ", "350,000 vnđ", "350,000 vnđ", "350,000 vnđ", "350,000 vnđ"};
-    int[] quantities = {10, 15, 5, 5, 5, 5, 5, 8, 9, 10, 11, 12};
 
+    DecimalFormat decimalFormat = new DecimalFormat("#0.00");
     @FXML
-
-
     private void initialize() {
-        // Mảng chứa danh sách dữ liệu mẫu, bạn có thể thay thế bằng dữ liệu thực tế
-
-
+        SanPham sanPham = new SanPham();
+        List<SanPham> danhSachSanPham = sanPham.DanhSach();
         try {
             // Vòng lặp để nạp và thêm từng mục vào VBox
-            for (int i = 0; i < productNames.length; i++) {
+            for (int i = 0; i < danhSachSanPham.size(); i++) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemListSanPham.fxml"));
-                HBox item = loader.load(); // Nạp ItemListSanPham.fxml
+                HBox item = loader.load(); // Nạp ItemListSanPh am.fxml
 
                 // Cài đặt dữ liệu cho mục
                 ItemListSanPhamController itemController = loader.getController();
                 itemController.setQuanLySanPhamController(this);
-                itemController.setProductData(String.valueOf("SP00" + i), productNames[i], prices[i], prices[i], String.valueOf(quantities[i]), String.valueOf(i + 3));
+                itemController.setProductData(danhSachSanPham.get(i).getMaHang(), danhSachSanPham.get(i).getTenHang(), decimalFormat.format(danhSachSanPham.get(i).getGiaBan()), decimalFormat.format(danhSachSanPham.get(i).getGiaVon()),String.valueOf(danhSachSanPham.get(i).getTonKho()), String.valueOf(danhSachSanPham.get(i).getSoLuongDaBan()));
 
                 ListSanPham.getChildren().add(item); // Thêm vào VBox
             }
@@ -69,12 +60,15 @@ public class QuanLySanPhamViewController {
 
     public void handleIconClick(String id, String typeButton) {
         if (typeButton.equals("edit")) {
-            loadScreen("ChiTietSanPham.fxml", subPane, typeButton);
+            SanPham sanPham = new SanPham();
+            loadScreen("ChiTietSanPham.fxml", subPane, typeButton, sanPham.ChiTiet(id));
             subPane.toFront();
 
         } else if (typeButton.equals("view")) {
-            loadScreen("ChiTietSanPham.fxml", subPane, typeButton);
+            SanPham sanPham = new SanPham();
+            loadScreen("ChiTietSanPham.fxml", subPane, typeButton, sanPham.ChiTiet(id));
             subPane.toFront();
+
         } else if (typeButton.equals("delete")) {
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
             confirmationAlert.setTitle("Xác nhận");
@@ -101,7 +95,7 @@ public class QuanLySanPhamViewController {
     }
     @FXML
    void handleBtnThemClick(){
-        loadScreen("ChiTietSanPham.fxml", subPane, "themSanPham");
+        loadScreen("ChiTietSanPham.fxml", subPane, "themSanPham",null);
         subPane.toFront();
     }
 
@@ -113,7 +107,8 @@ public class QuanLySanPhamViewController {
     }
 
 
-    private void loadScreen(String fxmlFileName, Pane container, String TypeButton) {
+    private void loadScreen(String fxmlFileName, Pane container, String TypeButton, SanPham sanpham) {
+
         try {
             // Tải màn hình con từ tệp FXML
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFileName));
@@ -123,11 +118,13 @@ public class QuanLySanPhamViewController {
 
             if (TypeButton.equals("edit")) {
                 itemController.setTextButtonThem("Lưu", "submitEdit");
-                itemController.setDataSanPham(String.valueOf("SP00"), productNames[0], prices[0], prices[0], "quần", "coolmate", String.valueOf(quantities[0]), String.valueOf(0 + 3));
+                itemController.setDataSanPham(sanpham.getMaHang(), sanpham.getTenHang(), decimalFormat.format(sanpham.getGiaBan()),  decimalFormat.format(sanpham.getGiaVon()),  sanpham.getNhomHang(), sanpham.getThuongHieu(), String.valueOf(sanpham.getTonKho()), String.valueOf(sanpham.getTrongLuong()));
+
             } else if (TypeButton.equals("view")) {
                 itemController.setTextButtonThem("Sửa sản phẩm", "view");
                 itemController.disableTextFieldEditing();
-                itemController.setDataSanPham(String.valueOf("SP00"), productNames[0], prices[0], prices[0], "quần", "coolmate", String.valueOf(quantities[0]), String.valueOf(0 + 3));
+                //set data
+                itemController.setDataSanPham(sanpham.getMaHang(), sanpham.getTenHang(), decimalFormat.format(sanpham.getGiaBan()),  decimalFormat.format(sanpham.getGiaVon()),  sanpham.getNhomHang(), sanpham.getThuongHieu(), String.valueOf(sanpham.getTonKho()), String.valueOf(sanpham.getTrongLuong()));
             }
             // Xóa nội dung cũ và đặt nội dung mới vào container (Pane)
             container.getChildren().clear();

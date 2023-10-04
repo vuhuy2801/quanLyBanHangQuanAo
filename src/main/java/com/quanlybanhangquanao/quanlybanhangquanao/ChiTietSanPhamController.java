@@ -1,5 +1,6 @@
 package com.quanlybanhangquanao.quanlybanhangquanao;
 
+import com.quanlybanhangquanao.quanlybanhangquanao.models.SanPham;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -60,13 +61,13 @@ public class ChiTietSanPhamController {
     }
 
 
-    public void setDataSanPham(String sttText, String tenText, String giaBanText, String giaGocText, String nhomSanPham, String thuongHieu, String tonKhoText, String soLuongDaBanText) {
-        inputMaSanPham.setText(sttText);
+    public void setDataSanPham(String maSanPham, String tenText, String giaBanText, String giaGocText, String nhomSanPham, String thuongHieu, String tonKhoText, String trongLuong) {
+        inputMaSanPham.setText(maSanPham);
         inputTenSanPham.setText(tenText);
         inputGiaBan.setText(giaBanText);
         inputGiaVon.setText(giaGocText);
         inputTonKho.setText(tonKhoText);
-        inputTrongLuong.setText(soLuongDaBanText);
+        inputTrongLuong.setText(trongLuong);
         inputNhomSanPham.setText(nhomSanPham);
         inputThuongHieu.setText(thuongHieu);
     }
@@ -123,6 +124,8 @@ public class ChiTietSanPhamController {
         String id = BtnThem.getId();
         if (id.equals("submitEdit")) {
             if (handleUpdateSanPham(true)) {
+
+                // bắn đến sửa sanpham.sua
                 setTextButtonThem("Sửa sản phẩm", "view");
                 disableTextFieldEditing();
                 thongBao("Thành công", "Sản phẩm đã được cập nhật thành công");
@@ -134,6 +137,8 @@ public class ChiTietSanPhamController {
 
         } else if (id.equals("themSanPham")) {
             if (handleThemSanPham()) {
+
+            //bắn đến thêm
                 thongBao("Thành công", "Sản phẩm đã được thêm thành công");
                 quanLySanPhamController.handleChiTietSanPhamClick("BtnQuayLai");
             }
@@ -162,6 +167,8 @@ public class ChiTietSanPhamController {
         }
         return true;
     }
+
+
 
     boolean handleUpdateSanPham(boolean isSuccess) {
         if (isSuccess) {

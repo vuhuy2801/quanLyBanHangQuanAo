@@ -1,5 +1,7 @@
 package com.quanlybanhangquanao.quanlybanhangquanao;
 
+import com.quanlybanhangquanao.quanlybanhangquanao.models.KhachHang;
+import com.quanlybanhangquanao.quanlybanhangquanao.models.Nguoi;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -10,7 +12,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-
+import java.util.List;
+import java.text.SimpleDateFormat;
 public class QuanLyKhachHangController {
 
     @FXML
@@ -25,22 +28,19 @@ public class QuanLyKhachHangController {
     @FXML
     private Pane subPane;
 
-    String[] customerIDs = {"KH001", "KH002", "KH003", "KH004", "KH005"};
-    String[] customerNames = {"Khách hàng 1", "Khách hàng 2", "Khách hàng 3", "Khách hàng 4", "Khách hàng 5"};
-    String[] phoneNumbers = {"1234567890", "0987654321", "1357924680", "9876543210", "0123456789"};
-    String[] totalPurchases = {"1,000,000 vnđ", "2,500,000 vnđ", "800,000 vnđ", "3,200,000 vnđ", "500,000 vnđ"};
-    String[] loyaltyPoints = {"100", "250", "80", "320", "50"};
-
     @FXML
     private void initialize() {
+        KhachHang khachHang = new KhachHang();
+        List<KhachHang> danhSachKhachHang = khachHang.DanhSach();
+
         try {
-            for (int i = 0; i < customerIDs.length; i++) {
+            for (int i = 0; i < danhSachKhachHang.size(); i++) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemListKhachHang.fxml"));
                 HBox item = loader.load();
 
                 ItemListKhachHangController itemController = loader.getController();
                 itemController.setQuanLyKhachHangController(this);
-                itemController.setCustomerData(customerIDs[i], customerNames[i], phoneNumbers[i], totalPurchases[i], loyaltyPoints[i]);
+                itemController.setCustomerData(danhSachKhachHang.get(i).getMaKhachHang(), danhSachKhachHang.get(i).getHoTen(), String.valueOf(danhSachKhachHang.get(i).getSDT()), String.valueOf(danhSachKhachHang.get(i).getTongTien()), String.valueOf(danhSachKhachHang.get(i).getDiemTichLuy()));
 
                 ListKhachHang.getChildren().add(item);
             }
@@ -51,10 +51,12 @@ public class QuanLyKhachHangController {
 
     public void handleIconClick(String id, String typeButton) {
         if (typeButton.equals("edit")) {
-            loadScreen("ChiTietKhachHang.fxml", subPane, typeButton);
+            KhachHang nguoi = new KhachHang();
+            loadScreen("ChiTietKhachHang.fxml", subPane, typeButton, nguoi.ChiTiet(id));
             subPane.toFront();
         } else if (typeButton.equals("view")) {
-            loadScreen("ChiTietKhachHang.fxml", subPane, typeButton);
+            KhachHang nguoi = new KhachHang();
+            loadScreen("ChiTietKhachHang.fxml", subPane, typeButton, nguoi.ChiTiet(id));
             subPane.toFront();
         } else if (typeButton.equals("delete")) {
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -79,7 +81,7 @@ public class QuanLyKhachHangController {
 
     @FXML
     void handleBtnThemClick() {
-        loadScreen("ChiTietKhachHang.fxml", subPane, "themKhachHang");
+        loadScreen("ChiTietKhachHang.fxml", subPane, "themKhachHang", null);
         subPane.toFront();
     }
 
@@ -90,7 +92,8 @@ public class QuanLyKhachHangController {
         }
     }
 
-    private void loadScreen(String fxmlFileName, Pane container, String TypeButton) {
+    private void loadScreen(String fxmlFileName, Pane container, String TypeButton, KhachHang nguoi) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFileName));
             Pane screen = loader.load();
@@ -99,11 +102,12 @@ public class QuanLyKhachHangController {
 
             if (TypeButton.equals("edit")) {
                 itemController.setTextButtonThem("Lưu", "submitEdit");
-                itemController.setDataKhachHang("KH001", "Khách hàng 1", "1234567890", "28/01/2003", "Nam","yên bái");
+                itemController.setDataKhachHang(nguoi.getMaNguoi(), nguoi.getHoTen(),  nguoi.getSDT(), sdf.format( nguoi.getNgaySinh()), String.valueOf(nguoi.getGioiTinh()),nguoi.getDiaChi());
             } else if (TypeButton.equals("view")) {
                 itemController.setTextButtonThem("Sửa khách hàng", "view");
                 itemController.disableTextFieldEditing();
-                itemController.setDataKhachHang("KH001", "Khách hàng 1", "1234567890", "28/01/2003", "Nam","yên bái");
+                itemController.setDataKhachHang(nguoi.getMaNguoi(), nguoi.getHoTen(),  nguoi.getSDT(), sdf.format( nguoi.getNgaySinh()), String.valueOf(nguoi.getGioiTinh()),nguoi.getDiaChi());
+
             }
 
             container.getChildren().clear();
