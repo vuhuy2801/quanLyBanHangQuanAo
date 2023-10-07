@@ -35,23 +35,43 @@ public class DonHang implements DonHangService {
     }
 
 
-    public NhanVien getNhanVien() {
-        return nhanVien;
+    public String getMaNhanVien() {
+            return nhanVien.getMaNhanVien();
     }
 
-    public void setNhanVien(NhanVien nhanVien) {
-        this.nhanVien = nhanVien;
+    public void setMaNhanVien(String maNhanVien) {
+        nhanVien.setMaNhanVien(maNhanVien);
     }
 
-    public KhachHang getKhachHang() {
-        return khachHang;
+    public String getHoTenNhanVien() {
+            return nhanVien.getHoTen();
+
     }
 
-    public void setKhachHang(KhachHang khachHang) {
-        this.khachHang = khachHang;
+    public void setHoTenNhanVien(String hoTen) {
+        nhanVien.setHoTen(hoTen);
     }
+
+    public String getHoTenKhachHang() {
+            return khachHang.getHoTen();
+    }
+
+    public void setHoTenKhachHang(String hoTen) {
+        khachHang.setHoTen(hoTen);
+    }
+
+    public String getMaKhachHang() {
+            return khachHang.getMaKhachHang();
+    }
+
+    public void setMaKhachHang(String maKhachHang) {
+        khachHang.setMaKhachHang(maKhachHang);
+    }
+
 
     public DonHang() {
+        khachHang = new KhachHang();
+        nhanVien = new NhanVien();
     }
 
     // Constructor with parameters
@@ -96,9 +116,11 @@ public class DonHang implements DonHangService {
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, donHang.getMaDonHang()); // Truyền mã đơn hàng
-                callableStatement.setString(2, donHang.getNhanVien().getMaNhanVien()); // Truyền mã nhân viên
-                callableStatement.setTimestamp(3, new Timestamp(donHang.getNgayLap().getTime())); // Truyền ngày lập
-                callableStatement.setString(4, donHang.getKhachHang().getMaKhachHang());
+                callableStatement.setString(2, donHang.getMaNhanVien()); // Truyền mã nhân viên
+                Date ngayLapUtil = donHang.getNgayLap();
+                java.sql.Date ngayLapSql = new java.sql.Date(ngayLapUtil.getTime());
+                callableStatement.setDate(3, ngayLapSql);
+                callableStatement.setString(4, donHang.getMaKhachHang());
 
                 callableStatement.execute();
                     return true;
@@ -118,9 +140,11 @@ public class DonHang implements DonHangService {
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, donHang.getMaDonHang()); // Truyền mã đơn hàng
-                callableStatement.setString(2, donHang.getNhanVien().getMaNhanVien()); // Truyền mã nhân viên
-                callableStatement.setTimestamp(3, new Timestamp(donHang.getNgayLap().getTime())); // Truyền ngày lập
-                callableStatement.setString(4, donHang.getKhachHang().getMaKhachHang()); // Truyền mã khách hàng
+                callableStatement.setString(2, donHang.getMaNhanVien()); // Truyền mã nhân viên
+                Date ngayLapUtil = donHang.getNgayLap();
+                java.sql.Date ngayLapSql = new java.sql.Date(ngayLapUtil.getTime());
+                callableStatement.setDate(3, ngayLapSql);
+                callableStatement.setString(4, donHang.getMaKhachHang()); // Truyền mã khách hàng
 
                 callableStatement.execute();
                     return true;
@@ -160,17 +184,13 @@ public class DonHang implements DonHangService {
             String storedProcedure = "{call dbo.hd_TimKiemDonHang(?)}";
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
-                callableStatement.setString(1, key); // Truyền từ khoá tìm kiếm
-
+                callableStatement.setString(1, key);
                 ResultSet resultSet = callableStatement.executeQuery();
-
                 while (resultSet.next()) {
                     DonHang donHang = new DonHang();
                     donHang.setMaDonHang(resultSet.getString("maHD"));
                     donHang.setNgayLap(resultSet.getTimestamp("ngayLap"));
-                    KhachHang khachHang = new KhachHang();
-                    khachHang.setHoTen(resultSet.getString("tenKH"));
-                    donHang.setKhachHang(khachHang);
+                    donHang.setHoTenKhachHang(resultSet.getString("tenKH"));
                     donHang.setTongTienHang(resultSet.getBigDecimal("TongTienHang"));
                     donHang.setGiamGia(resultSet.getBigDecimal("GiamGia"));
                     danhSachDonHang.add(donHang);
@@ -182,12 +202,9 @@ public class DonHang implements DonHangService {
         return danhSachDonHang;
     }
 
-
-
     @Override
     public List<DonHang> DanhSach() {
         List<DonHang> danhSachDonHang = new ArrayList<>();
-
         try (Connection connection = DatabaseConnection.getConnection()) {
             String storedProcedure = "{call dbo.hd_layDanhSachHoaDon}";
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
@@ -196,9 +213,7 @@ public class DonHang implements DonHangService {
                     DonHang donHang = new DonHang();
                     donHang.setMaDonHang(resultSet.getString("maHD"));
                     donHang.setNgayLap(resultSet.getTimestamp("ngayLap"));
-                    KhachHang khachHang = new KhachHang();
-                    khachHang.setHoTen(resultSet.getString("tenKH"));
-                    donHang.setKhachHang(khachHang);
+                    donHang.setHoTenKhachHang(resultSet.getString("tenKH"));
                     donHang.setTongTienHang(resultSet.getBigDecimal("TongTienHang"));
                     donHang.setGiamGia(resultSet.getBigDecimal("GiamGia"));
                     danhSachDonHang.add(donHang);
@@ -224,8 +239,8 @@ public class DonHang implements DonHangService {
                     donHang = new DonHang();
                     donHang.setMaDonHang(resultSet.getString("maHD"));
                     donHang.setNgayLap(resultSet.getTimestamp("ngayLap"));
-                    donHang.khachHang.setHoTen(resultSet.getString("TenKhachHang"));
-                    donHang.nhanVien.setHoTen(resultSet.getString("TenNhanVien"));
+                    donHang.setHoTenKhachHang(resultSet.getString("TenKhachHang"));
+                    donHang.setHoTenNhanVien(resultSet.getString("TenNhanVien"));
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -250,15 +265,9 @@ public class DonHang implements DonHangService {
                     donHangCuoi = new DonHang();
                     donHangCuoi.setMaDonHang(resultSet.getString("maHD"));
                     donHangCuoi.setNgayLap(resultSet.getTimestamp("ngayLap"));
+                    donHangCuoi.setMaNhanVien(resultSet.getString("NV_NguoiID"));
+                    donHangCuoi.setMaKhachHang(resultSet.getString("KH_NguoiID"));
 
-                    // Tạo một đối tượng NhanVien và KhachHang và thiết lập thuộc tính tương ứng
-                    NhanVien nhanVien = new NhanVien();
-                    nhanVien.setMaNhanVien(resultSet.getString("NV_NguoiID"));
-                    donHangCuoi.setNhanVien(nhanVien);
-
-                    KhachHang khachHang = new KhachHang();
-                    khachHang.setMaKhachHang(resultSet.getString("KH_NguoiID"));
-                    donHangCuoi.setKhachHang(khachHang);
                 }
             }
         } catch (SQLException e) {

@@ -30,7 +30,6 @@ public class KhachHang extends Nguoi {
     // Constructors
 
     public KhachHang() {
-        // Gọi constructor mặc định của lớp cha
         super();
     }
 
@@ -175,41 +174,43 @@ public class KhachHang extends Nguoi {
 
 
     @Override
-    public List<Nguoi> TimKiem(String key) {
+    public List<KhachHang> TimKiem(String key) {
+        List<KhachHang> danhSachNguoi = new ArrayList<>();
+
         try (Connection connection = DatabaseConnection.getConnection()) {
             String storedProcedure = "{call dbo.kh_timKiemKhachHang(?)}";
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
-                callableStatement.setString(1, key); // Truyền từ khóa cần tìm kiếm
+                callableStatement.setString(1, key);  // Truyền từ khóa cần tìm kiếm
 
-                // Thực hiện stored procedure
-                callableStatement.execute();
+                // Thực hiện stored procedure và lấy kết quả
+                boolean hasResults = callableStatement.execute();
 
-                // Xử lý kết quả tìm kiếm và trả về danh sách người (nhân viên) tìm thấy
-                List<Nguoi> danhSachNguoi = new ArrayList<>();
-                ResultSet resultSet = callableStatement.getResultSet();
+                // Xử lý kết quả tìm kiếm và trả về danh sách người (khách hàng) tìm thấy
+                while (hasResults) {
+                    ResultSet resultSet = callableStatement.getResultSet();
+                    while (resultSet.next()) {
+                        String maKhachHang = resultSet.getString("KH_NguoiID");
+                        String hoTen = resultSet.getString("hoTen");
+                        String sdt = resultSet.getString("SDT");
+                        float tongTien = resultSet.getFloat("TongTien");
+                        int diemTichLuy = resultSet.getInt("diem");
 
-                while (resultSet.next()) {
-                    String maNguoi = resultSet.getString("MaNguoi");
-                    String hoTen = resultSet.getString("HoTen");
-                    boolean gioiTinh = resultSet.getBoolean("GioiTinh");
-                    Date ngaySinh = resultSet.getDate("NgaySinh");
-                    String diaChi = resultSet.getString("DiaChi");
-                    String sdt = resultSet.getString("SDT");
-
-                    // Tạo đối tượng Nguoi với thông tin tìm thấy
-                    Nguoi nguoi = new Nguoi(maNguoi, hoTen, gioiTinh, ngaySinh, diaChi, sdt);
-                    danhSachNguoi.add(nguoi);
+                        // Tạo đối tượng KhachHang với thông tin tìm thấy
+                        KhachHang khachHang = new KhachHang(maKhachHang, diemTichLuy, tongTien, hoTen, sdt);
+                        danhSachNguoi.add(khachHang);
+                    }
+                    hasResults = callableStatement.getMoreResults(); // Kiểm tra xem còn kết quả nào nữa không
                 }
-
-                return danhSachNguoi;
             }
         } catch (SQLException e) {
             e.printStackTrace();
             // Xử lý ngoại lệ nếu có
         }
-        return null;
+
+        return danhSachNguoi;
     }
+
 
     @Override
     public List<KhachHang> DanhSach() {

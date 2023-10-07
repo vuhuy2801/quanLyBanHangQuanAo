@@ -1,6 +1,10 @@
 package com.quanlybanhangquanao.quanlybanhangquanao;
 
 import com.quanlybanhangquanao.quanlybanhangquanao.models.SanPham;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -13,6 +17,7 @@ import javafx.scene.layout.VBox;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +28,7 @@ public class QuanLySanPhamViewController {
     private VBox ListSanPham; // Tham chiếu đến VBox trong QuanLySanPham.fxml
 
     @FXML
-    private TextField searchField;
+    private TextField inputTimKiemSanPham;
     @FXML
     private ItemListSanPhamController itemListController;
 
@@ -32,17 +37,28 @@ public class QuanLySanPhamViewController {
     @FXML
     private Pane subPane;
 
-
+    private SanPham sanPham;
 
     DecimalFormat decimalFormat = new DecimalFormat("#0.00");
     @FXML
     private void initialize() {
-        loadSanPham();
+        sanPham = new SanPham();
+        inputTimKiemSanPham.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                ListSanPham.getChildren().clear();
+                loadSanPham(sanPham.TimKiem(newValue));
+                System.out.println("Dữ liệu đã thay đổi thành: " + newValue);
+                // Đây bạn có thể thực hiện xử lý dựa trên dữ liệu đã nhập
+            }
+        });
+
+        loadSanPham(sanPham.DanhSach());
     }
 
-    void loadSanPham(){
-        SanPham sanPham = new SanPham();
-        List<SanPham> danhSachSanPham = sanPham.DanhSach();
+
+
+    void loadSanPham(List<SanPham> danhSachSanPham){
         try {
             // Vòng lặp để nạp và thêm từng mục vào VBox
             for (int i = 0; i < danhSachSanPham.size(); i++) {
@@ -72,7 +88,7 @@ public class QuanLySanPhamViewController {
             subPane.toFront();
 
         } else if (typeButton.equals("delete")) {
-            SanPham sanPham = new SanPham();
+//            SanPham sanPham = new SanPham();
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
             confirmationAlert.setTitle("Xác nhận");
             confirmationAlert.setHeaderText("Xác nhận xóa tệp?");
@@ -84,7 +100,7 @@ public class QuanLySanPhamViewController {
                 if (response == buttonTypeOK) {
                     sanPham.Xoa(id);
                     ListSanPham.getChildren().clear();
-                    loadSanPham();
+                    loadSanPham(sanPham.DanhSach());
                     System.out.println("Xóa tệp thành công");
 
                 } else {
@@ -104,9 +120,10 @@ public class QuanLySanPhamViewController {
 
     public void handleChiTietSanPhamClick(String typeButton) {
         if (typeButton.equals("BtnQuayLai")) {
+
             subPane.getChildren().clear();
             ListSanPham.getChildren().clear();
-            loadSanPham();
+            loadSanPham(sanPham.DanhSach());
             mainPane.toFront();
         }
     }

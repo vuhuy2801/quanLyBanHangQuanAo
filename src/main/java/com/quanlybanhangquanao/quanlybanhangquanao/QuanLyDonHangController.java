@@ -1,6 +1,7 @@
 package com.quanlybanhangquanao.quanlybanhangquanao;
 
 import com.quanlybanhangquanao.quanlybanhangquanao.models.DonHang;
+import com.quanlybanhangquanao.quanlybanhangquanao.models.SanPham;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,12 +10,21 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class QuanLyDonHangController {
 
@@ -36,33 +46,46 @@ public class QuanLyDonHangController {
     @FXML
     private Pane subPane;
 
-    String[] orderCodes = {"DH001", "DH002", "DH003", "DH004", "DH005"};
-    String[] orderTimes = {"2023-01-15 10:30", "2023-01-16 14:45", "2023-01-17 09:15", "2023-01-18 16:20", "2023-01-19 11:55"};
-    String[] customers = {"Khách hàng 1", "Khách hàng 2", "Khách hàng 3", "Khách hàng 4", "Khách hàng 5"};
-    String[] totalPrices = {"500,000 vnđ", "750,000 vnđ", "320,000 vnđ", "980,000 vnđ", "250,000 vnđ"};
-    String[] discounts = {"50,000 vnđ", "0 vnđ", "30,000 vnđ", "100,000 vnđ", "0 vnđ"};
-
+    DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+    private DonHang donHang;
     @FXML
     private void initialize() {
+        donHang = new DonHang();
+        loadDonHang(donHang.DanhSach());
+    }
+
+    public static LocalDate formatDate(String inputDate, String inputFormat) throws ParseException {
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat(inputFormat);
+
+        Date date = inputDateFormat.parse(inputDate);
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+    void loadDonHang(List<DonHang> danhSachDonHang){
         try {
-            for (int i = 0 ; i < orderCodes.length; i++) {
+            for (int i = 0 ; i < danhSachDonHang.size(); i++) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemListDonHang.fxml"));
                 Pane item = loader.load();
 
                 ItemListDonHangController itemController = loader.getController();
                 itemController.setQuanLyDonHangController(this);
-                itemController.setOrderData(orderCodes[i], orderTimes[i], customers[i], totalPrices[i], discounts[i]);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                String formattedDate = formatDate(String.valueOf(danhSachDonHang.get(i).getNgayLap()), "yyyy-MM-dd").format(formatter);
+                itemController.setOrderData(danhSachDonHang.get(i).getMaDonHang(),
+                        formattedDate,
+                        danhSachDonHang.get(i).getHoTenKhachHang(),
+                        decimalFormat.format(danhSachDonHang.get(i).getTongTienHang()),
+                        decimalFormat.format(danhSachDonHang.get(i).getGiamGia()));
 
                 ListDonHang.getChildren().add(item);
             }
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
     }
 
     public void handleIconClick(String id, String typeButton) {
         if (typeButton.equals("edit")) {
-//            loadScreen("ChiTietDonHang.fxml", subPane, typeButton);
+            loadScreen("ChiTietDonHang.fxml", subPane, typeButton);
             subPane.toFront();
         } else if (typeButton.equals("view")) {
             loadScreen("ChiTietDonHang.fxml", subPane, typeButton);
@@ -113,6 +136,7 @@ public class QuanLyDonHangController {
 
             ChiTietDonHangController itemController = loader.getController();
             itemController.setQuanLyDonHangController(this);
+
             container.getChildren().clear();
             container.getChildren().add(screen);
         } catch (Exception e) {

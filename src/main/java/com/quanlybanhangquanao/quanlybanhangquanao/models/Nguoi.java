@@ -96,7 +96,7 @@ public class Nguoi implements NguoiService {
     }
 
     @Override
-    public List<Nguoi> TimKiem(String key) {
+    public List<KhachHang> TimKiem(String key) {
         // Implement the logic for searching Nguoi
         return null;
     }

@@ -11,26 +11,7 @@ import java.util.List;
 public class ChiTietDonHang extends DonHang {
     private int soLuong;
 
-    @Override
-    public NhanVien getNhanVien() {
-        return nhanVien;
-    }
-
-    @Override
-    public void setNhanVien(NhanVien nhanVien) {
-        this.nhanVien = nhanVien;
-    }
-
     private NhanVien nhanVien;
-    @Override
-    public KhachHang getKhachHang() {
-        return khachHang;
-    }
-
-    @Override
-    public void setKhachHang(KhachHang khachHang) {
-        this.khachHang = khachHang;
-    }
 
     private KhachHang khachHang;
     @Override
@@ -46,6 +27,15 @@ public class ChiTietDonHang extends DonHang {
     private BigDecimal giamGia;
     private SanPham sanPham;
 
+    public String getMaHang() {
+        return sanPham.getMaHang();
+
+    }
+
+    public void setMaHang(String maHang) {
+        sanPham.setMaHang(maHang);
+    }
+
     public float getThanhTien() {
         return thanhTien;
     }
@@ -54,9 +44,28 @@ public class ChiTietDonHang extends DonHang {
         this.thanhTien = thanhTien;
     }
 
+    @Override
+    public String getHoTenNhanVien() {
+        return nhanVien.getHoTen();
+
+    }
+    @Override
+    public void setHoTenNhanVien(String hoTen) {
+        nhanVien.setHoTen(hoTen);
+    }
+    @Override
+    public String getHoTenKhachHang() {
+        return khachHang.getHoTen();
+    }
+    @Override
+    public void setHoTenKhachHang(String hoTen) {
+        khachHang.setHoTen(hoTen);
+    }
     private float thanhTien;
     public ChiTietDonHang() {
-        // Constructor
+        sanPham = new SanPham();
+        khachHang = new KhachHang();
+        nhanVien = new NhanVien();
     }
 
     public void setSoLuong(int soLuong) {
@@ -82,7 +91,7 @@ public class ChiTietDonHang extends DonHang {
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, getMaDonHang()); // Truyền mã hóa đơn
-                callableStatement.setString(2, chiTietDonHang.getSanPham().getMaHang()); // Truyền mã sản phẩm
+                callableStatement.setString(2, chiTietDonHang.getMaHang()); // Truyền mã sản phẩm
                 callableStatement.setInt(3, chiTietDonHang.getSoLuong()); // Truyền số lượng
                 callableStatement.setBigDecimal(4, chiTietDonHang.getGiamGia()); // Truyền giảm giá
                 callableStatement.execute();
@@ -110,8 +119,8 @@ public class ChiTietDonHang extends DonHang {
                     ChiTietDonHang chiTietDonHang = new ChiTietDonHang();
                     chiTietDonHang.setMaDonHang(resultSet.getString("maHD"));
                     chiTietDonHang.setNgayLap(resultSet.getTimestamp("ngayLap"));
-                    chiTietDonHang.khachHang.setHoTen(resultSet.getString("TenKhachHang"));
-                    chiTietDonHang.nhanVien.setHoTen(resultSet.getString("TenNhanVien"));
+                    chiTietDonHang.setHoTenKhachHang(resultSet.getString("TenKhachHang"));
+                    chiTietDonHang.setHoTenNhanVien(resultSet.getString("TenNhanVien"));
                     return chiTietDonHang;
                 }
             }
@@ -128,7 +137,7 @@ public class ChiTietDonHang extends DonHang {
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, chiTietDonHang.getMaDonHang());
-                callableStatement.setString(2, chiTietDonHang.getSanPham().getMaHang());
+                callableStatement.setString(2, chiTietDonHang.getMaHang());
                 callableStatement.setInt(3, chiTietDonHang.getSoLuong());
                 callableStatement.setBigDecimal(4, chiTietDonHang.getGiamGia());
                 int rowsUpdated = callableStatement.executeUpdate();

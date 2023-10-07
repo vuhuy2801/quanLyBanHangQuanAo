@@ -62,7 +62,7 @@ public class NhanVien extends Nguoi {
     }
 
     @Override
-    public List<Nguoi> TimKiem(String key) {
+    public List<KhachHang> TimKiem(String key) {
         // Implement the logic for searching Nguoi
         return null;
     }

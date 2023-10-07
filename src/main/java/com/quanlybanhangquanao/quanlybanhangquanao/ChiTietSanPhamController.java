@@ -166,7 +166,6 @@ public class ChiTietSanPhamController {
             }
         }
 
-
         SanPham sanPham = new SanPham(data[0], data[1], data[6], data[7], new BigDecimal(data[2]), new BigDecimal(data[3]), Integer.parseInt(data[4]), new BigDecimal(data[5]), null);
         System.out.println(sanPham.getTenHang());
         boolean isSuccess = ThemSanPham(sanPham);
