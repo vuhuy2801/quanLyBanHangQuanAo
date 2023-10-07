@@ -45,14 +45,13 @@ public class QuanLyDonHangController {
     @FXML
     private void initialize() {
         try {
-            DonHang donHang =  new DonHang();
-            for (DonHang objDonHang : donHang.DanhSach()) {
+            for (int i = 0 ; i < orderCodes.length; i++) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemListDonHang.fxml"));
                 Pane item = loader.load();
 
                 ItemListDonHangController itemController = loader.getController();
                 itemController.setQuanLyDonHangController(this);
-                itemController.setOrderData(objDonHang.getMaDonHang(), donHang.getNgayLap(), customers[i], totalPrices[i], discounts[i]);
+                itemController.setOrderData(orderCodes[i], orderTimes[i], customers[i], totalPrices[i], discounts[i]);
 
                 ListDonHang.getChildren().add(item);
             }
