@@ -10,7 +10,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.math.BigDecimal;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.io.IOException;
@@ -114,6 +116,7 @@ public class ChiTietSanPhamController {
     }
 
 
+
     @FXML
     void handleBtnQuayLaiClick() {
         quanLySanPhamController.handleChiTietSanPhamClick("BtnQuayLai");
@@ -121,14 +124,13 @@ public class ChiTietSanPhamController {
 
     @FXML
     void handleBtnThemClick() {
+        try {
         String id = BtnThem.getId();
         if (id.equals("submitEdit")) {
-            if (handleUpdateSanPham(true)) {
-
-                // bắn đến sửa sanpham.sua
+            boolean isSuccess = handleUpdateSanPham();
+            if (isSuccess) {
                 setTextButtonThem("Sửa sản phẩm", "view");
                 disableTextFieldEditing();
-                thongBao("Thành công", "Sản phẩm đã được cập nhật thành công");
             }
 
         } else if (id.equals("view")) {
@@ -137,12 +139,12 @@ public class ChiTietSanPhamController {
 
         } else if (id.equals("themSanPham")) {
             if (handleThemSanPham()) {
-
-            //bắn đến thêm
-                thongBao("Thành công", "Sản phẩm đã được thêm thành công");
                 quanLySanPhamController.handleChiTietSanPhamClick("BtnQuayLai");
             }
 
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -159,27 +161,63 @@ public class ChiTietSanPhamController {
         String[] data = getDataSanPham();
         for (int i = 0; i < data.length; i++) {
             if (data[i].equals("")) {
-                thongBao("lỗi", "dữ liệu không đc để trống");
+                thongBao("Lỗi", "Dữ liệu không được để trống");
                 return false;
-            } else {
-                System.out.println(data[i]);
             }
         }
-        return true;
-    }
 
 
-
-    boolean handleUpdateSanPham(boolean isSuccess) {
+        SanPham sanPham = new SanPham(data[0], data[1], data[6], data[7], new BigDecimal(data[2]), new BigDecimal(data[3]), Integer.parseInt(data[4]), new BigDecimal(data[5]), null);
+        System.out.println(sanPham.getTenHang());
+        boolean isSuccess = ThemSanPham(sanPham);
         if (isSuccess) {
-            String[] data = getDataSanPham();
-            for (int i = 0; i < data.length; i++) {
-                System.out.println(data[i]);
-            }
-            return true;
+            thongBao("Thành công", "Sản phẩm đã được thêm thành công");
+            quanLySanPhamController.handleChiTietSanPhamClick("BtnQuayLai");
         }
-        return false;
+
+        return isSuccess;
     }
+
+    private boolean ThemSanPham(SanPham sanPham) {
+        return sanPham.Them(sanPham);
+    }
+
+
+    DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+
+    boolean handleUpdateSanPham() {
+        String[] data = getDataSanPham();
+        String giaBanText = data[2];
+        String giaVonText = data[3];
+
+        giaBanText = giaBanText.replace(",", ".");
+        giaVonText = giaVonText.replace(",", ".");
+        BigDecimal giaBan = new BigDecimal(giaBanText);
+        BigDecimal giaVon = new BigDecimal(giaVonText);
+
+        for (int i = 0; i < data.length; i++) {
+            if (data[i].isEmpty()) {
+
+                thongBao("Lỗi", "Dữ liệu không được để trống");
+                return false;
+            }
+        }
+        System.out.println(data[2]);
+        SanPham sanPham = new SanPham(data[0], data[1], data[6], data[7], giaBan, giaVon, Integer.parseInt(data[4]), new BigDecimal(data[5]), null);
+
+        boolean isSuccess = sanPham.Sua(sanPham);
+
+        if (isSuccess) {
+            thongBao("Thành công", "Sản phẩm đã được cập nhật thành công");
+            quanLySanPhamController.handleChiTietSanPhamClick("BtnQuayLai");
+        } else {
+            thongBao("Lỗi", "Có lỗi xảy ra khi cập nhật sản phẩm");
+        }
+
+        return isSuccess;
+    }
+
+
 
 
 }

@@ -1,6 +1,11 @@
 package com.quanlybanhangquanao.quanlybanhangquanao.models;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -75,6 +80,7 @@ public class KhachHang extends Nguoi {
                 ResultSet resultSet = callableStatement.executeQuery();
 
                 if (resultSet.next()) {
+
                     // Lấy thông tin từ ResultSet
                     String maNguoi = resultSet.getString("KH_NguoiID");
                     String hoTen = resultSet.getString("hoTen");
@@ -102,31 +108,23 @@ public class KhachHang extends Nguoi {
     public boolean Them(Nguoi n) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             String storedProcedure = "{call dbo.kh_themKhachHang(?, ?, ?, ?, ?, ?, ?, ?)}";
-
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, n.getMaNguoi()); // Đảm bảo bạn đã thêm getter cho maNguoi trong lớp cha Nguoi
                 callableStatement.setString(2, n.getHoTen());
                 callableStatement.setBoolean(3, n.getGioiTinh());
-                callableStatement.setDate(4, new java.sql.Date(n.getNgaySinh().getTime()));
+                Date ngaySinhUtil = n.getNgaySinh();
+                java.sql.Date ngaySinhSql = new java.sql.Date(ngaySinhUtil.getTime());
+                callableStatement.setDate(4, ngaySinhSql);
                 callableStatement.setString(5, n.getDiaChi());
                 callableStatement.setString(6, n.getSDT()); // Chuyển SDT sang kiểu String
-                callableStatement.setString(7, null); // Thay thế bằng nguoiTao thích hợp
-                callableStatement.setTimestamp(8, null); // Thay thế bằng ngayTao thích hợp
+                callableStatement.setString(7, "NV001"); // Thay thế bằng nguoiTao thích hợp
 
-                // Thực hiện stored procedure và lấy kết quả trả về
+                callableStatement.setTimestamp(8, null);
                 callableStatement.execute();
-                int result = callableStatement.getInt(9); // Đảm bảo rằng bạn lấy giá trị đúng của kết quả
-
-                // Xử lý kết quả theo logic của bạn
-                if (result == 1) {
-                    return true; // Thêm người (nhân viên) thành công
-                } else {
-                    return false; // Thêm người (nhân viên) không thành công
-                }
+                    return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Xử lý ngoại lệ nếu có
         }
         return false;
     }
@@ -134,31 +132,23 @@ public class KhachHang extends Nguoi {
     @Override
     public boolean Sua(Nguoi n) {
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.kh_suaThongTinKhachHang(?, ?, ?, ?, ?, ?, ?)}";
+            String storedProcedure = "{call dbo.kh_suaThongTinKhachHang(?, ?, ?, ?, ?, ?)}";
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, n.getMaNguoi()); // Đảm bảo bạn đã thêm getter cho maNguoi trong lớp cha Nguoi
                 callableStatement.setString(2, n.getHoTen());
                 callableStatement.setBoolean(3, n.getGioiTinh());
-                callableStatement.setDate(4, new java.sql.Date(n.getNgaySinh().getTime()));
+                Date ngaySinhUtil = n.getNgaySinh();
+                java.sql.Date ngaySinhSql = new java.sql.Date(ngaySinhUtil.getTime());
+                callableStatement.setDate(4, ngaySinhSql);
                 callableStatement.setString(5, n.getDiaChi());
                 callableStatement.setString(6, n.getSDT()); // Chuyển SDT sang kiểu String
-                callableStatement.setInt(7, 0); // Thay thế bằng diem thích hợp nếu cần
-
-                // Thực hiện stored procedure và lấy kết quả trả về
                 callableStatement.execute();
-                int result = callableStatement.getInt(8); // Đảm bảo rằng bạn lấy giá trị đúng của kết quả
 
-                // Xử lý kết quả theo logic của bạn
-                if (result == 1) {
                     return true; // Cập nhật thông tin thành công
-                } else {
-                    return false; // Cập nhật thông tin không thành công
-                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Xử lý ngoại lệ nếu có
         }
         return false;
     }
@@ -171,16 +161,9 @@ public class KhachHang extends Nguoi {
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, id); // Truyền mã khách hàng cần xóa
-
-                // Thực hiện stored procedure và lấy kết quả trả về
-                callableStatement.execute();
-                int result = callableStatement.getInt(2); // Đảm bảo rằng bạn lấy giá trị đúng của kết quả
-
-                // Xử lý kết quả theo logic của bạn
-                if (result == 1) {
-                    return true; // Xóa người (nhân viên) thành công
-                } else {
-                    return false; // Xóa người (nhân viên) không thành công
+                int rowsAffected = callableStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    return true;
                 }
             }
         } catch (SQLException e) {

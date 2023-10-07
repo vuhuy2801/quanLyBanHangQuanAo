@@ -12,6 +12,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.text.SimpleDateFormat;
 public class QuanLyKhachHangController {
@@ -28,8 +32,7 @@ public class QuanLyKhachHangController {
     @FXML
     private Pane subPane;
 
-    @FXML
-    private void initialize() {
+    private void loadKhachHang(){
         KhachHang khachHang = new KhachHang();
         List<KhachHang> danhSachKhachHang = khachHang.DanhSach();
 
@@ -49,6 +52,12 @@ public class QuanLyKhachHangController {
         }
     }
 
+
+    @FXML
+    private void initialize() {
+        loadKhachHang();
+    }
+
     public void handleIconClick(String id, String typeButton) {
         if (typeButton.equals("edit")) {
             KhachHang nguoi = new KhachHang();
@@ -59,6 +68,7 @@ public class QuanLyKhachHangController {
             loadScreen("ChiTietKhachHang.fxml", subPane, typeButton, nguoi.ChiTiet(id));
             subPane.toFront();
         } else if (typeButton.equals("delete")) {
+
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
             confirmationAlert.setTitle("Xác nhận");
             confirmationAlert.setHeaderText("Xác nhận xóa khách hàng?");
@@ -69,7 +79,12 @@ public class QuanLyKhachHangController {
 
             confirmationAlert.showAndWait().ifPresent(response -> {
                 if (response == buttonTypeOK) {
+                    KhachHang nguoi = new KhachHang();
+                    nguoi.Xoa(id);
+                    ListKhachHang.getChildren().clear();
+//                    mainPane.getChildren().clear();
                     System.out.println("Khách hàng đã được xóa.");
+                    loadKhachHang();
                 } else {
                     System.out.println("Xóa khách hàng đã bị hủy.");
                 }
@@ -88,12 +103,21 @@ public class QuanLyKhachHangController {
     public void handleChiTietKhachHangClick(String typeButton) {
         if (typeButton.equals("BtnQuayLai")) {
             subPane.getChildren().clear();
+            ListKhachHang.getChildren().clear();
+            loadKhachHang();
             mainPane.toFront();
         }
     }
 
+    public static LocalDate formatDate(String inputDate, String inputFormat) throws ParseException {
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat(inputFormat);
+
+        Date date = inputDateFormat.parse(inputDate);
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+
     private void loadScreen(String fxmlFileName, Pane container, String TypeButton, KhachHang nguoi) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFileName));
             Pane screen = loader.load();
@@ -102,11 +126,11 @@ public class QuanLyKhachHangController {
 
             if (TypeButton.equals("edit")) {
                 itemController.setTextButtonThem("Lưu", "submitEdit");
-                itemController.setDataKhachHang(nguoi.getMaNguoi(), nguoi.getHoTen(),  nguoi.getSDT(), sdf.format( nguoi.getNgaySinh()), String.valueOf(nguoi.getGioiTinh()),nguoi.getDiaChi());
+                itemController.setDataKhachHang(nguoi.getMaNguoi(), nguoi.getHoTen(),  nguoi.getSDT(), formatDate(String.valueOf(nguoi.getNgaySinh()), "yyyy-MM-dd"), nguoi.getGioiTinh() ,nguoi.getDiaChi());
             } else if (TypeButton.equals("view")) {
                 itemController.setTextButtonThem("Sửa khách hàng", "view");
                 itemController.disableTextFieldEditing();
-                itemController.setDataKhachHang(nguoi.getMaNguoi(), nguoi.getHoTen(),  nguoi.getSDT(), sdf.format( nguoi.getNgaySinh()), String.valueOf(nguoi.getGioiTinh()),nguoi.getDiaChi());
+                itemController.setDataKhachHang(nguoi.getMaNguoi(), nguoi.getHoTen(),  nguoi.getSDT(), formatDate(String.valueOf(nguoi.getNgaySinh()), "yyyy-MM-dd"), nguoi.getGioiTinh(),nguoi.getDiaChi());
 
             }
 
