@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.*?>
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1024.0" style="-fx-background-color: #ffffff;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.ChiTietSanPhamController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1024.0" style="-fx-background-color: #ffffff;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.ChiTietSanPhamController">
    <children>
       <Button fx:id="btnQuayLai" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#handleBtnQuayLaiClick" text="Quay lại">
          <graphic>
@@ -188,8 +185,8 @@
       </VBox>
       <VBox alignment="TOP_CENTER" layoutX="512.0" layoutY="95.0" prefHeight="584.0" prefWidth="512.0" spacing="25.0">
          <children>
-            <Button mnemonicParsing="false" text="Chọn ảnh" />
-            <ImageView fitHeight="410.0" fitWidth="319.0" pickOnBounds="true" preserveRatio="true">
+            <Button fx:id="buttonChonAnh" mnemonicParsing="false" onAction="#handleBtnChonAnhClick" text="Chọn ảnh" />
+            <ImageView fx:id="viewAnh" fitHeight="410.0" fitWidth="319.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/ao.png" />
                </image></ImageView>

@@ -117,7 +117,6 @@ public class SanPham implements SanPhamService {
 
     // Implementing methods from SanPhamService interface
     @Override
-
     public boolean Them(SanPham sanPham) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             String storedProcedure = "{call dbo.sp_ThemSanPham(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
@@ -140,7 +139,7 @@ public class SanPham implements SanPhamService {
             e.printStackTrace();
         }
         return false;
-        }
+    }
 
 
 

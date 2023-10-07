@@ -3,8 +3,6 @@ package com.quanlybanhangquanao.quanlybanhangquanao;
 import com.quanlybanhangquanao.quanlybanhangquanao.models.SanPham;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -14,13 +12,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class QuanLySanPhamViewController {
 
@@ -140,13 +134,14 @@ public class QuanLySanPhamViewController {
 
             if (TypeButton.equals("edit")) {
                 itemController.setTextButtonThem("Lưu", "submitEdit");
-                itemController.setDataSanPham(sanpham.getMaHang(), sanpham.getTenHang(), decimalFormat.format(sanpham.getGiaBan()),  decimalFormat.format(sanpham.getGiaVon()),  sanpham.getNhomHang(), sanpham.getThuongHieu(), String.valueOf(sanpham.getTonKho()), String.valueOf(sanpham.getTrongLuong()));
+
+                itemController.setDataSanPham(sanpham.getMaHang(), sanpham.getTenHang(), decimalFormat.format(sanpham.getGiaBan()),  decimalFormat.format(sanpham.getGiaVon()),  sanpham.getNhomHang(), sanpham.getThuongHieu(), String.valueOf(sanpham.getTonKho()), String.valueOf(sanpham.getTrongLuong()), sanpham.getAnh());
 
             } else if (TypeButton.equals("view")) {
                 itemController.setTextButtonThem("Sửa sản phẩm", "view");
                 itemController.disableTextFieldEditing();
                 //set data
-                itemController.setDataSanPham(sanpham.getMaHang(), sanpham.getTenHang(), decimalFormat.format(sanpham.getGiaBan()),  decimalFormat.format(sanpham.getGiaVon()),  sanpham.getNhomHang(), sanpham.getThuongHieu(), String.valueOf(sanpham.getTonKho()), String.valueOf(sanpham.getTrongLuong()));
+                itemController.setDataSanPham(sanpham.getMaHang(), sanpham.getTenHang(), decimalFormat.format(sanpham.getGiaBan()),  decimalFormat.format(sanpham.getGiaVon()),  sanpham.getNhomHang(), sanpham.getThuongHieu(), String.valueOf(sanpham.getTonKho()), String.valueOf(sanpham.getTrongLuong()), sanpham.getAnh());
             }
             container.getChildren().clear();
             container.getChildren().add(screen);
