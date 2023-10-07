@@ -17,12 +17,13 @@ import javafx.scene.layout.Pane;
 import com.quanlybanhangquanao.quanlybanhangquanao.models.SanPham;
 import javafx.stage.Stage;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class ThemDonHangController {
 
@@ -182,6 +183,31 @@ public class ThemDonHangController {
         updateCacLabelTongHop();
     }
 
+    public static String dinhDangTien(BigDecimal soTien) {
+        DecimalFormat MONEY_FORMATTER = (DecimalFormat) NumberFormat.getInstance(Locale.getDefault());
+        MONEY_FORMATTER.applyPattern("#,##0.### ₫");
+        return MONEY_FORMATTER.format(soTien);
+    }
+
+    // Chuyển đổi chuỗi định dạng số tiền thành BigDecimal
+    public static BigDecimal chuyenChuoiTienSangBigDecimal(String chuoiTien) {
+        try {
+            DecimalFormat MONEY_FORMATTER = (DecimalFormat) NumberFormat.getInstance(Locale.getDefault());
+            MONEY_FORMATTER.applyPattern("#,##0.### ₫");
+
+            // Loại bỏ các ký tự không phải là số, dấu phẩy và dấu chấm
+            String chuoiTienDaChuanHoa = chuoiTien
+                    .replaceAll("[^0-9.,]", "")
+                    .replace(",", "");
+
+            return new BigDecimal(chuoiTienDaChuanHoa);
+        } catch (NumberFormatException e) {
+            // Xử lý nếu có lỗi khi chuyển đổi
+            e.printStackTrace();
+            return BigDecimal.ZERO; // Hoặc có thể trả về giá trị mặc định khác
+        }
+    }
+
 
     // Cập nhật thời gian hiện tại
     private void updateThoiGianLapHoaDon() {
@@ -193,25 +219,26 @@ public class ThemDonHangController {
 
     // Cập nhật các giá trị SoLuong, GiamGia và TongTienHang
     private void updateCacLabelTongHop() {
-        int soLuongTong = 0;
-        int giamGiaTong = 0;
-        int tongTienHang = 0;
+        BigDecimal soLuongTong = BigDecimal.ZERO;
+        BigDecimal giamGiaTong = BigDecimal.ZERO;
+        BigDecimal tongTienHang = BigDecimal.ZERO;
 
         for (ItemListHoaDon item : tableViewChiTietDonHang.getItems()) {
-            int soLuong = Integer.parseInt(item.getSoLuong());
-            int giamGia = Integer.parseInt(item.getGiamGia().replace(",", ""));
-            int thanhTien = Integer.parseInt(item.getThanhTien().replace(",", ""));
+            BigDecimal soLuong = new BigDecimal(item.getSoLuong());
+            BigDecimal giamGia = chuyenChuoiTienSangBigDecimal(item.getGiamGia());
+            BigDecimal thanhTien = chuyenChuoiTienSangBigDecimal(item.getThanhTien());
 
-            soLuongTong += soLuong;
-            giamGiaTong += giamGia;
-            tongTienHang += thanhTien;
+            soLuongTong = soLuongTong.add(soLuong);
+            giamGiaTong = giamGiaTong.add(giamGia);
+            tongTienHang = tongTienHang.add(thanhTien);
         }
 
         // Cập nhật các Label với giá trị tính toán
-        valueSoLuong.setText(Integer.toString(soLuongTong));
-        valueGiamGia.setText(Integer.toString(giamGiaTong));
-        valueTongTienHang.setText(String.format("%,d", tongTienHang));
+        valueSoLuong.setText(soLuongTong.toString());
+        valueGiamGia.setText(giamGiaTong.toString());
+        valueTongTienHang.setText(dinhDangTien(tongTienHang)); // Use the formatMoney method to format the BigDecimal
     }
+
 
     @FXML
     private void handleThemSanPham(int index) {
@@ -285,7 +312,7 @@ public class ThemDonHangController {
         SanPham sanpham = new SanPham();
         ArrayList<ItemListSanPham> listSanPham = new ArrayList<>();
         for (SanPham item : sanpham.DanhSach()) {
-            listSanPham.add( new ItemListSanPham(item.getMaHang(), item.getTenHang(), String.valueOf(item.getTonKho()), String.valueOf(item.getGiaBan()), "+"));
+            listSanPham.add( new ItemListSanPham(item.getMaHang(), item.getTenHang(), String.valueOf(item.getTonKho()), dinhDangTien(item.getGiaBan()), "+"));
         }
         return listSanPham;
     }
@@ -294,7 +321,7 @@ public class ThemDonHangController {
         SanPham sanpham = new SanPham();
         ArrayList<ItemListSanPham> listSanPham = new ArrayList<>();
         for (SanPham item : sanpham.TimKiem(keyword)) {
-            listSanPham.add( new ItemListSanPham(item.getMaHang(), item.getTenHang(), String.valueOf(item.getTonKho()), String.valueOf(item.getGiaBan()), "+"));
+            listSanPham.add( new ItemListSanPham(item.getMaHang(), item.getTenHang(), String.valueOf(item.getTonKho()),dinhDangTien(item.getGiaBan()) , "+"));
         }
         return listSanPham;
     }
@@ -381,20 +408,21 @@ public class ThemDonHangController {
         }
     }
 
-    private boolean isValidGiamGia(String newValue , ItemListHoaDon item) {
-        int value = Integer.parseInt(newValue);
-
-        int soLuong = Integer.parseInt(item.getSoLuong());
-        int donGia = Integer.parseInt(item.getDonGia().replace(",", ""));
-        int thanhTien = soLuong * donGia;
-        // Kiểm tra nếu giá trị là số không âm
+    private boolean isValidGiamGia(String newValue, ItemListHoaDon item) {
         try {
-        return value >= 0 && thanhTien >= value;
+            BigDecimal value = new BigDecimal(newValue);
 
+            BigDecimal soLuong = new BigDecimal(item.getSoLuong());
+            BigDecimal donGia = chuyenChuoiTienSangBigDecimal(item.getDonGia());
+            BigDecimal thanhTien = soLuong.multiply(donGia);
+
+            // Check if the value is non-negative and less than or equal to thanhTien
+            return value.compareTo(BigDecimal.ZERO) >= 0 && value.compareTo(thanhTien) <= 0;
         } catch (NumberFormatException e) {
             return false;
         }
     }
+
 
 
     @FXML
@@ -469,16 +497,17 @@ public class ThemDonHangController {
     }
 
 
-    private float calculateTotal(List<ItemListHoaDon> listChiTietHD) {
-        float total = 0;
+    private BigDecimal calculateTotal(List<ItemListHoaDon> listChiTietHD) {
+        BigDecimal total = BigDecimal.ZERO; // Initialize total to zero
         for (ItemListHoaDon item : listChiTietHD) {
-            String donGiaStr = item.getDonGia().replace(",", ""); // Xóa dấu phẩy khỏi chuỗi đơn giá
-            float donGia = Float.parseFloat(donGiaStr);
-            int soLuong = Integer.parseInt(item.getSoLuong()); // Lấy giá trị số lượng từ chi tiết hóa đơn (thay bằng phương thức lấy số lượng thích hợp)
-            total += donGia * soLuong;
+            BigDecimal donGia = chuyenChuoiTienSangBigDecimal(item.getDonGia());
+            int soLuong = Integer.parseInt(item.getSoLuong());
+
+            total = total.add(donGia.multiply(new BigDecimal(soLuong)));
         }
         return total;
     }
+
 
 
     private void printDonHangInfo(DonHang donHang, List<ItemListHoaDon> listChiTietHD) {
@@ -498,8 +527,8 @@ public class ThemDonHangController {
         }
 
         // In tổng thanh toán
-        float total = calculateTotal(listChiTietHD);
-        System.out.println("Tổng thanh toán: " + total);
+        BigDecimal total = calculateTotal(listChiTietHD);
+        System.out.println("Tổng thanh toán: " + dinhDangTien(total));
     }
 
 
@@ -512,32 +541,26 @@ public class ThemDonHangController {
 
 
     private void handleUpdateThanhTien(ItemListHoaDon item) {
-        // Tính toán giá trị mới cho thuộc tính thanhTien dựa trên giá trị soLuong và donGia
-        int soLuong = Integer.parseInt(item.getSoLuong());
-        int donGia = Integer.parseInt(item.getDonGia().replace(",", ""));
-        int giamGia = Integer.parseInt(item.getGiamGia().replace(",", ""));
+        // Parse soLuong, donGia, and giamGia as BigDecimal
+        BigDecimal soLuong = new BigDecimal(item.getSoLuong());
+        BigDecimal donGia = chuyenChuoiTienSangBigDecimal(item.getDonGia());
+        BigDecimal giamGia = chuyenChuoiTienSangBigDecimal(item.getGiamGia());
 
-        int thanhTien = soLuong * donGia - giamGia;
+        // Calculate the new value for thanhTien based on soLuong, donGia, and giamGia
+        BigDecimal thanhTien = soLuong.multiply(donGia).subtract(giamGia);
 
-        // Cập nhật thuộc tính thanhTien
-        item.setThanhTien(String.format("%,d", thanhTien));
-
-        // Tìm và cập nhật lại đối tượng tương ứng trong sampleData
-//        for (ItemListHoaDon dataItem : sampleData) {
-//            if (dataItem.getStt().equals(item.getStt())) {
-//                dataItem.setThanhTien(item.getThanhTien());
-//                break;
-//            }
-//        }
+        // Format and update the thanhTien property
+        item.setThanhTien(dinhDangTien(thanhTien));
 
         // In ra giá trị thanhTien để kiểm tra
         System.out.println("Thành tiền mới: " + item.getThanhTien());
 
-        //update tổng tiền
+        // Update tổng tiền
         updateCacLabelTongHop();
         // Cập nhật TableView
         tableViewChiTietDonHang.refresh();
     }
+
 
 
     // Lớp mô hình dữ liệu cho TableView

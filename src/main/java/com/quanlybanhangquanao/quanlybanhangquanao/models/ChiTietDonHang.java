@@ -10,7 +10,40 @@ import java.util.List;
 
 public class ChiTietDonHang extends DonHang {
     private int soLuong;
-    private float giamGia;
+
+    @Override
+    public NhanVien getNhanVien() {
+        return nhanVien;
+    }
+
+    @Override
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
+    }
+
+    private NhanVien nhanVien;
+    @Override
+    public KhachHang getKhachHang() {
+        return khachHang;
+    }
+
+    @Override
+    public void setKhachHang(KhachHang khachHang) {
+        this.khachHang = khachHang;
+    }
+
+    private KhachHang khachHang;
+    @Override
+    public BigDecimal getGiamGia() {
+        return giamGia;
+    }
+
+    @Override
+    public void setGiamGia(BigDecimal giamGia) {
+        this.giamGia = giamGia;
+    }
+
+    private BigDecimal giamGia;
     private SanPham sanPham;
 
     public float getThanhTien() {
@@ -34,14 +67,6 @@ public class ChiTietDonHang extends DonHang {
         return soLuong;
     }
 
-    public void setGiamGia(float giamGia) {
-        this.giamGia = giamGia;
-    }
-
-    public float getGiamGia() {
-        return giamGia;
-    }
-
     public void setSanPham(SanPham sanPham) {
         this.sanPham = sanPham;
     }
@@ -59,9 +84,8 @@ public class ChiTietDonHang extends DonHang {
                 callableStatement.setString(1, getMaDonHang()); // Truyền mã hóa đơn
                 callableStatement.setString(2, chiTietDonHang.getSanPham().getMaHang()); // Truyền mã sản phẩm
                 callableStatement.setInt(3, chiTietDonHang.getSoLuong()); // Truyền số lượng
-                callableStatement.setBigDecimal(4, BigDecimal.valueOf(chiTietDonHang.getGiamGia())); // Truyền giảm giá
+                callableStatement.setBigDecimal(4, chiTietDonHang.getGiamGia()); // Truyền giảm giá
                 callableStatement.execute();
-
                 return true;
             }
         } catch (SQLException e) {
@@ -72,21 +96,52 @@ public class ChiTietDonHang extends DonHang {
         return false;
     }
 
-
-
     @Override
-    public boolean Sua(DonHang n) {
-        // Implementation to update a ChiTietDonHang in a DonHang
-        // Return true if successful, false otherwise
+    public ChiTietDonHang ChiTiet(String maDonHang) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String storedProcedure = "{call dbo.hd_layThongTinHoaDonChiTiet(?)}";
+
+            try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
+                callableStatement.setString(1, maDonHang); // Truyền mã đơn hàng
+
+                ResultSet resultSet = callableStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    ChiTietDonHang chiTietDonHang = new ChiTietDonHang();
+                    chiTietDonHang.setMaDonHang(resultSet.getString("maHD"));
+                    chiTietDonHang.setNgayLap(resultSet.getTimestamp("ngayLap"));
+                    chiTietDonHang.khachHang.setHoTen(resultSet.getString("TenKhachHang"));
+                    chiTietDonHang.nhanVien.setHoTen(resultSet.getString("TenNhanVien"));
+                    return chiTietDonHang;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public boolean Sua(ChiTietDonHang chiTietDonHang) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String storedProcedure = "{call dbo.hd_suaChiTietHoaDon(?, ?, ?, ?)}";
+
+            try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
+                callableStatement.setString(1, chiTietDonHang.getMaDonHang());
+                callableStatement.setString(2, chiTietDonHang.getSanPham().getMaHang());
+                callableStatement.setInt(3, chiTietDonHang.getSoLuong());
+                callableStatement.setBigDecimal(4, chiTietDonHang.getGiamGia());
+                int rowsUpdated = callableStatement.executeUpdate();
+                if (rowsUpdated > 0) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
-    @Override
-    public boolean Xoa(String maDonHang) {
-        // Implementation to delete a ChiTietDonHang from a DonHang by ID
-        // Return true if successful, false otherwise
-        return false;
-    }
 
     @Override
     public List<DonHang> TimKiem(String key) {

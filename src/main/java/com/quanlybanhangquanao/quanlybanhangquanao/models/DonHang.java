@@ -1,6 +1,7 @@
 package com.quanlybanhangquanao.quanlybanhangquanao.models;
 import com.quanlybanhangquanao.quanlybanhangquanao.models.services.DonHangService;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,37 +9,56 @@ import java.util.List;
 
 public class DonHang implements DonHangService {
     private String maDonHang;
-
-    public String getMaNhanVien() {
-        return maNhanVien;
+    private NhanVien nhanVien;
+    private BigDecimal tongTienHang;
+    private BigDecimal giamGia;
+    public BigDecimal getGiamGia() {
+        return giamGia;
     }
 
-    public void setMaNhanVien(String maNhanVien) {
-        this.maNhanVien = maNhanVien;
+    public void setGiamGia(BigDecimal giamGia) {
+        this.giamGia = giamGia;
     }
 
-    private String maNhanVien;
 
-    public String getMaKhachHang() {
-        return maKhachHang;
-    }
-
-    public void setMaKhachHang(String maKhachHang) {
-        this.maKhachHang = maKhachHang;
-    }
-
-    private String maKhachHang;
+    private KhachHang khachHang;
     private Date ngayLap;
 
+
+
+    public BigDecimal getTongTienHang() {
+        return tongTienHang;
+    }
+
+    public void setTongTienHang(BigDecimal tongTienHang) {
+        this.tongTienHang = tongTienHang;
+    }
+
+
+    public NhanVien getNhanVien() {
+        return nhanVien;
+    }
+
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
+    }
+
+    public KhachHang getKhachHang() {
+        return khachHang;
+    }
+
+    public void setKhachHang(KhachHang khachHang) {
+        this.khachHang = khachHang;
+    }
 
     public DonHang() {
     }
 
     // Constructor with parameters
-    public DonHang(String maDonHang, String maNhanVien, String maKhachHang, Date ngayLap) {
+    public DonHang(String maDonHang, NhanVien nhanVien, KhachHang khachHang, Date ngayLap) {
         this.maDonHang = maDonHang;
-        this.maNhanVien = maNhanVien;
-        this.maKhachHang = maKhachHang;
+        this.nhanVien = nhanVien;
+        this.khachHang = khachHang;
         this.ngayLap = ngayLap;
     }
 
@@ -76,26 +96,16 @@ public class DonHang implements DonHangService {
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, donHang.getMaDonHang()); // Truyền mã đơn hàng
-                callableStatement.setString(2, donHang.getMaNhanVien()); // Truyền mã nhân viên
+                callableStatement.setString(2, donHang.getNhanVien().getMaNhanVien()); // Truyền mã nhân viên
                 callableStatement.setTimestamp(3, new Timestamp(donHang.getNgayLap().getTime())); // Truyền ngày lập
-                callableStatement.setString(4, donHang.getMaKhachHang()); // Truyền mã khách hàng
+                callableStatement.setString(4, donHang.getKhachHang().getMaKhachHang());
 
-                // Thực hiện stored procedure
                 callableStatement.execute();
-
-                // Lấy kết quả trả về từ stored procedure
-                int result = callableStatement.getInt(5);
-
-                // Xử lý kết quả theo logic của bạn
-                if (result == 1) {
-                    return true; // Đã thêm đơn hàng thành công
-                } else {
-                    return false; // Không thêm đơn hàng
-                }
+                    return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Xử lý ngoại lệ nếu có
+
         }
         return false;
     }
@@ -108,26 +118,15 @@ public class DonHang implements DonHangService {
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, donHang.getMaDonHang()); // Truyền mã đơn hàng
-                callableStatement.setString(2, donHang.getMaNhanVien()); // Truyền mã nhân viên
+                callableStatement.setString(2, donHang.getNhanVien().getMaNhanVien()); // Truyền mã nhân viên
                 callableStatement.setTimestamp(3, new Timestamp(donHang.getNgayLap().getTime())); // Truyền ngày lập
-                callableStatement.setString(4, donHang.getMaKhachHang()); // Truyền mã khách hàng
+                callableStatement.setString(4, donHang.getKhachHang().getMaKhachHang()); // Truyền mã khách hàng
 
-                // Thực hiện stored procedure
                 callableStatement.execute();
-
-                // Lấy kết quả trả về từ stored procedure
-                int result = callableStatement.getInt(1);
-
-                // Xử lý kết quả theo logic của bạn
-                if (result == 1) {
-                    return true; // Đã cập nhật đơn hàng thành công
-                } else {
-                    return false; // Không cập nhật đơn hàng
-                }
+                    return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Xử lý ngoại lệ nếu có
         }
         return false;
     }
@@ -141,27 +140,48 @@ public class DonHang implements DonHangService {
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, key); // Đặt giá trị tham số
                 callableStatement.execute();
-                int result = callableStatement.getInt(1); // 1 là vị trí của cột result trong kết quả
-                if (result == 1) {
-                    return true; // Xóa thành công
-                } else {
-                    return false; // Xóa không thành công
+                int rowsAffected = callableStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    return true;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Xử lý ngoại lệ nếu có
         }
-
-        return false; // Xóa không thành công (lỗi hoặc không tìm thấy đơn hàng)
+        return false;
     }
 
 
     @Override
     public List<DonHang> TimKiem(String key) {
-        // Implement the logic for searching orders
-        return null;
+        List<DonHang> danhSachDonHang = new ArrayList<>();
+
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String storedProcedure = "{call dbo.hd_TimKiemDonHang(?)}";
+
+            try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
+                callableStatement.setString(1, key); // Truyền từ khoá tìm kiếm
+
+                ResultSet resultSet = callableStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    DonHang donHang = new DonHang();
+                    donHang.setMaDonHang(resultSet.getString("maHD"));
+                    donHang.setNgayLap(resultSet.getTimestamp("ngayLap"));
+                    KhachHang khachHang = new KhachHang();
+                    khachHang.setHoTen(resultSet.getString("tenKH"));
+                    donHang.setKhachHang(khachHang);
+                    donHang.setTongTienHang(resultSet.getBigDecimal("TongTienHang"));
+                    donHang.setGiamGia(resultSet.getBigDecimal("GiamGia"));
+                    danhSachDonHang.add(donHang);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return danhSachDonHang;
     }
+
 
 
     @Override
@@ -169,64 +189,88 @@ public class DonHang implements DonHangService {
         List<DonHang> danhSachDonHang = new ArrayList<>();
 
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.hd_DanhSach}";
-
+            String storedProcedure = "{call dbo.hd_layDanhSachHoaDon}";
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
-                // Thực hiện stored procedure
                 ResultSet resultSet = callableStatement.executeQuery();
-
                 while (resultSet.next()) {
                     DonHang donHang = new DonHang();
                     donHang.setMaDonHang(resultSet.getString("maHD"));
                     donHang.setNgayLap(resultSet.getTimestamp("ngayLap"));
-                    donHang.setMaNhanVien(resultSet.getString("NV_NguoiID"));
-                    donHang.setMaKhachHang(resultSet.getString("KH_NguoiID"));
+                    KhachHang khachHang = new KhachHang();
+                    khachHang.setHoTen(resultSet.getString("tenKH"));
+                    donHang.setKhachHang(khachHang);
+                    donHang.setTongTienHang(resultSet.getBigDecimal("TongTienHang"));
+                    donHang.setGiamGia(resultSet.getBigDecimal("GiamGia"));
                     danhSachDonHang.add(donHang);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Xử lý ngoại lệ nếu có
         }
-
         return danhSachDonHang;
     }
+
 
 
     @Override
     public DonHang ChiTiet(String maDonHang) {
         DonHang donHang = null;
-
         try (Connection connection = DatabaseConnection.getConnection()) {
             String storedProcedure = "{call hd_layThongTinHoaDonChiTiet(?)}";
-
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, maDonHang); // Truyền mã hóa đơn vào stored procedure
-
-                // Thực hiện stored procedure
                 ResultSet resultSet = callableStatement.executeQuery();
-
                 if (resultSet.next()) {
                     donHang = new DonHang();
                     donHang.setMaDonHang(resultSet.getString("maHD"));
                     donHang.setNgayLap(resultSet.getTimestamp("ngayLap"));
-                    donHang.setMaKhachHang(resultSet.getString("TenKhachHang"));
-                    donHang.setMaNhanVien(resultSet.getString("TenNhanVien"));
+                    donHang.khachHang.setHoTen(resultSet.getString("TenKhachHang"));
+                    donHang.nhanVien.setHoTen(resultSet.getString("TenNhanVien"));
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Xử lý ngoại lệ nếu có
         }
 
         return donHang;
     }
 
+    public DonHang DonHangCuoi() {
+        DonHang donHangCuoi = null;
+
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String storedProcedure = "{call dbo.hd_layHoaDonCuoi}";
+
+            try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
+                ResultSet resultSet = callableStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    donHangCuoi = new DonHang();
+                    donHangCuoi.setMaDonHang(resultSet.getString("maHD"));
+                    donHangCuoi.setNgayLap(resultSet.getTimestamp("ngayLap"));
+
+                    // Tạo một đối tượng NhanVien và KhachHang và thiết lập thuộc tính tương ứng
+                    NhanVien nhanVien = new NhanVien();
+                    nhanVien.setMaNhanVien(resultSet.getString("NV_NguoiID"));
+                    donHangCuoi.setNhanVien(nhanVien);
+
+                    KhachHang khachHang = new KhachHang();
+                    khachHang.setMaKhachHang(resultSet.getString("KH_NguoiID"));
+                    donHangCuoi.setKhachHang(khachHang);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return donHangCuoi;
+    }
+
+
     @Override
     public float ThanhTien() {
-        // Implement the logic to calculate the total cost of the order
+
         return 0.0f;
     }
 }
