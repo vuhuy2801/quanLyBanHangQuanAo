@@ -36,7 +36,7 @@ public class QuanLyDonHangController {
     @FXML
     private void initialize() {
         try {
-            for (int i = 0; i < orderCodes.length; i++) {
+            for (int i = 0 ; i < orderCodes.length; i++) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemListDonHang.fxml"));
                 Pane item = loader.load();
 
