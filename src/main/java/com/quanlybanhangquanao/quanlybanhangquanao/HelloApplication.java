@@ -1,5 +1,4 @@
 package com.quanlybanhangquanao.quanlybanhangquanao;
-import com.quanlybanhangquanao.quanlybanhangquanao.controlles.QuanLySanPhamController;
 import com.quanlybanhangquanao.quanlybanhangquanao.models.DatabaseConnection;
 
 import com.quanlybanhangquanao.quanlybanhangquanao.models.SanPham;

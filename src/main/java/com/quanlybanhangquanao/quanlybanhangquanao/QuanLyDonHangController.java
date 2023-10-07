@@ -1,19 +1,28 @@
 package com.quanlybanhangquanao.quanlybanhangquanao;
 
+import com.quanlybanhangquanao.quanlybanhangquanao.models.DonHang;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class QuanLyDonHangController {
 
     @FXML
     private VBox ListDonHang;
+
+    @FXML
+    private Button btnThem;
 
     @FXML
     private TextField searchField;
@@ -36,13 +45,14 @@ public class QuanLyDonHangController {
     @FXML
     private void initialize() {
         try {
-            for (int i = 0; i < orderCodes.length; i++) {
+            DonHang donHang =  new DonHang();
+            for (DonHang objDonHang : donHang.DanhSach()) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemListDonHang.fxml"));
                 Pane item = loader.load();
 
                 ItemListDonHangController itemController = loader.getController();
                 itemController.setQuanLyDonHangController(this);
-                itemController.setOrderData(orderCodes[i], orderTimes[i], customers[i], totalPrices[i], discounts[i]);
+                itemController.setOrderData(objDonHang.getMaDonHang(), donHang.getNgayLap(), customers[i], totalPrices[i], discounts[i]);
 
                 ListDonHang.getChildren().add(item);
             }
@@ -80,9 +90,14 @@ public class QuanLyDonHangController {
     }
 
     @FXML
-    void handleBtnThemClick() {
-//        loadScreen("ChiTietDonHang.fxml", subPane, "themDonHang");
-        subPane.toFront();
+    void handleBtnThemClick() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("ThemDonHang.fxml"));
+        Parent root = loader.load();
+        Stage newStage = new Stage();
+        newStage.setTitle("Cửa sổ mới");
+        newStage.setScene(new Scene(root));
+        newStage.show();
+//        subPane.toFront();
     }
 
     public void handleChiTietDonHangClick(String typeButton) {

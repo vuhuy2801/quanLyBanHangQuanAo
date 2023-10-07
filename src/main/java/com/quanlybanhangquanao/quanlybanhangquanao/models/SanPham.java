@@ -117,33 +117,33 @@ public class SanPham implements SanPhamService {
 
     // Implementing methods from SanPhamService interface
     @Override
-    public boolean Them(SanPham sanPham) {
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.sp_ThemSanPham(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+        public boolean Them(SanPham sanPham) {
+            try (Connection connection = DatabaseConnection.getConnection()) {
+                String storedProcedure = "{call dbo.sp_ThemSanPham(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
-            try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
-                callableStatement.setString(1, sanPham.getMaHang());
-                callableStatement.setString(2, sanPham.getTenHang());
-                callableStatement.setString(3, sanPham.getNhomHang());
-                callableStatement.setString(4, sanPham.getThuongHieu());
-                callableStatement.setBigDecimal(5, sanPham.getGiaVon());
-                callableStatement.setBigDecimal(6, sanPham.getGiaBan());
-                callableStatement.setInt(7, sanPham.getTonKho());
-                callableStatement.setBigDecimal(8, sanPham.getTrongLuong());
-                callableStatement.setBytes(9, sanPham.getAnh());
-                callableStatement.execute();
-                int result = callableStatement.getInt(10);
-                if (result == 1) {
-                    return true;
-                } else {
-                    return false;
+                try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
+                    callableStatement.setString(1, sanPham.getMaHang());
+                    callableStatement.setString(2, sanPham.getTenHang());
+                    callableStatement.setString(3, sanPham.getNhomHang());
+                    callableStatement.setString(4, sanPham.getThuongHieu());
+                    callableStatement.setBigDecimal(5, sanPham.getGiaVon());
+                    callableStatement.setBigDecimal(6, sanPham.getGiaBan());
+                    callableStatement.setInt(7, sanPham.getTonKho());
+                    callableStatement.setBigDecimal(8, sanPham.getTrongLuong());
+                    callableStatement.setBytes(9, sanPham.getAnh());
+                    callableStatement.execute();
+                    int result = callableStatement.getInt(10);
+                    if (result == 1) {
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            return false;
         }
-        return false;
-    }
 
     @Override
     public boolean Sua(SanPham n) {
@@ -223,13 +223,10 @@ public class SanPham implements SanPhamService {
                     SanPham sanPham = new SanPham();
                     sanPham.setMaHang(resultSet.getString("maHang"));
                     sanPham.setTenHang(resultSet.getString("tenHang"));
-                    sanPham.setNhomHang(resultSet.getString("nhomHang"));
-                    sanPham.setThuongHieu(resultSet.getString("thuongHieu"));
                     sanPham.setGiaVon(resultSet.getBigDecimal("giaVon"));
                     sanPham.setGiaBan(resultSet.getBigDecimal("giaBan"));
                     sanPham.setTonKho(resultSet.getInt("tonKho"));
-                    sanPham.setTrongLuong(resultSet.getBigDecimal("trongLuong"));
-                    sanPham.setAnh(resultSet.getBytes("anh"));
+                    sanPham.setSoLuongDaBan(resultSet.getInt("soLuongDaBan"));
 
                     danhSachTimKiem.add(sanPham);
                 }
