@@ -132,12 +132,8 @@ public class SanPham implements SanPhamService {
                 callableStatement.setBigDecimal(8, sanPham.getTrongLuong());
                 callableStatement.setBytes(9, sanPham.getAnh());
                 callableStatement.execute();
-                int result = callableStatement.getInt(10);
-                if (result == 1) {
-                    return true;
-                } else {
-                    return false;
-                }
+
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -145,10 +141,11 @@ public class SanPham implements SanPhamService {
         return false;
     }
 
+
     @Override
     public boolean Sua(SanPham n) {
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.sp_SuaSanPham(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+            String storedProcedure = "{call dbo.sp_SuaSanPham(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, n.getMaHang());
@@ -161,24 +158,16 @@ public class SanPham implements SanPhamService {
                 callableStatement.setBigDecimal(8, n.getTrongLuong());
                 callableStatement.setBytes(9, n.getAnh());
 
-                callableStatement.registerOutParameter(10, Types.INTEGER);
-
                 callableStatement.execute();
 
-
-                int result = callableStatement.getInt(10);
-
-                if (result == 1) {
-                    return true; // Sửa sản phẩm thành công
-                } else {
-                    return false; // Sửa sản phẩm không thành công
-                }
+                return true; // Sửa sản phẩm thành công
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
+
 
     @Override
     public boolean Xoa(String maHang) {
@@ -187,24 +176,17 @@ public class SanPham implements SanPhamService {
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, maHang);
-
-                // Thực hiện stored procedure và lấy kết quả trả về
-                callableStatement.execute();
-                int result = callableStatement.getInt(2); // Đảm bảo rằng bạn lấy giá trị đúng của kết quả
-
-                // Xử lý kết quả theo logic của bạn
-                if (result == 1) {
-                    return true; // Xóa sản phẩm thành công
-                } else {
-                    return false; // Xóa sản phẩm không thành công
+                int rowsAffected = callableStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    return true;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Xử lý ngoại lệ nếu có
         }
         return false;
     }
+
 
     public List<SanPham> TimKiem(String key) {
         List<SanPham> danhSachTimKiem = new ArrayList<>();

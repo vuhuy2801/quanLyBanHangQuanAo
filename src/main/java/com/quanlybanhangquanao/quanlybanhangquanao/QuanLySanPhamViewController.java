@@ -37,6 +37,10 @@ public class QuanLySanPhamViewController {
     DecimalFormat decimalFormat = new DecimalFormat("#0.00");
     @FXML
     private void initialize() {
+        loadSanPham();
+    }
+
+    void loadSanPham(){
         SanPham sanPham = new SanPham();
         List<SanPham> danhSachSanPham = sanPham.DanhSach();
         try {
@@ -44,7 +48,6 @@ public class QuanLySanPhamViewController {
             for (int i = 0; i < danhSachSanPham.size(); i++) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemListSanPham.fxml"));
                 HBox item = loader.load(); // Nạp ItemListSanPh am.fxml
-
                 // Cài đặt dữ liệu cho mục
                 ItemListSanPhamController itemController = loader.getController();
                 itemController.setQuanLySanPhamController(this);
@@ -56,7 +59,6 @@ public class QuanLySanPhamViewController {
             e.printStackTrace();
         }
     }
-
 
     public void handleIconClick(String id, String typeButton) {
         if (typeButton.equals("edit")) {
@@ -70,6 +72,7 @@ public class QuanLySanPhamViewController {
             subPane.toFront();
 
         } else if (typeButton.equals("delete")) {
+            SanPham sanPham = new SanPham();
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
             confirmationAlert.setTitle("Xác nhận");
             confirmationAlert.setHeaderText("Xác nhận xóa tệp?");
@@ -77,14 +80,14 @@ public class QuanLySanPhamViewController {
             ButtonType buttonTypeOK = new ButtonType("Xác nhận");
             ButtonType buttonTypeCancel = new ButtonType("Hủy");
             confirmationAlert.getButtonTypes().setAll(buttonTypeOK, buttonTypeCancel);
-
-            // Hiển thị Alert và xử lý tương tác người dùng
             confirmationAlert.showAndWait().ifPresent(response -> {
                 if (response == buttonTypeOK) {
-                    // Xử lý xóa tệp
-                    System.out.println("Tệp đã được xóa.");
+                    sanPham.Xoa(id);
+                    ListSanPham.getChildren().clear();
+                    loadSanPham();
+                    System.out.println("Xóa tệp thành công");
+
                 } else {
-                    // Hủy xóa tệp
                     System.out.println("Xóa tệp đã bị hủy.");
                 }
             });
@@ -102,6 +105,8 @@ public class QuanLySanPhamViewController {
     public void handleChiTietSanPhamClick(String typeButton) {
         if (typeButton.equals("BtnQuayLai")) {
             subPane.getChildren().clear();
+            ListSanPham.getChildren().clear();
+            loadSanPham();
             mainPane.toFront();
         }
     }
@@ -126,7 +131,6 @@ public class QuanLySanPhamViewController {
                 //set data
                 itemController.setDataSanPham(sanpham.getMaHang(), sanpham.getTenHang(), decimalFormat.format(sanpham.getGiaBan()),  decimalFormat.format(sanpham.getGiaVon()),  sanpham.getNhomHang(), sanpham.getThuongHieu(), String.valueOf(sanpham.getTonKho()), String.valueOf(sanpham.getTrongLuong()));
             }
-            // Xóa nội dung cũ và đặt nội dung mới vào container (Pane)
             container.getChildren().clear();
             container.getChildren().add(screen);
         } catch (Exception e) {

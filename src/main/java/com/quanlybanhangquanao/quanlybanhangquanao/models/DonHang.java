@@ -30,9 +30,8 @@ public class DonHang implements DonHangService {
     private String maKhachHang;
     private Date ngayLap;
 
-    // Constructors
+
     public DonHang() {
-        // Default constructor
     }
 
     // Constructor with parameters
