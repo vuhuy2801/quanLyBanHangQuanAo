@@ -27,11 +27,12 @@ public class QuanLyDonHangController {
     @FXML
     private Pane subPane;
 
-    String[] orderCodes = {"DH001", "DH002", "DH003", "DH004", "DH005"};
-    String[] orderTimes = {"2023-01-15 10:30", "2023-01-16 14:45", "2023-01-17 09:15", "2023-01-18 16:20", "2023-01-19 11:55"};
-    String[] customers = {"Khách hàng 1", "Khách hàng 2", "Khách hàng 3", "Khách hàng 4", "Khách hàng 5"};
-    String[] totalPrices = {"500,000 vnđ", "750,000 vnđ", "320,000 vnđ", "980,000 vnđ", "250,000 vnđ"};
-    String[] discounts = {"50,000 vnđ", "0 vnđ", "30,000 vnđ", "100,000 vnđ", "0 vnđ"};
+    String[] orderCodes = { "DH001", "DH002", "DH003", "DH004", "DH005" };
+    String[] orderTimes = { "2023-01-15 10:30", "2023-01-16 14:45", "2023-01-17 09:15", "2023-01-18 16:20",
+            "2023-01-19 11:55" };
+    String[] customers = { "Khách hàng 1", "Khách hàng 2", "Khách hàng 3", "Khách hàng 4", "Khách hàng 5" };
+    String[] totalPrices = { "500,000 vnđ", "750,000 vnđ", "320,000 vnđ", "980,000 vnđ", "250,000 vnđ" };
+    String[] discounts = { "50,000 vnđ", "0 vnđ", "30,000 vnđ", "100,000 vnđ", "0 vnđ" };
 
     @FXML
     private void initialize() {
@@ -53,7 +54,7 @@ public class QuanLyDonHangController {
 
     public void handleIconClick(String id, String typeButton) {
         if (typeButton.equals("edit")) {
-//            loadScreen("ChiTietDonHang.fxml", subPane, typeButton);
+            // loadScreen("ChiTietDonHang.fxml", subPane, typeButton);
             subPane.toFront();
         } else if (typeButton.equals("view")) {
             loadScreen("ChiTietDonHang.fxml", subPane, typeButton);
@@ -81,7 +82,7 @@ public class QuanLyDonHangController {
 
     @FXML
     void handleBtnThemClick() {
-//        loadScreen("ChiTietDonHang.fxml", subPane, "themDonHang");
+        // loadScreen("ChiTietDonHang.fxml", subPane, "themDonHang");
         subPane.toFront();
     }
 
