@@ -117,6 +117,7 @@ public class SanPham implements SanPhamService {
 
     // Implementing methods from SanPhamService interface
     @Override
+
     public boolean Them(SanPham sanPham) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             String storedProcedure = "{call dbo.sp_ThemSanPham(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
@@ -135,11 +136,8 @@ public class SanPham implements SanPhamService {
 
                 return true;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            return false;
         }
-        return false;
-    }
 
 
     @Override
@@ -205,13 +203,10 @@ public class SanPham implements SanPhamService {
                     SanPham sanPham = new SanPham();
                     sanPham.setMaHang(resultSet.getString("maHang"));
                     sanPham.setTenHang(resultSet.getString("tenHang"));
-                    sanPham.setNhomHang(resultSet.getString("nhomHang"));
-                    sanPham.setThuongHieu(resultSet.getString("thuongHieu"));
                     sanPham.setGiaVon(resultSet.getBigDecimal("giaVon"));
                     sanPham.setGiaBan(resultSet.getBigDecimal("giaBan"));
                     sanPham.setTonKho(resultSet.getInt("tonKho"));
-                    sanPham.setTrongLuong(resultSet.getBigDecimal("trongLuong"));
-                    sanPham.setAnh(resultSet.getBytes("anh"));
+                    sanPham.setSoLuongDaBan(resultSet.getInt("soLuongDaBan"));
 
                     danhSachTimKiem.add(sanPham);
                 }
