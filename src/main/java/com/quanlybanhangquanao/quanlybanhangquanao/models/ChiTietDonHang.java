@@ -14,6 +14,26 @@ public class ChiTietDonHang extends DonHang {
     private NhanVien nhanVien;
 
     private KhachHang khachHang;
+
+    public String getTenHang() {
+        return tenHang;
+    }
+
+    public void setTenHang(String tenHang) {
+        this.tenHang = tenHang;
+    }
+
+    private String tenHang;
+
+    public BigDecimal getGiaBan() {
+        return giaBan;
+    }
+
+    public void setGiaBan(BigDecimal giaBan) {
+        this.giaBan = giaBan;
+    }
+
+    private BigDecimal giaBan;
     @Override
     public BigDecimal getGiamGia() {
         return giamGia;
@@ -61,12 +81,34 @@ public class ChiTietDonHang extends DonHang {
     public void setHoTenKhachHang(String hoTen) {
         khachHang.setHoTen(hoTen);
     }
+
+    public String getMaHangSanPham() {
+        return maHangSanPham;
+    }
+
+    public void setMaHangSanPham(String maHangSanPham) {
+        this.maHangSanPham = maHangSanPham;
+    }
+
+    private String maHangSanPham;
     private float thanhTien;
     public ChiTietDonHang() {
         sanPham = new SanPham();
         khachHang = new KhachHang();
         nhanVien = new NhanVien();
     }
+
+
+
+    public ChiTietDonHang(String maHangSanPham, String tenHang, int soLuong, BigDecimal giaBan, BigDecimal giamGia, float thanhTien){
+        this.maHangSanPham = maHangSanPham;
+        this.tenHang = tenHang;
+        this.soLuong = soLuong;
+        this.giaBan = giaBan;
+        this.giamGia = giamGia;
+        this.thanhTien = thanhTien;
+    }
+
 
     public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
@@ -76,13 +118,7 @@ public class ChiTietDonHang extends DonHang {
         return soLuong;
     }
 
-    public void setSanPham(SanPham sanPham) {
-        this.sanPham = sanPham;
-    }
 
-    public SanPham getSanPham() {
-        return sanPham;
-    }
 
 
     public boolean Them(ChiTietDonHang chiTietDonHang) {
@@ -104,6 +140,34 @@ public class ChiTietDonHang extends DonHang {
 
         return false;
     }
+
+    public List<ChiTietDonHang> LayDanhSachSanPhamCuaHoaDon(String maDonHang) {
+        List<ChiTietDonHang> danhSachSanPham = new ArrayList<>();
+
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String sql = "{call hd_layDanhSachSanPhamCuaHoaDon(?)}";
+            CallableStatement statement = connection.prepareCall(sql);
+            statement.setString(1, maDonHang);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String maHangSanPham = resultSet.getString("maHang");
+                String tenHang = resultSet.getString("tenHang");
+                int soLuong = resultSet.getInt("SoLuong");
+                BigDecimal giaBan = resultSet.getBigDecimal("giaBan");
+                BigDecimal giamGia = resultSet.getBigDecimal("GiamGia");
+                float thanhTien = resultSet.getFloat("ThanhTien");
+
+                ChiTietDonHang chiTiet = new ChiTietDonHang(maHangSanPham, tenHang, soLuong, giaBan, giamGia, thanhTien);
+                danhSachSanPham.add(chiTiet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return danhSachSanPham;
+    }
+
 
     @Override
     public ChiTietDonHang ChiTiet(String maDonHang) {

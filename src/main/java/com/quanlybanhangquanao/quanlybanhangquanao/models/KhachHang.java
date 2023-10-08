@@ -16,6 +16,7 @@ public class KhachHang extends Nguoi {
     private int diemTichLuy;
     private  float tongTien;
 
+
     public float getTongTien() {
         return tongTien;
     }

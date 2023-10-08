@@ -90,6 +90,7 @@ public class ChiTietSanPhamController {
 
     public void setDataSanPham(String maSanPham, String tenText, String giaBanText, String giaGocText, String nhomSanPham, String thuongHieu, String tonKhoText, String trongLuong, byte[] dataAnh) {
         inputMaSanPham.setText(maSanPham);
+        inputMaSanPham.setEditable(false);
         inputTenSanPham.setText(tenText);
         inputGiaBan.setText(giaBanText);
         inputGiaVon.setText(giaGocText);
@@ -115,6 +116,7 @@ public class ChiTietSanPhamController {
                 inputTrongLuong.getText(),
                 inputNhomSanPham.getText(),
                 inputThuongHieu.getText(),
+
         };
     }
 
@@ -197,9 +199,54 @@ public class ChiTietSanPhamController {
                 return false;
             }
         }
+        String maSanPham = data[0];
+        String tenHang = data[1];
+        String giaVonText = data[2];
+        String giaBanText = data[3];
+        String tonKhoText = data[4];
+        String trongLuongText = data[5];
 
-        SanPham sanPham = new SanPham(data[0], data[1], data[6], data[7], new BigDecimal(data[2]), new BigDecimal(data[3]), Integer.parseInt(data[4]), new BigDecimal(data[5]), null);
-        sanPham.setAnh(this.sanPham.getAnh());
+        if ( !maSanPham.startsWith("sp")) {
+            thongBao("Lỗi", "Mã sản phẩm phải bắt đầu bằng 'sp'");
+            return false;
+        }
+
+
+        if (maSanPham.length() > 5) {
+            thongBao("Lỗi", "Mã sản phẩm có độ dài tối đa là 5 ký tự");
+            return false;
+        }
+
+
+        if (tenHang.matches(".*\\d+.*")) {
+            thongBao("Lỗi", "Tên hàng không được chứa số");
+            return false;
+        }
+        if (!giaVonText.matches("^\\d+(\\.\\d+)?$") || !giaBanText.matches("^\\d+(\\.\\d+)?$") || !tonKhoText.matches("^\\d+$") || !trongLuongText.matches("^\\d+(\\.\\d+)?$")) {
+            thongBao("Lỗi", "Giá vốn, giá bán, số lượng và trọng lượng không hợp lệ");
+            return false;
+        }
+        try {
+            BigDecimal giaVon = new BigDecimal(giaVonText.replace(",", "."));
+            BigDecimal giaBan = new BigDecimal(giaBanText.replace(",", "."));
+            int tonKho = Integer.parseInt(tonKhoText);
+            BigDecimal trongLuong = new BigDecimal(trongLuongText);
+
+            if (giaVon.compareTo(BigDecimal.ZERO) < 0 || giaBan.compareTo(BigDecimal.ZERO) < 0 || tonKho < 0 || trongLuong.compareTo(BigDecimal.ZERO) < 0) {
+                thongBao("Lỗi", "Giá vốn, giá bán, số lượng và trọng lượng không được âm");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            thongBao("Lỗi", "Dữ liệu không hợp lệ");
+            return false;
+        }
+
+        if (this.sanPham != null && this.sanPham.getAnh() != null) {
+            sanPham = new SanPham(data[0], data[1], data[6], data[7],  new BigDecimal(data[2]), new BigDecimal(data[3]), Integer.parseInt(data[4]), new BigDecimal(data[5]), this.sanPham.getAnh());
+        } else {
+            sanPham = new SanPham(data[0], data[1], data[6], data[7],  new BigDecimal(data[2]), new BigDecimal(data[3]), Integer.parseInt(data[4]), new BigDecimal(data[5]), null);
+        }
+
         System.out.println(sanPham.getTenHang());
         boolean isSuccess = ThemSanPham(sanPham);
         if (isSuccess) {
@@ -222,31 +269,75 @@ public class ChiTietSanPhamController {
         String giaBanText = data[2];
         String giaVonText = data[3];
 
-        giaBanText = giaBanText.replace(",", ".");
-        giaVonText = giaVonText.replace(",", ".");
-        BigDecimal giaBan = new BigDecimal(giaBanText);
-        BigDecimal giaVon = new BigDecimal(giaVonText);
+
 
         for (int i = 0; i < data.length; i++) {
             if (data[i].isEmpty()) {
-
                 thongBao("Lỗi", "Dữ liệu không được để trống");
                 return false;
             }
         }
-        System.out.println(data[2]);
-        SanPham sanPham = new SanPham(data[0], data[1], data[6], data[7], giaBan, giaVon, Integer.parseInt(data[4]), new BigDecimal(data[5]), null);
-        sanPham.setAnh(this.sanPham.getAnh());
-        boolean isSuccess = sanPham.Sua(sanPham);
-
-        if (isSuccess) {
-            thongBao("Thành công", "Sản phẩm đã được cập nhật thành công");
-            quanLySanPhamController.handleChiTietSanPhamClick("BtnQuayLai");
-        } else {
-            thongBao("Lỗi", "Có lỗi xảy ra khi cập nhật sản phẩm");
+        try {
+            int tonKho = Integer.parseInt(data[4]);
+            if (tonKho <= 0) {
+                thongBao("Lỗi", "Số lượng tồn kho phải là số nguyên dương");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            thongBao("Lỗi", "Số lượng tồn kho không hợp lệ");
+            return false;
         }
 
-        return isSuccess;
+        try {
+            BigDecimal trongLuong = new BigDecimal(data[5]);
+            if (trongLuong.compareTo(BigDecimal.ZERO) < 0) {
+                thongBao("Lỗi", "Trọng lượng phải là số không âm");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            thongBao("Lỗi", "Trọng lượng không hợp lệ");
+            return false;
+        }
+
+
+
+
+        try {
+            giaBanText = giaBanText.replace(",", ".");
+            giaVonText = giaVonText.replace(",", ".");
+            BigDecimal giaBan = new BigDecimal(giaBanText);
+            BigDecimal giaVon = new BigDecimal(giaVonText);
+
+            // Kiểm tra giá bán và giá vốn phải lớn hơn 0
+            if (giaBan.compareTo(BigDecimal.ZERO) <= 0 || giaVon.compareTo(BigDecimal.ZERO) <= 0) {
+                thongBao("Lỗi", "Giá bán và giá vốn phải lớn hơn 0");
+                return false;
+            }
+            System.out.println(data[2]);
+
+            if (this.sanPham != null && this.sanPham.getAnh() != null) {
+                sanPham = new SanPham(data[0], data[1], data[6], data[7], giaBan, giaVon, Integer.parseInt(data[4]), new BigDecimal(data[5]), this.sanPham.getAnh());
+            } else {
+                sanPham = new SanPham(data[0], data[1], data[6], data[7], giaBan, giaVon, Integer.parseInt(data[4]), new BigDecimal(data[5]), null);
+            }
+
+            boolean isSuccess = sanPham.Sua(sanPham);
+
+            if (isSuccess) {
+                thongBao("Thành công", "Sản phẩm đã được cập nhật thành công");
+                quanLySanPhamController.handleChiTietSanPhamClick("BtnQuayLai");
+            } else {
+                thongBao("Lỗi", "Có lỗi xảy ra khi cập nhật sản phẩm");
+            }
+
+            return isSuccess;
+        } catch (NumberFormatException e) {
+            thongBao("Lỗi", "Giá bán và giá vốn không hợp lệ");
+            return false;
+        }
+
+
+
     }
 
 

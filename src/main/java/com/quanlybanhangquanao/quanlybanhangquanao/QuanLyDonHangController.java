@@ -1,5 +1,6 @@
 package com.quanlybanhangquanao.quanlybanhangquanao;
 
+import com.quanlybanhangquanao.quanlybanhangquanao.models.ChiTietDonHang;
 import com.quanlybanhangquanao.quanlybanhangquanao.models.DonHang;
 import com.quanlybanhangquanao.quanlybanhangquanao.models.SanPham;
 import javafx.beans.value.ChangeListener;
@@ -53,6 +54,7 @@ public class QuanLyDonHangController {
     @FXML
     private void initialize() {
         donHang = new DonHang();
+
         inputTimKiemDonHang.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
