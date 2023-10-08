@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="794.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.ItemSpHoaDonController">
+   <children>
+      <Label fx:id="lbTenSanPham" prefHeight="20.0" prefWidth="201.0" text="Áo coolmate">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbSoLuong" layoutX="10.0" layoutY="13.0" prefHeight="20.0" prefWidth="131.0" text="2">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbDonGia" layoutX="72.0" layoutY="13.0" prefHeight="20.0" prefWidth="177.0" text="200,000 đ">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbGiamGia" layoutX="133.0" layoutY="13.0" prefHeight="20.0" prefWidth="131.0" text="0đ">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbThanhTien" layoutX="195.0" layoutY="13.0" prefHeight="20.0" prefWidth="151.0" text="400,000đ">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+   </children>
+</HBox>
