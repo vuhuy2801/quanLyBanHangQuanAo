@@ -179,10 +179,8 @@ public class DonHang implements DonHangService {
     @Override
     public List<DonHang> TimKiem(String key) {
         List<DonHang> danhSachDonHang = new ArrayList<>();
-
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.hd_TimKiemDonHang(?)}";
-
+            String storedProcedure = "{call dbo.hd_timKiemHoaDon(?)}";
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, key);
                 ResultSet resultSet = callableStatement.executeQuery();
