@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="172.24" prefWidth="346.46" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.ItemMaVachSanPhamController">
+   <children>
+      <Label fx:id="lbMaSanPham" alignment="CENTER" layoutY="56.0" prefHeight="60.0" prefWidth="346.0" text="Label">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbSubMaSanPham" alignment="CENTER" layoutY="86.0" prefHeight="46.0" prefWidth="346.0" text="SP001">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbTenSanPham" alignment="CENTER" layoutY="26.0" prefHeight="46.0" prefWidth="346.0" text="Áo khoác nam">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbGiaSanPham" alignment="CENTER" layoutY="109.0" prefHeight="46.0" prefWidth="346.0" text="Giá: 700,000 đ">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>

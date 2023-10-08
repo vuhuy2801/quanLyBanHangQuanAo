@@ -1,5 +1,6 @@
 package com.quanlybanhangquanao.quanlybanhangquanao;
 
+import com.quanlybanhangquanao.quanlybanhangquanao.models.ChiTietDonHang;
 import com.quanlybanhangquanao.quanlybanhangquanao.models.DonHang;
 import com.quanlybanhangquanao.quanlybanhangquanao.models.KhachHang;
 import javafx.beans.property.SimpleStringProperty;
@@ -93,6 +94,8 @@ public class ThemDonHangController {
     @FXML
     private Label valueTongTienHang;
 
+    public boolean IsEdit = false;
+
     @FXML
     private void initialize() {
 
@@ -104,10 +107,9 @@ public class ThemDonHangController {
                         handleTimKiemSanPham(newValue)
                 );
                 tableViewListSanPham.setItems(dataSanPhamSearch);
-                System.out.println("Dữ liệu đã thay đổi thành: " + newValue);
-                // Đây bạn có thể thực hiện xử lý dựa trên dữ liệu đã nhập
             }
         });
+
 
         ObservableList<String> options = FXCollections.observableArrayList(
                 loadDataKhachHang()
@@ -163,7 +165,7 @@ public class ThemDonHangController {
             }
         });
 
-//        tableViewChiTietDonHang.setItems(sampleData);
+        tableViewChiTietDonHang.setItems(sampleData);
         tableViewListSanPham.setItems(sampleDataSanPham);
 
         editCellHoaDon();
@@ -173,6 +175,7 @@ public class ThemDonHangController {
         // Cập nhật các giá trị khác dựa trên dữ liệu trong bảng
         updateCacLabelTongHop();
     }
+
 
 
     private void handleXoaSanPham(int index) {
@@ -286,6 +289,25 @@ public class ThemDonHangController {
             showAlert("Lỗi", "Vui lòng chọn sản phẩm để thêm vào đơn hàng.");
         }
     }
+
+
+//    ArrayList<ItemListSanPham> setDataEditDonHang(String maDonHang){
+//        DonHang donHang = new DonHang();
+//        ChiTietDonHang chiTietDonHang = new ChiTietDonHang();
+//        donHang = donHang.ChiTiet("HD001");
+//        chiTietDonHang = chiTietDonHang.ChiTiet("HD001");
+//
+//        chiTietD
+//
+//    }
+    //     ObservableList để theo dõi và cập nhật dữ liệu trong TableView
+    ObservableList<ItemListHoaDon> sampleData = FXCollections.observableArrayList(
+
+            new ItemListHoaDon("1", "MH001", "Máy tính", "5", "1,500,000", "0", "7,500,000", "Xóa"),
+            new ItemListHoaDon("2", "MH002", "Laptop", "3", "2,000,000", "0", "6,000,000", "Xóa"),
+            new ItemListHoaDon("3", "MH003", "Điện thoại", "2", "1,000,000", "0", "2,000,000", "Xóa")
+    );
+
 
     ObservableList<ItemListSanPham> sampleDataSanPham = FXCollections.observableArrayList(
             loadListSanPham()
@@ -410,7 +432,7 @@ public class ThemDonHangController {
     @FXML
     private void btnThanhToan_Click() throws IOException {
         // edit bool value
-        if (false) {
+        if (IsEdit) {
             // Xử lý sửa đơn hàng ở đây
             // Lấy danh sách sản phẩm từ bảng tableViewChiTietDonHang
             List<ItemListHoaDon> listChiTietHD = new ArrayList<>();

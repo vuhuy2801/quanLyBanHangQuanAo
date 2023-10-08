@@ -46,6 +46,7 @@ public class ChiTietDonHangController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Khởi tạo các giá trị mẫu khi khởi động controller
         setData("HD123", "2023-10-05", "Khách hàng A", "Nhân viên B", createSampleDataModel(), "100", "10", "900");
+
     }
 
     public void setQuanLyDonHangController(QuanLyDonHangController quanLyDonHangController) {
