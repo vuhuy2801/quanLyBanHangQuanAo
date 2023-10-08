@@ -2,6 +2,8 @@ package com.quanlybanhangquanao.quanlybanhangquanao;
 
 import com.quanlybanhangquanao.quanlybanhangquanao.models.DonHang;
 import com.quanlybanhangquanao.quanlybanhangquanao.models.SanPham;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -35,7 +37,7 @@ public class QuanLyDonHangController {
     private Button btnThem;
 
     @FXML
-    private TextField searchField;
+    private TextField inputTimKiemDonHang;
 
     @FXML
     private ItemListDonHangController itemListController;
@@ -51,6 +53,14 @@ public class QuanLyDonHangController {
     @FXML
     private void initialize() {
         donHang = new DonHang();
+        inputTimKiemDonHang.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                ListDonHang.getChildren().clear();
+                loadDonHang(donHang.TimKiem(newValue));
+                System.out.println("Dữ liệu đã thay đổi thành: " + newValue);
+            }
+        });
         loadDonHang(donHang.DanhSach());
     }
 

@@ -1,23 +1,23 @@
 package com.quanlybanhangquanao.quanlybanhangquanao;
 
 import com.quanlybanhangquanao.quanlybanhangquanao.models.SanPham;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.Objects;
-import java.util.ResourceBundle;
 import java.io.IOException;
+import java.util.Base64;
 
-import javafx.fxml.Initializable;
+import javafx.stage.FileChooser;
 
 public class ChiTietSanPhamController {
     private QuanLySanPhamViewController quanLySanPhamController;
@@ -56,14 +56,39 @@ public class ChiTietSanPhamController {
     private VBox imageContainer;
 
     @FXML
-    private ImageView imageView;
+    private ImageView viewAnh;
+    @FXML
+    private Button buttonChonAnh;
+    SanPham sanPham;
+    @FXML
+    void handleBtnChonAnhClick(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Ảnh Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
+        );
+         sanPham = new SanPham();
+        java.io.File selectedFile = fileChooser.showOpenDialog(buttonChonAnh.getScene().getWindow());
+        if (selectedFile != null) {
+            try {
+                FileInputStream fis = new FileInputStream(selectedFile);
+                byte[] imageData = new byte[(int) selectedFile.length()];
+                fis.read(imageData);
+                fis.close(); // Đóng luồng sau khi đọc xong
+                sanPham.setAnh(imageData);
+                Image image = new Image(new ByteArrayInputStream(imageData));
+                viewAnh.setImage(image);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 
     public void setQuanLySanPhamController(QuanLySanPhamViewController quanLySanPhamController) {
         this.quanLySanPhamController = quanLySanPhamController;
     }
 
 
-    public void setDataSanPham(String maSanPham, String tenText, String giaBanText, String giaGocText, String nhomSanPham, String thuongHieu, String tonKhoText, String trongLuong) {
+    public void setDataSanPham(String maSanPham, String tenText, String giaBanText, String giaGocText, String nhomSanPham, String thuongHieu, String tonKhoText, String trongLuong, byte[] dataAnh) {
         inputMaSanPham.setText(maSanPham);
         inputTenSanPham.setText(tenText);
         inputGiaBan.setText(giaBanText);
@@ -72,6 +97,13 @@ public class ChiTietSanPhamController {
         inputTrongLuong.setText(trongLuong);
         inputNhomSanPham.setText(nhomSanPham);
         inputThuongHieu.setText(thuongHieu);
+
+        if (dataAnh != null) {
+
+            // Hiển thị ảnh nếu bạn muốn
+            Image image = new Image(new ByteArrayInputStream(dataAnh));
+            viewAnh.setImage(image);
+        }
     }
 
     public String[] getDataSanPham() {
@@ -167,6 +199,7 @@ public class ChiTietSanPhamController {
         }
 
         SanPham sanPham = new SanPham(data[0], data[1], data[6], data[7], new BigDecimal(data[2]), new BigDecimal(data[3]), Integer.parseInt(data[4]), new BigDecimal(data[5]), null);
+        sanPham.setAnh(this.sanPham.getAnh());
         System.out.println(sanPham.getTenHang());
         boolean isSuccess = ThemSanPham(sanPham);
         if (isSuccess) {
@@ -203,7 +236,7 @@ public class ChiTietSanPhamController {
         }
         System.out.println(data[2]);
         SanPham sanPham = new SanPham(data[0], data[1], data[6], data[7], giaBan, giaVon, Integer.parseInt(data[4]), new BigDecimal(data[5]), null);
-
+        sanPham.setAnh(this.sanPham.getAnh());
         boolean isSuccess = sanPham.Sua(sanPham);
 
         if (isSuccess) {
