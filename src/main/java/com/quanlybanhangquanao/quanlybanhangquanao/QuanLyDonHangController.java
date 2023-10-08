@@ -116,7 +116,7 @@ public class QuanLyDonHangController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ThemDonHang.fxml"));
         Parent root = loader.load();
         Stage newStage = new Stage();
-        newStage.setTitle("Cửa sổ mới");
+        newStage.setTitle("Thêm Đơn hàng");
         newStage.setScene(new Scene(root));
         newStage.show();
 //        subPane.toFront();

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" prefWidth="794.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.hoaDonController">
+   <content>
+      <VBox fx:id="productVBox" minHeight="400" prefWidth="794.0" spacing="8.0" style="-fx-background-color: #ffffff;">
+         <children>
+            <Pane fx:id="headerPane" prefHeight="300.0" prefWidth="794.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <Label fx:id="lbNgayIn" layoutX="14.0" layoutY="14.0" text="8/10/2023 1:11:30 PM">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="197.0" layoutY="68.0" text="CỬA HÀNG QUẦN ÁO COOLMATE">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="256.0" layoutY="103.0" text="Địa chỉ: số 1, lê đức thọ, nam từ liêm, hà nội">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="343.0" layoutY="123.0" text="ĐT:0337661630">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="264.0" layoutY="149.0" text="HÓA ĐƠN BÁN HÀNG">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="49.0" layoutY="222.0" text="Ngày:">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="49.0" layoutY="242.0" text="Số HĐ:">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lbNgayLap" layoutX="91.0" layoutY="222.0" text="07/08/2023 12:12:30 PM">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lbMaHoaDon" layoutX="105.0" layoutY="242.0" text="HD001">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="515.0" layoutY="222.0" text="Khách hàng:">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="515.0" layoutY="242.0" text="Nhân viên:">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lbKhachHang" layoutX="594.0" layoutY="222.0" text="Khách lẻ">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lbNhanVien" layoutX="586.0" layoutY="242.0" text="Vũ huy">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="794.0" style="-fx-border-width: 1 0; -fx-border-color: black; -fx-background-color: #ffffff;">
+               <children>
+                  <Label prefHeight="20.0" prefWidth="201.0" text="Tên hàng">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="13.0" prefHeight="20.0" prefWidth="131.0" text="SL">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="72.0" layoutY="13.0" prefHeight="20.0" prefWidth="177.0" text="Đơn giá">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="133.0" layoutY="13.0" prefHeight="20.0" prefWidth="131.0" text="Giảm giá">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="195.0" layoutY="13.0" prefHeight="20.0" prefWidth="151.0" text="Thành tiền">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+               </children></HBox>
+            <VBox fx:id="vBoxListSanPham" />
+            <Pane prefHeight="160.0" style="-fx-background-color: #ffffff;">
+               <children>
+                  <Label layoutX="520.0" layoutY="39.0" text="Tổng số lượng:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="520.0" layoutY="59.0" text="Giảm giá:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lbTongTienHang" alignment="CENTER_RIGHT" layoutX="628.0" layoutY="80.0" prefHeight="20.0" prefWidth="155.0" text="12,000,000 vnđ">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lbGiamGia" alignment="CENTER_RIGHT" layoutX="625.0" layoutY="59.0" prefHeight="20.0" prefWidth="158.0" text="20,000 đ" textAlignment="RIGHT">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="520.0" layoutY="80.0" text="Tổng tiền hàng:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lbTongSoLuong" alignment="CENTER_RIGHT" layoutX="623.0" layoutY="39.0" prefHeight="20.0" prefWidth="158.0" text="10" textAlignment="RIGHT">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="299.0" layoutY="127.0" text="Cảm ơn quý khách, hẹn gặp lại !">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

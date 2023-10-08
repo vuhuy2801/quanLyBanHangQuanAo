@@ -8,21 +8,20 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.AnchorPane;
 import com.quanlybanhangquanao.quanlybanhangquanao.models.SanPham;
 import javafx.stage.Stage;
-
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class ThemDonHangController {
@@ -68,9 +67,8 @@ public class ThemDonHangController {
     @FXML
     private TextField inputTimKiemSanPham;
 
-//    @FXML
-//    private ImageView searchIcon;
-
+    @FXML
+    private AnchorPane nodeThemDonHang;
 
 
     @FXML
@@ -289,48 +287,33 @@ public class ThemDonHangController {
         }
     }
 
-
-//    private void handleThemSanPham(int index) {
-//        // Xử lý sự kiện xóa sản phẩm ở đây
-//        System.out.println("thêm sp" + index);
-////        tableViewChiTietDonHang.getItems().add(index);
-//    }
-
-    // ObservableList để theo dõi và cập nhật dữ liệu trong TableView
-//    ObservableList<ItemListHoaDon> sampleData = FXCollections.observableArrayList(
-//
-//            new ItemListHoaDon("1", "MH001", "Máy tính", "5", "1,500,000", "0", "7,500,000", "Xóa"),
-//            new ItemListHoaDon("2", "MH002", "Laptop", "3", "2,000,000", "0", "6,000,000", "Xóa"),
-//            new ItemListHoaDon("3", "MH003", "Điện thoại", "2", "1,000,000", "0", "2,000,000", "Xóa")
-//    );
-
     ObservableList<ItemListSanPham> sampleDataSanPham = FXCollections.observableArrayList(
             loadListSanPham()
     );
 
-    ArrayList<ItemListSanPham> loadListSanPham(){
+    ArrayList<ItemListSanPham> loadListSanPham() {
         SanPham sanpham = new SanPham();
         ArrayList<ItemListSanPham> listSanPham = new ArrayList<>();
         for (SanPham item : sanpham.DanhSach()) {
-            listSanPham.add( new ItemListSanPham(item.getMaHang(), item.getTenHang(), String.valueOf(item.getTonKho()), dinhDangTien(item.getGiaBan()), "+"));
+            listSanPham.add(new ItemListSanPham(item.getMaHang(), item.getTenHang(), String.valueOf(item.getTonKho()), dinhDangTien(item.getGiaBan()), "+"));
         }
         return listSanPham;
     }
 
-    ArrayList<ItemListSanPham> handleTimKiemSanPham(String keyword){
+    ArrayList<ItemListSanPham> handleTimKiemSanPham(String keyword) {
         SanPham sanpham = new SanPham();
         ArrayList<ItemListSanPham> listSanPham = new ArrayList<>();
         for (SanPham item : sanpham.TimKiem(keyword)) {
-            listSanPham.add( new ItemListSanPham(item.getMaHang(), item.getTenHang(), String.valueOf(item.getTonKho()),dinhDangTien(item.getGiaBan()) , "+"));
+            listSanPham.add(new ItemListSanPham(item.getMaHang(), item.getTenHang(), String.valueOf(item.getTonKho()), dinhDangTien(item.getGiaBan()), "+"));
         }
         return listSanPham;
     }
 
-    ArrayList<String> loadDataKhachHang(){
+    ArrayList<String> loadDataKhachHang() {
         KhachHang kh = new KhachHang();
         ArrayList<String> listKhachHang = new ArrayList<>();
-        for (KhachHang khachHang: kh.DanhSach()){
-            listKhachHang.add(khachHang.getMaKhachHang()+":"+khachHang.getHoTen());
+        for (KhachHang khachHang : kh.DanhSach()) {
+            listKhachHang.add(khachHang.getMaKhachHang() + ":" + khachHang.getHoTen());
         }
         return listKhachHang;
     }
@@ -387,14 +370,14 @@ public class ThemDonHangController {
         boolean isInvalid = false;
         // Kiểm tra nếu giá trị là số dương
         try {
-            if(value >= 0){
+            if (value >= 0) {
                 for (ItemListSanPham item1 : tableViewListSanPham.getItems()) {
                     if (item.getMaHang().equals(item1.getMaHang())) {
                         tonKho = Integer.parseInt(item1.getTonKho());
                         break;
                     }
                 }
-                if(tonKho >= value){
+                if (tonKho >= value) {
                     isInvalid = true;
                 }
             }
@@ -424,9 +407,8 @@ public class ThemDonHangController {
     }
 
 
-
     @FXML
-    private void btnThanhToan_Click() {
+    private void btnThanhToan_Click() throws IOException {
         // edit bool value
         if (false) {
             // Xử lý sửa đơn hàng ở đây
@@ -455,17 +437,21 @@ public class ThemDonHangController {
         } else {
             // Xử lý tạo đơn hàng mới ở đây
             String maKhachHang = (selectKhachHang.getSelectionModel().getSelectedItem()).split(":")[0];
+            String tenKhachHang = (selectKhachHang.getSelectionModel().getSelectedItem()).split(":")[1];
             DonHang donHang = new DonHang();
             donHang.setMaDonHang(valueMaHoaDon.getText()); // Thiết lập mã đơn hàng
-            donHang.setMaNhanVien("NV001"); // Thiết lập mã nhân viên (đổi thành mã nhân viên thích hợp)
+            donHang.setMaNhanVien("NV001");
+            donHang.setHoTenNhanVien("Vũ Huy"); // Thiết lập mã nhân viên (đổi thành mã nhân viên thích hợp)
             donHang.setNgayLap(new Date()); // Lấy thời gian hiện tại làm ngày lập
+            donHang.setHoTenKhachHang(tenKhachHang);
             donHang.setMaKhachHang(maKhachHang); // Lấy mã khách hàng từ ChoiceBox selectKhachHang.getValue()
 
             // Lấy danh sách sản phẩm từ bảng tableViewChiTietDonHang
             List<ItemListHoaDon> listChiTietHD = tableViewChiTietDonHang.getItems();
 
+
             // Thêm đơn hàng và chi tiết đơn hàng vào cơ sở dữ liệu  donHang.Them(donHang, listChiTietHD);
-            printDonHangInfo(donHang, listChiTietHD);
+//            printDonHangInfo(donHang, listChiTietHD);
             boolean result = true;
             if (result) {
                 showAlert("Tạo hóa đơn thành công", Alert.AlertType.INFORMATION);
@@ -477,7 +463,15 @@ public class ThemDonHangController {
                 Optional<ButtonType> resultButtonType = confirmAlert.showAndWait();
 
                 if (resultButtonType.isPresent() && resultButtonType.get() == ButtonType.OK) {
-                    // Xử lý việc in hóa đơn ở đây (nếu cần)
+
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("hoaDon.fxml"));
+                    Parent root = loader.load();
+                    hoaDonController itemController = loader.getController();
+                    itemController.setDataHoaDon(donHang, listChiTietHD);
+                    Stage newStage = new Stage();
+                    newStage.setTitle("Preview in hóa đơn:" + valueMaHoaDon.getText() );
+                    newStage.setScene(new Scene(root));
+                    newStage.show();
                 }
 
                 // Đóng cửa sổ hoặc thực hiện các hành động khác sau khi tạo đơn hàng thành công
@@ -509,7 +503,6 @@ public class ThemDonHangController {
     }
 
 
-
     private void printDonHangInfo(DonHang donHang, List<ItemListHoaDon> listChiTietHD) {
         // In thông tin đơn hàng
         System.out.println("Thông tin đơn hàng:");
@@ -530,7 +523,6 @@ public class ThemDonHangController {
         BigDecimal total = calculateTotal(listChiTietHD);
         System.out.println("Tổng thanh toán: " + dinhDangTien(total));
     }
-
 
 
     private void closeWindow() {
@@ -560,7 +552,6 @@ public class ThemDonHangController {
         // Cập nhật TableView
         tableViewChiTietDonHang.refresh();
     }
-
 
 
     // Lớp mô hình dữ liệu cho TableView

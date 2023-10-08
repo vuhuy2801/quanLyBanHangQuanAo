@@ -7,12 +7,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.print.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.transform.Scale;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -109,6 +111,36 @@ public class QuanLySanPhamViewController {
             });
         } else if (typeButton.equals("print")) {
 
+            double pageWidth = 794; // Width of the page in your desired unit (e.g., pixels)
+            double pageHeight = 1123; // Height of the page in your desired unit (e.g., pixels)
+            System.out.println(ListSanPham.getBoundsInParent().getWidth());
+            System.out.println(ListSanPham.getBoundsInParent().getHeight());
+            double scaleX = pageWidth / ListSanPham.getBoundsInParent().getWidth();
+            double scaleY = pageHeight / ListSanPham.getBoundsInParent().getHeight();
+            double scale = Math.min(scaleX, scaleY);
+
+            VBox item = new VBox(ListSanPham);
+            item.getTransforms().add(new Scale(scale, scale));
+
+            PageLayout pageLayout = Printer.getDefaultPrinter().createPageLayout(
+                    Paper.A4, PageOrientation.PORTRAIT, 0, 0, 0, 0
+            );
+            PrinterJob printerJob = PrinterJob.createPrinterJob();
+
+            if (printerJob != null) {
+
+                printerJob.getJobSettings().setPageLayout(pageLayout);
+
+                // Print the scaled content
+                boolean success = printerJob.printPage(item);
+                if (success) {
+                    System.out.println("Printing successful.");
+                    printerJob.endJob();
+                } else {
+                    System.out.println("Printing failed.");
+                }
+
+            }
         }
 
     }
