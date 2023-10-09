@@ -2,6 +2,9 @@ package com.quanlybanhangquanao.quanlybanhangquanao;
 
 import com.quanlybanhangquanao.quanlybanhangquanao.models.KhachHang;
 import com.quanlybanhangquanao.quanlybanhangquanao.models.Nguoi;
+import com.quanlybanhangquanao.quanlybanhangquanao.models.SanPham;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -24,7 +27,7 @@ public class QuanLyKhachHangController {
     private VBox ListKhachHang;
 
     @FXML
-    private TextField searchField;
+    private TextField inputTimKiemKhachHang;
 
     @FXML
     private Pane mainPane;
@@ -32,10 +35,27 @@ public class QuanLyKhachHangController {
     @FXML
     private Pane subPane;
 
-    private void loadKhachHang(){
-        KhachHang khachHang = new KhachHang();
-        List<KhachHang> danhSachKhachHang = khachHang.DanhSach();
+    private KhachHang khachHang;
 
+    @FXML
+    private void initialize() {
+        khachHang = new KhachHang();
+        inputTimKiemKhachHang.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                ListKhachHang.getChildren().clear();
+                loadKhachHang(khachHang.TimKiem(newValue));
+                System.out.println("Dữ liệu đã thay đổi thành: " + newValue);
+                // Đây bạn có thể thực hiện xử lý dựa trên dữ liệu đã nhập
+            }
+        });
+
+        loadKhachHang(khachHang.DanhSach());
+    }
+
+
+
+    private void loadKhachHang(List<KhachHang> danhSachKhachHang){
         try {
             for (int i = 0; i < danhSachKhachHang.size(); i++) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemListKhachHang.fxml"));
@@ -53,10 +73,7 @@ public class QuanLyKhachHangController {
     }
 
 
-    @FXML
-    private void initialize() {
-        loadKhachHang();
-    }
+
 
     public void handleIconClick(String id, String typeButton) {
         if (typeButton.equals("edit")) {
@@ -79,12 +96,12 @@ public class QuanLyKhachHangController {
 
             confirmationAlert.showAndWait().ifPresent(response -> {
                 if (response == buttonTypeOK) {
-                    KhachHang nguoi = new KhachHang();
-                    nguoi.Xoa(id);
+//                    KhachHang nguoi = new KhachHang();
+                    khachHang.Xoa(id);
                     ListKhachHang.getChildren().clear();
 //                    mainPane.getChildren().clear();
                     System.out.println("Khách hàng đã được xóa.");
-                    loadKhachHang();
+                    loadKhachHang(khachHang.DanhSach());
                 } else {
                     System.out.println("Xóa khách hàng đã bị hủy.");
                 }
@@ -104,7 +121,7 @@ public class QuanLyKhachHangController {
         if (typeButton.equals("BtnQuayLai")) {
             subPane.getChildren().clear();
             ListKhachHang.getChildren().clear();
-            loadKhachHang();
+            loadKhachHang(khachHang.DanhSach());
             mainPane.toFront();
         }
     }

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.*?>
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #02030A;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.HomeViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #02030A;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.HomeViewController">
     <children>
         <VBox alignment="TOP_CENTER" prefHeight="576.0" prefWidth="256.0" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -131,7 +130,7 @@
                             <children>
                                 <VBox alignment="CENTER" prefHeight="132.0" prefWidth="330.0" style="-fx-border-style: solid inside; -fx-border-radius: 1em; -fx-border-color: #000000;">
                                     <children>
-                                        <Label text="220,000đ" textFill="#2a73ff">
+                                        <Label fx:id="viewDoanhThu" text="220,0000đ" textFill="#2a73ff">
                                             <font>
                                                 <Font name="System Bold" size="26.0" />
                                             </font>
@@ -141,7 +140,7 @@
                                 </VBox>
                                 <VBox alignment="CENTER" prefHeight="132.0" prefWidth="330.0" style="-fx-border-style: solid inside; -fx-border-radius: 1em; -fx-border-color: #000000;">
                                     <children>
-                                        <Label style="solid inside: solid inside;" text="1500" textFill="#26bfbc">
+                                        <Label fx:id="viewTraHang" style="solid inside: solid inside;" text="1500" textFill="#26bfbc">
                                             <font>
                                                 <Font name="System Bold" size="26.0" />
                                             </font>
@@ -151,7 +150,7 @@
                                 </VBox>
                                 <VBox alignment="CENTER" prefHeight="132.0" prefWidth="330.0" style="-fx-border-style: solid inside; -fx-border-radius: 1em; -fx-border-color: #000000;">
                                     <children>
-                                        <Label text="1000" textFill="#fa5f7e">
+                                        <Label fx:id="viewDaBan" text="1000" textFill="#fa5f7e">
                                             <font>
                                                 <Font name="System Bold" size="26.0" />
                                             </font>

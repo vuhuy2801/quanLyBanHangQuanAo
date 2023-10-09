@@ -11,7 +11,7 @@ public interface NguoiService {
 
     boolean Xoa(String key);
 
-    List<Nguoi> TimKiem(String key);
+    List<KhachHang> TimKiem(String key);
 
     List<KhachHang> DanhSach();
 

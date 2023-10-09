@@ -1,4 +1,5 @@
 package com.quanlybanhangquanao.quanlybanhangquanao.models;
+
 import com.quanlybanhangquanao.quanlybanhangquanao.models.services.SanPhamService;
 
 import java.sql.*;
@@ -61,7 +62,7 @@ public class SanPham implements SanPhamService {
 
     // Constructor with parameters
     public SanPham(String maHang, String tenHang, String nhomHang, String thuongHieu, BigDecimal giaVon,
-                   BigDecimal giaBan, int tonKho, BigDecimal trongLuong, byte[] anh) {
+            BigDecimal giaBan, int tonKho, BigDecimal trongLuong, byte[] anh) {
         this.maHang = maHang;
         this.tenHang = tenHang;
         this.nhomHang = nhomHang;
@@ -90,8 +91,6 @@ public class SanPham implements SanPhamService {
         this.tenHang = tenHang;
     }
 
-
-
     public String getThuongHieu() {
         return thuongHieu;
     }
@@ -107,6 +106,7 @@ public class SanPham implements SanPhamService {
     public void setTonKho(int tonKho) {
         this.tonKho = tonKho;
     }
+
     public byte[] getAnh() {
         return anh;
     }
@@ -141,7 +141,6 @@ public class SanPham implements SanPhamService {
         return false;
     }
 
-
     @Override
     public boolean Sua(SanPham n) {
         try (Connection connection = DatabaseConnection.getConnection()) {
@@ -168,7 +167,6 @@ public class SanPham implements SanPhamService {
         return false;
     }
 
-
     @Override
     public boolean Xoa(String maHang) {
         try (Connection connection = DatabaseConnection.getConnection()) {
@@ -186,7 +184,6 @@ public class SanPham implements SanPhamService {
         }
         return false;
     }
-
 
     public List<SanPham> TimKiem(String key) {
         List<SanPham> danhSachTimKiem = new ArrayList<>();
@@ -224,7 +221,6 @@ public class SanPham implements SanPhamService {
         return danhSachTimKiem;
     }
 
-
     @Override
     public List<SanPham> DanhSach() {
         List<SanPham> danhSachSanPham = new ArrayList<>();
@@ -257,6 +253,7 @@ public class SanPham implements SanPhamService {
 
         return danhSachSanPham;
     }
+
     @Override
     public SanPham ChiTiet(String maHang) {
         SanPham chiTietSanPham = null;
@@ -291,6 +288,7 @@ public class SanPham implements SanPhamService {
 
         return chiTietSanPham;
     }
+
     public BigDecimal getTrongLuong() {
         return trongLuong;
     }

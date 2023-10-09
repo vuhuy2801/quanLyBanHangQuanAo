@@ -1,21 +1,25 @@
 package com.quanlybanhangquanao.quanlybanhangquanao;
 
 import com.quanlybanhangquanao.quanlybanhangquanao.models.SanPham;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.print.*;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.transform.Scale;
+import javafx.stage.Stage;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class QuanLySanPhamViewController {
 
@@ -23,7 +27,7 @@ public class QuanLySanPhamViewController {
     private VBox ListSanPham; // Tham chiếu đến VBox trong QuanLySanPham.fxml
 
     @FXML
-    private TextField searchField;
+    private TextField inputTimKiemSanPham;
     @FXML
     private ItemListSanPhamController itemListController;
 
@@ -32,17 +36,28 @@ public class QuanLySanPhamViewController {
     @FXML
     private Pane subPane;
 
-
+    private SanPham sanPham;
 
     DecimalFormat decimalFormat = new DecimalFormat("#0.00");
     @FXML
     private void initialize() {
-        loadSanPham();
+        sanPham = new SanPham();
+        inputTimKiemSanPham.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                ListSanPham.getChildren().clear();
+                loadSanPham(sanPham.TimKiem(newValue));
+                System.out.println("Dữ liệu đã thay đổi thành: " + newValue);
+                // Đây bạn có thể thực hiện xử lý dựa trên dữ liệu đã nhập
+            }
+        });
+
+        loadSanPham(sanPham.DanhSach());
     }
 
-    void loadSanPham(){
-        SanPham sanPham = new SanPham();
-        List<SanPham> danhSachSanPham = sanPham.DanhSach();
+
+
+    void loadSanPham(List<SanPham> danhSachSanPham){
         try {
             // Vòng lặp để nạp và thêm từng mục vào VBox
             for (int i = 0; i < danhSachSanPham.size(); i++) {
@@ -72,7 +87,7 @@ public class QuanLySanPhamViewController {
             subPane.toFront();
 
         } else if (typeButton.equals("delete")) {
-            SanPham sanPham = new SanPham();
+//            SanPham sanPham = new SanPham();
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
             confirmationAlert.setTitle("Xác nhận");
             confirmationAlert.setHeaderText("Xác nhận xóa tệp?");
@@ -84,7 +99,7 @@ public class QuanLySanPhamViewController {
                 if (response == buttonTypeOK) {
                     sanPham.Xoa(id);
                     ListSanPham.getChildren().clear();
-                    loadSanPham();
+                    loadSanPham(sanPham.DanhSach());
                     System.out.println("Xóa tệp thành công");
 
                 } else {
@@ -92,6 +107,21 @@ public class QuanLySanPhamViewController {
                 }
             });
         } else if (typeButton.equals("print")) {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("BarCodeSanPham.fxml"));
+            Parent root = null;
+            try {
+                root = loader.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            BarCodeSanPhamController itemController = loader.getController();
+            itemController.setData(id);
+//            itemController.setDataHoaDon(donHang, listChiTietHD);
+            Stage newStage = new Stage();
+            newStage.setTitle("Preview in mã vạch sản phẩm:");
+            newStage.setScene(new Scene(root));
+            newStage.show();
 
         }
 
@@ -104,9 +134,10 @@ public class QuanLySanPhamViewController {
 
     public void handleChiTietSanPhamClick(String typeButton) {
         if (typeButton.equals("BtnQuayLai")) {
+
             subPane.getChildren().clear();
             ListSanPham.getChildren().clear();
-            loadSanPham();
+            loadSanPham(sanPham.DanhSach());
             mainPane.toFront();
         }
     }
@@ -123,13 +154,14 @@ public class QuanLySanPhamViewController {
 
             if (TypeButton.equals("edit")) {
                 itemController.setTextButtonThem("Lưu", "submitEdit");
-                itemController.setDataSanPham(sanpham.getMaHang(), sanpham.getTenHang(), decimalFormat.format(sanpham.getGiaBan()),  decimalFormat.format(sanpham.getGiaVon()),  sanpham.getNhomHang(), sanpham.getThuongHieu(), String.valueOf(sanpham.getTonKho()), String.valueOf(sanpham.getTrongLuong()));
+
+                itemController.setDataSanPham(sanpham.getMaHang(), sanpham.getTenHang(), decimalFormat.format(sanpham.getGiaBan()),  decimalFormat.format(sanpham.getGiaVon()),  sanpham.getNhomHang(), sanpham.getThuongHieu(), String.valueOf(sanpham.getTonKho()), String.valueOf(sanpham.getTrongLuong()), sanpham.getAnh());
 
             } else if (TypeButton.equals("view")) {
                 itemController.setTextButtonThem("Sửa sản phẩm", "view");
                 itemController.disableTextFieldEditing();
                 //set data
-                itemController.setDataSanPham(sanpham.getMaHang(), sanpham.getTenHang(), decimalFormat.format(sanpham.getGiaBan()),  decimalFormat.format(sanpham.getGiaVon()),  sanpham.getNhomHang(), sanpham.getThuongHieu(), String.valueOf(sanpham.getTonKho()), String.valueOf(sanpham.getTrongLuong()));
+                itemController.setDataSanPham(sanpham.getMaHang(), sanpham.getTenHang(), decimalFormat.format(sanpham.getGiaBan()),  decimalFormat.format(sanpham.getGiaVon()),  sanpham.getNhomHang(), sanpham.getThuongHieu(), String.valueOf(sanpham.getTonKho()), String.valueOf(sanpham.getTrongLuong()), sanpham.getAnh());
             }
             container.getChildren().clear();
             container.getChildren().add(screen);

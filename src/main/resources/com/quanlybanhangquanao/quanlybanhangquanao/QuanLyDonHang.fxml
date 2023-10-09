@@ -11,7 +11,7 @@
       <Pane fx:id="subPane" prefHeight="200.0" prefWidth="200.0" />
       <Pane fx:id="mainPane" prefHeight="720.0" prefWidth="1024.0">
          <children>
-            <TextField layoutX="810.0" layoutY="33.0" prefHeight="27.0" prefWidth="183.0" promptText="Tìm kiếm đơn hàng" style="-fx-background-color: #ffffff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" />
+            <TextField fx:id="inputTimKiemDonHang" layoutX="810.0" layoutY="33.0" prefHeight="27.0" prefWidth="183.0" promptText="Tìm kiếm đơn hàng" style="-fx-background-color: #ffffff; -fx-border-color: #B7C3D7; -fx-border-radius: 2em;" />
             <ImageView fitHeight="17.0" fitWidth="16.0" layoutX="967.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/icons8_Search_52px.png" />

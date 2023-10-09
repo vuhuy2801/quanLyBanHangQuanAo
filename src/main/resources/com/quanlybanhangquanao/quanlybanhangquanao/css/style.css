@@ -1,56 +1,153 @@
-.button
-{
-    -fx-background-color : rgba(0, 0, 0, 0);
-    -fx-text-fill : #000000;
-    -fx-cursor: HAND;
+.button {
+  -fx-background-color: rgba(0, 0, 0, 0);
+  -fx-text-fill: #000000;
+  -fx-cursor: HAND;
 }
-.button:hover{
-    -fx-background-color : #000000;
-    -fx-text-fill : #ffffff;
-}
-
-
-
-
-
-.increment-button, .decrement-button {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
+.button:hover {
+  -fx-background-color: #000000;
+  -fx-text-fill: #ffffff;
 }
 
-
-
-
-
-.btnSearch{
-    -fx-background-color: #02030A;
-    -fx-border-radius: 2em;
-    -fx-text-fill:  #ffffff;
+.increment-button,
+.decrement-button {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
 }
 
-.iconButton{
-    -fx-opacity: 0.6;
+.btnSearch {
+  -fx-background-color: #02030a;
+  -fx-border-radius: 2em;
+  -fx-text-fill: #ffffff;
 }
 
-.iconButton:hover{
-    -fx-opacity: 1;
+.iconButton {
+  -fx-opacity: 0.6;
 }
 
-.btnAdd{
-    -fx-background-color: #0085fc ;
-    -fx-text-fill:  white;
+.iconButton:hover {
+  -fx-opacity: 1;
 }
 
-.btnAdd:hover{
-    -fx-background-color: #0058fc;
+.btnAdd {
+  -fx-background-color: #0085fc;
+  -fx-text-fill: white;
 }
 
-
-btnQuayLai{
-    -fx-background-color: #000000;
+.btnAdd:hover {
+  -fx-background-color: #0058fc;
 }
 
-btnQuayLai:hover{
-    -fx-background-color: #ffffff;
-    -fx-font-style: underline;
+btnQuayLai {
+  -fx-background-color: #000000;
+}
+
+btnQuayLai:hover {
+  -fx-background-color: #ffffff;
+  -fx-font-style: underline;
+}
+
+.btnTaoDonHang {
+  -fx-border-width: 1;
+  -fx-border-color: black;
+  -fx-border-radius: 0.5em;
+  -fx-background-color: transparent;
+}
+
+.btnTaoDonHang:hover {
+  -fx-text-fill: white;
+  -fx-background-color: black;
+}
+
+/* Đổi màu nền của TableView và hàng */
+.table-view {
+  -fx-background-color: transparent;
+}
+
+.table-row-cell {
+  -fx-font-size: 16px;
+  -fx-cell-size: 55px;
+  -fx-background-color: transparent;
+}
+
+/* Đổi màu văn bản trong các ô của TableView */
+.table-cell {
+  -fx-text-alignment: center center;
+  -fx-alignment: center center;
+  -fx-text-fill: #000000;
+}
+
+/* Đổi màu đường viền của TableView và các cột */
+.table-view,
+.table-column {
+  -fx-border-color: #cccccc;
+  -fx-border-width: 0;
+}
+
+/* Đổi màu văn bản trong tiêu đề của các cột */
+.table-column .label {
+  -fx-text-fill: #333333;
+}
+
+/* Hiệu ứng khi con trỏ chuột di chuyển qua hàng */
+.table-row-cell:hover {
+  -fx-background-color: #d9d9d9;
+}
+
+/* Đổi giao diện của hàng được chọn */
+.table-row-cell:selected {
+  -fx-background-color: #d9d9d9;
+  -fx-text-fill: white;
+}
+
+/*Định dạng tiêu đề cột:*/
+.table-view .column-header {
+  -fx-font-size: 16px;
+  -fx-font-weight: bold;
+  -fx-background-color: #ffffff;
+}
+
+/*Định dạng tiêu đề cột:*/
+.table-view .column-header {
+  -fx-font-size: 16px;
+  -fx-font-weight: bold;
+  -fx-background-color: #ffffff;
+}
+
+.tbdanhSachChiTietHoaDon .column-header {
+}
+
+.tbSanPhamThem .column-header {
+  -fx-font-size: 11px;
+  -fx-font-weight: bold;
+  -fx-background-color: #ffffff;
+}
+
+/*.tbSanPhamThem{*/
+/*    */
+/*}*/
+
+.tbSanPhamThem .table-row-cell {
+  -fx-font-size: 11px;
+  -fx-cell-size: 30px;
+  -fx-background-color: transparent;
+}
+
+.tbSanPhamThem .button {
+}
+
+.btnThemKhachHang {
+  -fx-border-radius: 0.5em;
+  -fx-border-width: 1;
+  -fx-border-color: black;
+  -fx-background-color: transparent;
+}
+
+.btnThemKhachHang:hover {
+  -fx-text-fill: #ffffff;
+}
+
+.table-view .button {
+  -fx-border-width: 1px;
+  -fx-border-color: black;
+  -fx-border-radius: 0.5em;
 }
