@@ -17,14 +17,14 @@ Trước khi bắt đầu, đảm bảo bạn đã có các yêu cầu sau:
 
 2. Chạy file `mockup.sql` để tạo cơ sở dữ liệu.
 
-3. Sửa file cấu hình để kết nối đến cơ sở dữ liệu. Mở file `DatabaseConnection.java` tại đường dẫn sau và thay đổi thông tin kết nối database:
+3. Sửa file cấu hình để kết nối đến cơ sở dữ liệu. Mở file `DatabaseConnection.java` tại đường dẫn sau quanLyBanHangQuanAo\src\main\java\com\quanlybanhangquanao\quanlybanhangquanao\models\DatabaseConnection.java và thay đổi thông tin kết nối database:
 
     ```java
     private static final String JDBC_URL = "jdbc:sqlserver://localhost:1434;databaseName=QUAN_LY_BAN_HANG_QUAN_AO;Encrypt=false";
     private static final String USERNAME = "Demo";
     private static final String PASSWORD = "demo@123";
     ```
-
+4. chạy QuanLyQuanAoApplication.java tại src\main\java\com\quanlybanhangquanao\quanlybanhangquanao
 ## Cách Sử Dụng
 
 **Thêm ảnh ở đây để minh họa cách sử dụng dự án của bạn.**
