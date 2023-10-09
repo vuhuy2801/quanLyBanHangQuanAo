@@ -27,7 +27,7 @@ Trước khi bắt đầu, đảm bảo bạn đã có các yêu cầu sau:
 4. chạy `QuanLyQuanAoApplication.java` tại src\main\java\com\quanlybanhangquanao\quanlybanhangquanao
 ## Cách Sử Dụng
 
-**Thêm ảnh ở đây để minh họa cách sử dụng dự án của bạn.**
+**Thêm ảnh **
 
 ## Người Đóng Góp
 
