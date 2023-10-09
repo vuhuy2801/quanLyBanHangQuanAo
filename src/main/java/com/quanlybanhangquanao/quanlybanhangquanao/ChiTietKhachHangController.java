@@ -156,6 +156,31 @@ public class ChiTietKhachHangController {
 //                System.out.println(data[i]);
             }
         }
+
+        String tenKhachHang = data[1];
+        String SDT = data[2];
+
+
+        String maKhachHang = data[0];
+        if ( !maKhachHang.startsWith("kh")) {
+            thongBao("Lỗi", "Mã khách hàng phải bắt đầu bằng 'kh'");
+            return false;
+        }
+        if (maKhachHang.length() > 5) {
+            thongBao("Lỗi", "Mã khách hàng có độ dài tối đa là 5 ký tự");
+            return false;
+        }
+        if (tenKhachHang.matches(".*\\d+.*")) {
+            thongBao("Lỗi", "Tên khách hàng không được chứa số");
+            return false;
+        }
+
+        if (SDT.matches("^\\d+(\\.\\d+)?$")) {
+            thongBao("Lỗi", "Số điện thoại không hợp lệ");
+            return false;
+        }
+
+
             KhachHang khachHang = new KhachHang(data[0], data[1], (data[4]).equals("true") ?true :false, convertStringToDate(data[3], "yyyy-MM-dd"), data[5], data[2]);
             boolean isSuccess = ThemKhachHang(khachHang);
         if (isSuccess) {
@@ -178,6 +203,7 @@ public class ChiTietKhachHangController {
                 return false;
             }
         }
+
         KhachHang khachHang = new KhachHang(data[0], data[1], (data[4]).equals("true") ?true :false, convertStringToDate(data[3], "yyyy-MM-dd"), data[5], data[2]);
 
         boolean isSuccess = khachHang.Sua(khachHang);
