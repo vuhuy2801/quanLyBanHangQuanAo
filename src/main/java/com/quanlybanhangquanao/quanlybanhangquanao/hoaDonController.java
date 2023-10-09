@@ -108,7 +108,7 @@ public class hoaDonController  implements Initializable {
 
 
 
-    public void setDataHoaDon( DonHang donHang, List<ThemDonHangController.ItemListHoaDon> listChiTietHD){
+    public void setDataHoaDon( DonHang donHang, List<ThemDonHangController .ItemListHoaDon> listChiTietHD){
 
         lbMaHoaDon.setText(donHang.getMaDonHang());
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");

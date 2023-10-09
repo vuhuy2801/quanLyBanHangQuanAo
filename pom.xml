@@ -58,6 +58,13 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>12.4.1.jre8</version>
+        </dependency>
+
 
 
 
@@ -84,7 +91,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.quanlybanhangquanao.quanlybanhangquanao/com.quanlybanhangquanao.quanlybanhangquanao.HelloApplication
+                                com.quanlybanhangquanao.quanlybanhangquanao/com.quanlybanhangquanao.quanlybanhangquanao.QuanLyQuanAoApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

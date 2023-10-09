@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="nodeThemDonHang" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.ThemDonHangController">
+    <children>
+        <Pane layoutX="14.0" layoutY="51.0" prefHeight="645.0" prefWidth="931.0" style="-fx-border-width: 1; -fx-border-color: #000000; -fx-border-radius: 1em;">
+            <children>
+                <TableView fx:id="tableViewChiTietDonHang" editable="true" layoutY="11.0" prefHeight="634.0" prefWidth="917.0" styleClass="tbdanhSachChiTietHoaDon" stylesheets="@css/style.css">
+                    <columns>
+                        <TableColumn fx:id="stt" prefWidth="52.0" text="STT">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="maHang" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="maHang" prefWidth="87.0" text="Mã Hàng">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="maHang" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="tenHang" prefWidth="190.0" text="Tên Hàng">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="tenHang" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="soLuongColumn" prefWidth="87.0" text="Số lượng">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="soLuongColumn" />
+                            </cellValueFactory>
+                        </TableColumn>
+
+
+                        <TableColumn fx:id="donGia" prefWidth="143.0" text="Đơn Giá">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="donGia" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="giamGia" prefWidth="142.0" text="Giảm giá">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="giamGia" />
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn fx:id="thanhTien" prefWidth="158.0" text="Thành Tiền">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="thanhTien" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="56.0" text="Xóa" fx:id="xoaColumn">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="xoa" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+            </children></Pane>
+        <Label fx:id="valueThoiGianLapHoaDon" layoutX="20.0" layoutY="26.0" prefHeight="25.0" prefWidth="298.0" text="28/01/2023 22:54:30 ">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Label>
+        <Button fx:id="btnTaoDonHang" layoutX="953.0" layoutY="649.0" mnemonicParsing="false" onMouseClicked="#btnThanhToan_Click" prefHeight="47.0" prefWidth="320.0" styleClass="btnTaoDonHang" stylesheets="@css/style.css" text="Tạo đơn hàng">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Button>
+        <TextField fx:id="inputTimKiemSanPham" layoutX="957.0" layoutY="51.0" prefHeight="33.0" prefWidth="311.0" promptText="Tìm sản phẩm" style="-fx-background-color: #ffffff; -fx-border-color: #B7C3D7; -fx-border-radius: 0.5em;" />
+        <ImageView fitHeight="17.0" fitWidth="16.0" layoutX="1240.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@images/icons8_Search_52px.png" />
+            </image>
+        </ImageView>
+        <Pane layoutX="953.0" layoutY="91.0" prefHeight="289.0" prefWidth="320.0" style="-fx-border-width: 1; -fx-border-color: #000000; -fx-border-radius: 1em;">
+            <children>
+                <TableView fx:id="tableViewListSanPham" editable="true" layoutY="6.0" prefHeight="283.0" prefWidth="320.0" styleClass="tbSanPhamThem" stylesheets="@css/style.css">
+                    <columns>
+                        <TableColumn fx:id="maSP" prefWidth="59.0" text="Mã SP">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="maHang" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="tenSP" minWidth="0.0" prefWidth="96.0" text="Tên SP">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="tenHang" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="tonKho" prefWidth="48.0" text="Tồn kho">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="tonKho" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="giaSP" prefWidth="61.0" text="Giá">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="giaSP" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="them" prefWidth="42.0" text="Thêm">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="them" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+
+            </children>
+        </Pane>
+        <VBox layoutX="952.0" layoutY="394.0" prefHeight="245.0" prefWidth="320.0" spacing="10.0">
+            <children>
+                <HBox alignment="CENTER" prefHeight="32.0" prefWidth="320.0">
+                    <children>
+                        <Label prefHeight="25.0" prefWidth="99.0" text="khách hàng:">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <ChoiceBox fx:id="selectKhachHang" prefHeight="32.0" prefWidth="221.0" />
+                    </children>
+                </HBox>
+                <HBox prefHeight="32.0" prefWidth="320.0">
+                    <children>
+                        <Label prefHeight="25.0" prefWidth="298.0" text="Mã hóa đơn:">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="valueMaHoaDon" prefHeight="25.0" prefWidth="298.0" text="HD001">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+                <HBox prefHeight="32.0" prefWidth="320.0">
+                    <children>
+                        <Label prefHeight="25.0" prefWidth="298.0" text="Tổng số lượng:">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="valueSoLuong" prefHeight="25.0" prefWidth="298.0" text="2">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+                <HBox prefHeight="32.0" prefWidth="320.0">
+                    <children>
+                        <Label prefHeight="25.0" prefWidth="298.0" text="Giảm giá: ">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="valueGiamGia" prefHeight="25.0" prefWidth="298.0" text="20,000 vnđ">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+                <HBox prefHeight="32.0" prefWidth="320.0">
+                    <children>
+                        <Label prefHeight="25.0" prefWidth="298.0" text="Tổng tiền hàng:">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="valueTongTienHang" prefHeight="25.0" prefWidth="298.0" text="10,000,000 vnđ">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
