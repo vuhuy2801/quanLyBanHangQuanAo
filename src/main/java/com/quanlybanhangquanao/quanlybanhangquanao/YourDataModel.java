@@ -1,7 +1,6 @@
 package com.quanlybanhangquanao.quanlybanhangquanao;
 
 public class YourDataModel {
-
     private String maHang;
     private String tenHang;
     private int soLuong;

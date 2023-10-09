@@ -7,16 +7,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -51,6 +47,7 @@ public class QuanLyDonHangController {
 
     DecimalFormat decimalFormat = new DecimalFormat("#0.00");
     private DonHang donHang;
+
     @FXML
     private void initialize() {
         donHang = new DonHang();
@@ -72,16 +69,18 @@ public class QuanLyDonHangController {
         Date date = inputDateFormat.parse(inputDate);
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
-    void loadDonHang(List<DonHang> danhSachDonHang){
+
+    void loadDonHang(List<DonHang> danhSachDonHang) {
         try {
-            for (int i = 0 ; i < danhSachDonHang.size(); i++) {
+            for (int i = 0; i < danhSachDonHang.size(); i++) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemListDonHang.fxml"));
                 Pane item = loader.load();
 
                 ItemListDonHangController itemController = loader.getController();
                 itemController.setQuanLyDonHangController(this);
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                String formattedDate = formatDate(String.valueOf(danhSachDonHang.get(i).getNgayLap()), "yyyy-MM-dd").format(formatter);
+                String formattedDate = formatDate(String.valueOf(danhSachDonHang.get(i).getNgayLap()), "yyyy-MM-dd")
+                        .format(formatter);
                 itemController.setOrderData(danhSachDonHang.get(i).getMaDonHang(),
                         formattedDate,
                         danhSachDonHang.get(i).getHoTenKhachHang(),
@@ -131,7 +130,7 @@ public class QuanLyDonHangController {
         newStage.setTitle("Thêm Đơn hàng");
         newStage.setScene(new Scene(root));
         newStage.show();
-//        subPane.toFront();
+        // subPane.toFront();
     }
 
     public void handleChiTietDonHangClick(String typeButton) {
