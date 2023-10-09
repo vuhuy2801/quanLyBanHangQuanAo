@@ -291,15 +291,13 @@ public class ThemDonHangController {
     }
 
 
-//    ArrayList<ItemListSanPham> setDataEditDonHang(String maDonHang){
-//        DonHang donHang = new DonHang();
-//        ChiTietDonHang chiTietDonHang = new ChiTietDonHang();
-//        donHang = donHang.ChiTiet("HD001");
-//        chiTietDonHang = chiTietDonHang.ChiTiet("HD001");
-//
-//        chiTietD
-//
-//    }
+    ArrayList<ItemListSanPham> setDataEditDonHang(String maDonHang){
+        DonHang donHang = new DonHang();
+        ChiTietDonHang chiTietDonHang = new ChiTietDonHang();
+        donHang = donHang.ChiTiet("HD001");
+        chiTietDonHang = chiTietDonHang.ChiTiet("HD001");
+
+    }
     //     ObservableList để theo dõi và cập nhật dữ liệu trong TableView
     ObservableList<ItemListHoaDon> sampleData = FXCollections.observableArrayList(
 
