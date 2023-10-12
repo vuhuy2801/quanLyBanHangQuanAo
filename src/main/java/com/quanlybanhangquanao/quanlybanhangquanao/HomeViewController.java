@@ -105,14 +105,13 @@ public class HomeViewController {
         dataSeries.getData().add(new XYChart.Data<>("Tháng 11", 11020));
         dataSeries.getData().add(new XYChart.Data<>("Tháng 12", 110300));
         barChart.getData().add(dataSeries);
-
     }
 
 
     public void initialize() {
-
         changeLabelText();
         BieuDo();
+
     }
 
     @FXML
@@ -127,7 +126,7 @@ public class HomeViewController {
             activeButton = clickedButton;
         if (actionEvent.getSource() == btnOverview) {
             pnlOverview.toFront();
-            BieuDo();
+
 
         }
         if (actionEvent.getSource() == btnQuanLyKhachHang) {

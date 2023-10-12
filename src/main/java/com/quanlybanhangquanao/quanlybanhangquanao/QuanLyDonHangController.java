@@ -32,7 +32,7 @@ import java.util.List;
 public class QuanLyDonHangController {
 
     @FXML
-    private VBox ListDonHang;
+    public VBox ListDonHang;
 
     @FXML
     private Button btnThem;
@@ -98,12 +98,18 @@ public class QuanLyDonHangController {
         }
     }
 
-    public void handleIconClick(String id, String typeButton) {
+    public void handleIconClick(String id, String typeButton) throws IOException {
         if (typeButton.equals("edit")) {
-            loadScreen("ChiTietDonHang.fxml", subPane, typeButton);
-            subPane.toFront();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ThemDonHang.fxml"));
+            Parent root = loader.load();
+            ThemDonHangController itemController = loader.getController();
+            itemController.setDataEditDonHang(id);
+            Stage newStage = new Stage();
+            newStage.setTitle("Sửa đơn hàng");
+            newStage.setScene(new Scene(root));
+            newStage.show();
         } else if (typeButton.equals("view")) {
-            loadScreen("ChiTietDonHang.fxml", subPane, typeButton);
+            loadScreen("ChiTietDonHang.fxml", subPane, typeButton, id);
             subPane.toFront();
         } else if (typeButton.equals("delete")) {
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -116,13 +122,29 @@ public class QuanLyDonHangController {
 
             confirmationAlert.showAndWait().ifPresent(response -> {
                 if (response == buttonTypeOK) {
-                    System.out.println("Đơn hàng đã được xóa.");
+                    donHang.Xoa(id);
+                    ListDonHang.getChildren().clear();
+                    loadDonHang(donHang.DanhSach());
+                    System.out.println("Xóa Đơn hàng thành công");
                 } else {
                     System.out.println("Xóa đơn hàng đã bị hủy.");
                 }
             });
         } else if (typeButton.equals("print")) {
-            // Xử lý in đơn hàng
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("hoaDon.fxml"));
+            Parent root = loader.load();
+
+            DonHang Donhang = new DonHang();
+            Donhang = Donhang.ChiTiet(id);
+            ChiTietDonHang chiTietHD = new ChiTietDonHang();
+            chiTietHD = chiTietHD.ChiTiet(id);
+            List<ChiTietDonHang> listChiTietHD = chiTietHD.LayDanhSachSanPhamCuaHoaDon(id);
+            hoaDonController itemController = loader.getController();
+            itemController.setDataHoaDon1(Donhang.ChiTiet(id), listChiTietHD);
+            Stage newStage = new Stage();
+            newStage.setTitle("Preview in hóa đơn:" + Donhang.getMaDonHang() );
+            newStage.setScene(new Scene(root));
+            newStage.show();
         }
     }
 
@@ -131,11 +153,14 @@ public class QuanLyDonHangController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ThemDonHang.fxml"));
         Parent root = loader.load();
         Stage newStage = new Stage();
+        ThemDonHangController itemController = loader.getController();
+        itemController.quanLyDonHangController = this;
         newStage.setTitle("Thêm Đơn hàng");
         newStage.setScene(new Scene(root));
         newStage.show();
         // subPane.toFront();
     }
+
 
     public void handleChiTietDonHangClick(String typeButton) {
         if (typeButton.equals("BtnQuayLai")) {
@@ -144,14 +169,14 @@ public class QuanLyDonHangController {
         }
     }
 
-    private void loadScreen(String fxmlFileName, Pane container, String TypeButton) {
+    private void loadScreen(String fxmlFileName, Pane container, String TypeButton, String id) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFileName));
             Pane screen = loader.load();
 
             ChiTietDonHangController itemController = loader.getController();
             itemController.setQuanLyDonHangController(this);
-
+            itemController.setDataEditDonHang(id);
             container.getChildren().clear();
             container.getChildren().add(screen);
         } catch (Exception e) {

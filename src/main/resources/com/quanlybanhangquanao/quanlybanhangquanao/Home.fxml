@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
@@ -8,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #02030A;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.HomeViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #02030A;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.HomeViewController">
     <children>
         <VBox alignment="TOP_CENTER" prefHeight="576.0" prefWidth="256.0" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -118,9 +119,25 @@
         </VBox>
         <StackPane layoutX="258.0" prefHeight="720.0" prefWidth="1024.0" style="-fx-background-color: #02030A;">
             <children>
+            <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1024.0" />
                 <Pane fx:id="pnlOverview" prefHeight="720.0" prefWidth="1024.0" style="-fx-background-color: #ffffff;">
                     <children>
-                  <Pane layoutX="13.0" layoutY="245.0" prefHeight="466.0" prefWidth="990.0" style="-fx-border-color: #000000; -fx-border-style: solid inside; -fx-border-radius: 1em;" />
+                  <Pane layoutX="13.0" layoutY="245.0" prefHeight="466.0" prefWidth="990.0" style="-fx-border-color: #000000; -fx-border-radius: 1em;">
+                     <children>
+                        <BarChart fx:id="barChart" layoutX="31.0" layoutY="51.0" prefHeight="399.0" prefWidth="939.0">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </BarChart>
+                        <Label layoutX="11.0" layoutY="8.0" text="Doanh thu 12 tháng">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
+                     </children></Pane>
                         <Label layoutX="14.0" layoutY="28.0" text="Kết quả bán hàng hôm nay">
                             <font>
                                 <Font name="System Bold" size="24.0" />
@@ -162,23 +179,6 @@
                         </HBox>
                     </children>
                 </Pane>
-            <Pane fx:id="mainPanel" prefHeight="720.0" prefWidth="1024.0">
-               <children>
-                  <BarChart fx:id="barChart" layoutX="34.0" layoutY="296.0" prefHeight="399.0" prefWidth="939.0">
-                    <xAxis>
-                      <CategoryAxis side="BOTTOM" />
-                    </xAxis>
-                    <yAxis>
-                      <NumberAxis side="LEFT" />
-                    </yAxis>
-                  </BarChart>
-                  <Label layoutX="34.0" layoutY="256.0" text="Doanh thu 12 tháng">
-                     <font>
-                        <Font name="System Bold" size="24.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
             </children>
         </StackPane>
     </children>

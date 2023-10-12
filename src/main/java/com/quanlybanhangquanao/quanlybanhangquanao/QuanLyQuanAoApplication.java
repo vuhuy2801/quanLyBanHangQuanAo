@@ -21,5 +21,6 @@ public class QuanLyQuanAoApplication extends Application {
 
     public static void main(String[] args) {
         launch();
+
     }
 }

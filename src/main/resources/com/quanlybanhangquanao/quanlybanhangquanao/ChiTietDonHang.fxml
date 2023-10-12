@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.*?>
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<?import javafx.scene.control.cell.PropertyValueFactory?>
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1024.0" style="-fx-background-color: #ffffff;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.ChiTietDonHangController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1024.0" style="-fx-background-color: #ffffff;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhangquanao.quanlybanhangquanao.ChiTietDonHangController">
    <children>
       <Button fx:id="btnQuayLai" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#handleBtnQuayLaiClick" text="Quay lại">
          <graphic>
@@ -32,7 +29,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label fx:id="valueMaHoaDon" prefHeight="25.0" prefWidth="149.0">
+                  <Label fx:id="valueMaHoaDon" prefHeight="26.0" prefWidth="230.0">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -49,7 +46,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label fx:id="valueThoiGian" prefHeight="25.0" prefWidth="150.0">
+                  <Label fx:id="valueThoiGian" prefHeight="26.0" prefWidth="258.0">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -66,7 +63,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label fx:id="valueKhachHang" prefHeight="25.0" prefWidth="150.0">
+                  <Label fx:id="valueKhachHang" prefHeight="26.0" prefWidth="245.0">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -83,7 +80,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label fx:id="valueNguoiBan" prefHeight="25.0" prefWidth="150.0">
+                  <Label fx:id="valueNguoiBan" prefHeight="26.0" prefWidth="232.0">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>

@@ -5,6 +5,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+import java.io.IOException;
+
 public class ItemListDonHangController {
 
     private QuanLyDonHangController quanLyDonHangController;
@@ -53,25 +55,25 @@ public class ItemListDonHangController {
     }
 
     @FXML
-    private void handlePenIconClick() {
+    private void handlePenIconClick() throws IOException {
         // Gọi callback và truyền id (maDonHang) vào QuanLyDonHangController
         quanLyDonHangController.handleIconClick(maDonHang.getText(), "edit");
     }
 
     @FXML
-    private void handleTrashIconClick() {
+    private void handleTrashIconClick() throws IOException {
         // Gọi callback và truyền id (maDonHang) vào QuanLyDonHangController
         quanLyDonHangController.handleIconClick(maDonHang.getText(), "delete");
     }
 
     @FXML
-    private void handleEyeIconClick() {
+    private void handleEyeIconClick() throws IOException {
         // Gọi callback và truyền id (maDonHang) vào QuanLyDonHangController
         quanLyDonHangController.handleIconClick(maDonHang.getText(),"view");
     }
 
     @FXML
-    private void handlePrintIconClick() {
+    private void handlePrintIconClick() throws IOException {
         // Gọi callback và truyền id (maDonHang) vào QuanLyDonHangController
         quanLyDonHangController.handleIconClick(maDonHang.getText(), "print");
     }

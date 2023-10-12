@@ -110,6 +110,16 @@ public class ChiTietDonHang extends DonHang {
     }
 
 
+    public ChiTietDonHang(String maHD, String maHang, int soLuong,BigDecimal giamGia){
+        sanPham = new SanPham();
+        setMaDonHang(maHD);
+     this.maHangSanPham = maHang;
+        this.soLuong = soLuong;
+        this.giamGia = giamGia;
+    }
+
+
+
     public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
     }
@@ -121,25 +131,40 @@ public class ChiTietDonHang extends DonHang {
 
 
 
-    public boolean Them(ChiTietDonHang chiTietDonHang) {
+    public boolean Them(List<ChiTietDonHang> listDonHangChiTiet) {
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call hd_themChiTietHoaDon(?, ?, ?, ?)}";
+            connection.setAutoCommit(false); // Tắt tự động commit
 
-            try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
-                callableStatement.setString(1, getMaDonHang()); // Truyền mã hóa đơn
-                callableStatement.setString(2, chiTietDonHang.getMaHang()); // Truyền mã sản phẩm
-                callableStatement.setInt(3, chiTietDonHang.getSoLuong()); // Truyền số lượng
-                callableStatement.setBigDecimal(4, chiTietDonHang.getGiamGia()); // Truyền giảm giá
-                callableStatement.execute();
+            try {
+                for (ChiTietDonHang chiTietDonHang1 : listDonHangChiTiet) {
+                    String storedProcedure = "{call dbo.hd_themChiTietHoaDon(?, ?, ?, ?)}";
+
+                    try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
+                        callableStatement.setString(1, chiTietDonHang1.getMaDonHang());
+                        callableStatement.setString(2, chiTietDonHang1.getMaHangSanPham());
+                        callableStatement.setInt(3, chiTietDonHang1.getSoLuong());
+                        callableStatement.setBigDecimal(4, chiTietDonHang1.getGiamGia());
+                        int rowsUpdated = callableStatement.executeUpdate();
+                        if (rowsUpdated == 0) {
+                            // Không tìm thấy bản ghi nào để cập nhật
+                            connection.rollback(); // Rollback nếu có lỗi
+                            return false;
+                        }
+                    }
+                }
+
+                connection.commit(); // Commit nếu không có lỗi
                 return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                connection.rollback(); // Rollback nếu có lỗi
             }
         } catch (SQLException e) {
             e.printStackTrace();
-
         }
-
         return false;
     }
+
 
     public List<ChiTietDonHang> LayDanhSachSanPhamCuaHoaDon(String maDonHang) {
         List<ChiTietDonHang> danhSachSanPham = new ArrayList<>();
@@ -195,25 +220,40 @@ public class ChiTietDonHang extends DonHang {
     }
 
 
-    public boolean Sua(ChiTietDonHang chiTietDonHang) {
+    public boolean Sua(List<ChiTietDonHang> listDonHangChiTiet) {
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.hd_suaChiTietHoaDon(?, ?, ?, ?)}";
+            connection.setAutoCommit(false); // Tắt tự động commit
 
-            try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
-                callableStatement.setString(1, chiTietDonHang.getMaDonHang());
-                callableStatement.setString(2, chiTietDonHang.getMaHang());
-                callableStatement.setInt(3, chiTietDonHang.getSoLuong());
-                callableStatement.setBigDecimal(4, chiTietDonHang.getGiamGia());
-                int rowsUpdated = callableStatement.executeUpdate();
-                if (rowsUpdated > 0) {
-                    return true;
+            try {
+                for (ChiTietDonHang chiTietDonHang1 : listDonHangChiTiet) {
+                    String storedProcedure = "{call dbo.hd_suaChiTietHoaDon(?, ?, ?, ?)}";
+
+                    try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
+                        callableStatement.setString(1, chiTietDonHang1.getMaDonHang());
+                        callableStatement.setString(2, chiTietDonHang1.getMaHangSanPham());
+                        callableStatement.setInt(3, chiTietDonHang1.getSoLuong());
+                        callableStatement.setBigDecimal(4, chiTietDonHang1.getGiamGia());
+                        int rowsUpdated = callableStatement.executeUpdate();
+                        if (rowsUpdated == 0) {
+                            // Không tìm thấy bản ghi nào để cập nhật
+                            connection.rollback(); // Rollback nếu có lỗi
+                            return false;
+                        }
+                    }
                 }
+
+                connection.commit(); // Commit nếu không có lỗi
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                connection.rollback(); // Rollback nếu có lỗi
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
+
 
 
     @Override

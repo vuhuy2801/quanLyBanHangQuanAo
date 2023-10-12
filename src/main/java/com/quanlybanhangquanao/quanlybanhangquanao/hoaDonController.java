@@ -1,5 +1,6 @@
 package com.quanlybanhangquanao.quanlybanhangquanao;
 
+import com.quanlybanhangquanao.quanlybanhangquanao.models.ChiTietDonHang;
 import com.quanlybanhangquanao.quanlybanhangquanao.models.DonHang;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -140,6 +141,39 @@ public class hoaDonController  implements Initializable {
 
     }
 
+    public void setDataHoaDon1( DonHang donHang, List<ChiTietDonHang> listChiTietHD){
+
+        lbMaHoaDon.setText(donHang.getMaDonHang());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        lbNgayLap.setText(sdf.format(donHang.getNgayLap()));
+        lbKhachHang.setText(donHang.getHoTenKhachHang());
+        lbNhanVien.setText(donHang.getHoTenNhanVien());
+        lbNgayIn.setText(sdf.format(new Date()));
+        int demSoLuong = 0;
+        BigDecimal sumGiamGia = new BigDecimal(0);
+        try {
+            // Vòng lặp để nạp và thêm từng mục vào VBox
+            for (int i = 0; i < listChiTietHD.size(); i++) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("ItemListSpHoaDon.fxml"));
+                HBox item = loader.load();
+                // Cài đặt dữ liệu cho mục
+                ItemSpHoaDonController itemController = loader.getController();
+                itemController.setDataSpHoaDon(listChiTietHD.get(i).getTenHang(),String.valueOf(listChiTietHD.get(i).getSoLuong()),dinhDangTien(listChiTietHD.get(i).getGiaBan()), dinhDangTien(listChiTietHD.get(i).getGiamGia()),String.valueOf(listChiTietHD.get(i).getThanhTien()));
+                vBoxListSanPham.getChildren().add(item); // Thêm vào VBox
+                demSoLuong += (listChiTietHD.get(i).getSoLuong());
+                sumGiamGia =sumGiamGia.add(listChiTietHD.get(i).getGiamGia());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        lbTongSoLuong.setText(String.valueOf(demSoLuong));
+        lbGiamGia.setText(String.valueOf(sumGiamGia) +" đ");
+        BigDecimal total = calculateTotal2(listChiTietHD);
+        lbTongTienHang.setText(dinhDangTien(total));
+
+    }
+
+
     public static String dinhDangTien(BigDecimal soTien) {
         DecimalFormat MONEY_FORMATTER = (DecimalFormat) NumberFormat.getInstance(Locale.getDefault());
         MONEY_FORMATTER.applyPattern("#,##0.### ₫");
@@ -151,6 +185,17 @@ public class hoaDonController  implements Initializable {
         for (ThemDonHangController.ItemListHoaDon item : listChiTietHD) {
             BigDecimal donGia = chuyenChuoiTienSangBigDecimal(item.getDonGia());
             int soLuong = Integer.parseInt(item.getSoLuong());
+
+            total = total.add(donGia.multiply(new BigDecimal(soLuong)));
+        }
+        return total;
+    }
+
+    private BigDecimal calculateTotal2(List<ChiTietDonHang> listChiTietHD) {
+        BigDecimal total = BigDecimal.ZERO; // Initialize total to zero
+        for (ChiTietDonHang item : listChiTietHD) {
+            BigDecimal donGia = item.getGiaBan();
+            int soLuong = item.getSoLuong();
 
             total = total.add(donGia.multiply(new BigDecimal(soLuong)));
         }
