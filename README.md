@@ -14,7 +14,6 @@ Trước khi bắt đầu, đảm bảo bạn đã có các yêu cầu sau:
 
 [Tên thay thế]: Vuhuy.xyz
 
-
 ## Cách Cài Đặt
 
 1. Clone dự án về máy tính của bạn.
@@ -29,7 +28,6 @@ Trước khi bắt đầu, đảm bảo bạn đã có các yêu cầu sau:
     private static final String PASSWORD = "demo@123";
     ```
 4. chạy `QuanLyQuanAoApplication.java` tại src\main\java\com\quanlybanhangquanao\quanlybanhangquanao
-
 
 ## Người Đóng Góp
 
