@@ -202,13 +202,10 @@ public class SanPham implements SanPhamService {
                     SanPham sanPham = new SanPham();
                     sanPham.setMaHang(resultSet.getString("maHang"));
                     sanPham.setTenHang(resultSet.getString("tenHang"));
-                    sanPham.setNhomHang(resultSet.getString("nhomHang"));
-                    sanPham.setThuongHieu(resultSet.getString("thuongHieu"));
                     sanPham.setGiaVon(resultSet.getBigDecimal("giaVon"));
                     sanPham.setGiaBan(resultSet.getBigDecimal("giaBan"));
                     sanPham.setTonKho(resultSet.getInt("tonKho"));
-                    sanPham.setTrongLuong(resultSet.getBigDecimal("trongLuong"));
-                    sanPham.setAnh(resultSet.getBytes("anh"));
+                    sanPham.setSoLuongDaBan(resultSet.getInt("soLuongDaBan"));
 
                     danhSachTimKiem.add(sanPham);
                 }
