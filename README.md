@@ -12,7 +12,7 @@ Trước khi bắt đầu, đảm bảo bạn đã có các yêu cầu sau:
 - Microsoft SQL Server
 ## Video demo sản phẩm
 
-[Tên thay thế]: Vuhuy.xyz
+ Video demo: **[youtube](https://youtu.be/hWA8Z2fL_X8)**
 
 ## Cách Cài Đặt
 
