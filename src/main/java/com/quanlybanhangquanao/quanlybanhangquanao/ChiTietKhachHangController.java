@@ -2,6 +2,8 @@ package com.quanlybanhangquanao.quanlybanhangquanao;
 
 import com.quanlybanhangquanao.quanlybanhangquanao.models.KhachHang;
 import com.quanlybanhangquanao.quanlybanhangquanao.models.SanPham;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -10,6 +12,7 @@ import javafx.scene.layout.VBox;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -51,8 +54,11 @@ public class ChiTietKhachHangController {
     }
 
 
+    @FXML
     private void initialize() {
-
+        LocalDate currentTime = LocalDate.now(Clock.systemDefaultZone());
+        inputNgaySinh.setValue(currentTime); // Đặt ngày cho DatePicker
+        inputGioiTinh.setValue("nam"); // Đặt giá trị cho ChoiceBox
     }
 
 
@@ -162,8 +168,8 @@ public class ChiTietKhachHangController {
 
 
         String maKhachHang = data[0];
-        if ( !maKhachHang.startsWith("kh")) {
-            thongBao("Lỗi", "Mã khách hàng phải bắt đầu bằng 'kh'");
+        if ( !maKhachHang.startsWith("kh") || !maKhachHang.startsWith("KH") ) {
+            thongBao("Lỗi", "Mã khách hàng phải bắt đầu bằng 'kh' hoặc 'KH'");
             return false;
         }
         if (maKhachHang.length() > 5) {

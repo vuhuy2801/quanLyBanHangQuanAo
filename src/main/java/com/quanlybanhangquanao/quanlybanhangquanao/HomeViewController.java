@@ -69,7 +69,7 @@ public class HomeViewController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             java.util.Date ngayHienTai = sdf.parse(ngayCuThe);
-            java.sql.Date ngaySQL = new java.sql.Date(ngayHienTai.getTime()); // có data sẽ là ngày hôm nay
+            java.sql.Date ngaySQL = new java.sql.Date(ngayHomNay.getTime()); // có data sẽ là ngày hôm nay
             BaoCaoThongKeNgay baoCao = new BaoCaoThongKeNgay();
             baoCao.thucHienBaoCaoDoanhThu(ngaySQL);
             baoCao.thucHienBaoCaoSoLuong((ngaySQL));
@@ -111,7 +111,6 @@ public class HomeViewController {
     public void initialize() {
         changeLabelText();
         BieuDo();
-
     }
 
     @FXML
@@ -126,7 +125,7 @@ public class HomeViewController {
             activeButton = clickedButton;
         if (actionEvent.getSource() == btnOverview) {
             pnlOverview.toFront();
-
+            changeLabelText();
 
         }
         if (actionEvent.getSource() == btnQuanLyKhachHang) {

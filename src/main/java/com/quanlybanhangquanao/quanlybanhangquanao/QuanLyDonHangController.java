@@ -19,7 +19,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -28,6 +30,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class QuanLyDonHangController {
 
@@ -49,7 +52,11 @@ public class QuanLyDonHangController {
     @FXML
     private Pane subPane;
 
-    DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+    public static String dinhDangTien(BigDecimal soTien) {
+        DecimalFormat MONEY_FORMATTER = (DecimalFormat) NumberFormat.getInstance(Locale.getDefault());
+        MONEY_FORMATTER.applyPattern("#,##0.### ₫");
+        return MONEY_FORMATTER.format(soTien);
+    }
     private DonHang donHang;
 
     @FXML
@@ -88,8 +95,8 @@ public class QuanLyDonHangController {
                 itemController.setOrderData(danhSachDonHang.get(i).getMaDonHang(),
                         formattedDate,
                         danhSachDonHang.get(i).getHoTenKhachHang(),
-                        decimalFormat.format(danhSachDonHang.get(i).getTongTienHang()),
-                        decimalFormat.format(danhSachDonHang.get(i).getGiamGia()));
+                        dinhDangTien(danhSachDonHang.get(i).getTongTienHang()),
+                        dinhDangTien(danhSachDonHang.get(i).getGiamGia()));
 
                 ListDonHang.getChildren().add(item);
             }

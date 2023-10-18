@@ -15,12 +15,16 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 public class QuanLyKhachHangController {
 
     @FXML
@@ -45,8 +49,6 @@ public class QuanLyKhachHangController {
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 ListKhachHang.getChildren().clear();
                 loadKhachHang(khachHang.TimKiem(newValue));
-                System.out.println("Dữ liệu đã thay đổi thành: " + newValue);
-                // Đây bạn có thể thực hiện xử lý dựa trên dữ liệu đã nhập
             }
         });
 
@@ -63,7 +65,7 @@ public class QuanLyKhachHangController {
 
                 ItemListKhachHangController itemController = loader.getController();
                 itemController.setQuanLyKhachHangController(this);
-                itemController.setCustomerData(danhSachKhachHang.get(i).getMaKhachHang(), danhSachKhachHang.get(i).getHoTen(), String.valueOf(danhSachKhachHang.get(i).getSDT()), String.valueOf(danhSachKhachHang.get(i).getTongTien()), String.valueOf(danhSachKhachHang.get(i).getDiemTichLuy()));
+                itemController.setCustomerData(danhSachKhachHang.get(i).getMaKhachHang(), danhSachKhachHang.get(i).getHoTen(), String.valueOf(danhSachKhachHang.get(i).getSDT()), formatCurrency(danhSachKhachHang.get(i).getTongTien(),"đ"), String.valueOf(danhSachKhachHang.get(i).getDiemTichLuy()));
 
                 ListKhachHang.getChildren().add(item);
             }
@@ -72,6 +74,13 @@ public class QuanLyKhachHangController {
         }
     }
 
+
+    public static String formatCurrency(float number, String currencySymbol) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+        symbols.setCurrencySymbol( currencySymbol); // Đặt ký tự đại diện cho tiền tệ
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.## ¤", symbols); // ¤ là ký hiệu cho tiền tệ
+        return decimalFormat.format(number);
+    }
 
 
 
