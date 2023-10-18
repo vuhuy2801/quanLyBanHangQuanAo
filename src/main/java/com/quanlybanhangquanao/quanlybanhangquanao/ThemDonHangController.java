@@ -287,6 +287,8 @@ public class ThemDonHangController {
             String donGia = selectedProduct.getGia();
             String tonKho = selectedProduct.getTonKho();
 
+
+
             // Kiểm tra xem số lượng tồn kho có hợp lệ để thêm sản phẩm hay không
             if (Integer.parseInt(tonKho) == 0) {
                 showAlert("Hết hàng", "Sản phẩm đã hết hàng trong kho.");
@@ -509,7 +511,15 @@ public class ThemDonHangController {
                 for (ItemListHoaDon item : tableViewChiTietDonHang.getItems()) {
                     listChiTietHD.add(new ChiTietDonHang(valueMaHoaDon.getText().replace(" ", ""),item.maHang, Integer.parseInt(item.soLuongColumn),chuyenChuoiTienSangBigDecimal(item.giamGia)));
                 }
+
+                if (tableViewChiTietDonHang.getItems().isEmpty()) {
+                    // Nếu danh sách rỗng, hiển thị thông báo lỗi
+                    showAlert("Lỗi", "Danh sách đơn hàng trống. Vui lòng chọn sản phẩm để thêm vào đơn hàng.");
+                    return;
+                }
                 ChiTietDonHang chiTietDonHang = new ChiTietDonHang();
+
+
                 // Cập nhật thông tin đơn hàng và chi tiết đơn hàng donHang.Sua(donHang, listChiTietHD);
     //            printDonHangInfo(donHang, listChiTietHD);
                 boolean result = chiTietDonHang.Sua(listChiTietHD);
@@ -532,7 +542,11 @@ public class ThemDonHangController {
             donHang.setNgayLap(new Date()); // Lấy thời gian hiện tại làm ngày lập
             donHang.setHoTenKhachHang(tenKhachHang);
             donHang.setMaKhachHang(maKhachHang); // Lấy mã khách hàng từ ChoiceBox selectKhachHang.getValue()
-
+            if (tableViewChiTietDonHang.getItems().isEmpty()) {
+                // Nếu danh sách rỗng, hiển thị thông báo lỗi
+                showAlert("Lỗi", "Danh sách đơn hàng trống. Vui lòng chọn sản phẩm để thêm vào đơn hàng.");
+                return;
+            }
             // Lấy danh sách sản phẩm từ bảng tableViewChiTietDonHang
             ChiTietDonHang themChiTiet = new ChiTietDonHang();
             List<ItemListHoaDon> listChiTietHD1 = tableViewChiTietDonHang.getItems();

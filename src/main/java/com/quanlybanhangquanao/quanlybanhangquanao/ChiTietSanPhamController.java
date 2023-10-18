@@ -268,8 +268,7 @@ public class ChiTietSanPhamController {
         String[] data = getDataSanPham();
         String giaBanText = data[2];
         String giaVonText = data[3];
-
-
+        String tenHang = data[1];
 
         for (int i = 0; i < data.length; i++) {
             if (data[i].isEmpty()) {
@@ -277,6 +276,18 @@ public class ChiTietSanPhamController {
                 return false;
             }
         }
+
+        String maSanPham = data[0];
+        if (!maSanPham.toLowerCase().startsWith("sp")) {
+            thongBao("Lỗi", "Mã sản phẩm phải bắt đầu bằng 'SP'");
+            return false;
+        }
+
+        if (tenHang.matches(".*\\d+.*")) {
+            thongBao("Lỗi", "Tên hàng không được chứa số");
+            return false;
+        }
+
         try {
             int tonKho = Integer.parseInt(data[4]);
             if (tonKho <= 0) {
@@ -298,9 +309,6 @@ public class ChiTietSanPhamController {
             thongBao("Lỗi", "Trọng lượng không hợp lệ");
             return false;
         }
-
-
-
 
         try {
             giaBanText = giaBanText.replace(",", ".");
