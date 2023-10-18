@@ -19,12 +19,12 @@
                 <Font size="16.0" />
             </font>
         </Label>
-        <Label fx:id="dienThoai" alignment="CENTER" prefHeight="27.0" prefWidth="179.0" text="1234567890">
+        <Label fx:id="dienThoai" alignment="CENTER" prefHeight="27.0" prefWidth="117.0" text="1234567890">
             <font>
                 <Font size="16.0" />
             </font>
         </Label>
-        <Label fx:id="tongTienDaMua" alignment="CENTER" prefHeight="27.0" prefWidth="185.0" text="1,000,000 vnđ">
+        <Label fx:id="tongTienDaMua" alignment="CENTER" prefHeight="27.0" prefWidth="276.0" text="1,000,000 vnđ">
             <font>
                 <Font size="16.0" />
             </font>
@@ -50,11 +50,6 @@
         <ImageView fx:id="trashIcon" fitHeight="20.0" fitWidth="17.0" onMouseClicked="#handleTrashIconClick" styleClass="iconButton">
             <image>
                 <Image url="@images/trash-solid.png" />
-            </image>
-        </ImageView>
-        <ImageView fx:id="printIcon" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#handlePrintIconClick" styleClass="iconButton">
-            <image>
-                <Image url="@images/print-solid.png" />
             </image>
         </ImageView>
     </children>

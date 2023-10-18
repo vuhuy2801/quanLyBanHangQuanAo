@@ -10,6 +10,9 @@ Trước khi bắt đầu, đảm bảo bạn đã có các yêu cầu sau:
 - Java 8
 - JDK 21
 - Microsoft SQL Server
+## Video demo sản phẩm
+
+ Video demo: **[youtube](https://youtu.be/hWA8Z2fL_X8)**
 
 ## Cách Cài Đặt
 
@@ -25,9 +28,6 @@ Trước khi bắt đầu, đảm bảo bạn đã có các yêu cầu sau:
     private static final String PASSWORD = "demo@123";
     ```
 4. chạy `QuanLyQuanAoApplication.java` tại src\main\java\com\quanlybanhangquanao\quanlybanhangquanao
-## Cách Sử Dụng
-
-**Thêm ảnh **
 
 ## Người Đóng Góp
 

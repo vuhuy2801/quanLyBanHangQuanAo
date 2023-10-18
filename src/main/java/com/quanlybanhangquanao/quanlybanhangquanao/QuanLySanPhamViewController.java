@@ -18,7 +18,10 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.*;
 
 public class QuanLySanPhamViewController {
@@ -38,7 +41,11 @@ public class QuanLySanPhamViewController {
 
     private SanPham sanPham;
 
-    DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+    public static String dinhDangTien(BigDecimal soTien) {
+        DecimalFormat MONEY_FORMATTER = (DecimalFormat) NumberFormat.getInstance(Locale.getDefault());
+        MONEY_FORMATTER.applyPattern("#,##0.### ₫");
+        return MONEY_FORMATTER.format(soTien);
+    }
     @FXML
     private void initialize() {
         sanPham = new SanPham();
@@ -66,7 +73,7 @@ public class QuanLySanPhamViewController {
                 // Cài đặt dữ liệu cho mục
                 ItemListSanPhamController itemController = loader.getController();
                 itemController.setQuanLySanPhamController(this);
-                itemController.setProductData(danhSachSanPham.get(i).getMaHang(), danhSachSanPham.get(i).getTenHang(), decimalFormat.format(danhSachSanPham.get(i).getGiaBan()), decimalFormat.format(danhSachSanPham.get(i).getGiaVon()),String.valueOf(danhSachSanPham.get(i).getTonKho()), String.valueOf(danhSachSanPham.get(i).getSoLuongDaBan()));
+                itemController.setProductData(danhSachSanPham.get(i).getMaHang(), danhSachSanPham.get(i).getTenHang(), dinhDangTien(danhSachSanPham.get(i).getGiaBan()), dinhDangTien(danhSachSanPham.get(i).getGiaVon()),String.valueOf(danhSachSanPham.get(i).getTonKho()), String.valueOf(danhSachSanPham.get(i).getSoLuongDaBan()));
 
                 ListSanPham.getChildren().add(item); // Thêm vào VBox
             }
@@ -74,6 +81,7 @@ public class QuanLySanPhamViewController {
             e.printStackTrace();
         }
     }
+
 
     public void handleIconClick(String id, String typeButton) {
         if (typeButton.equals("edit")) {
@@ -155,13 +163,13 @@ public class QuanLySanPhamViewController {
             if (TypeButton.equals("edit")) {
                 itemController.setTextButtonThem("Lưu", "submitEdit");
 
-                itemController.setDataSanPham(sanpham.getMaHang(), sanpham.getTenHang(), decimalFormat.format(sanpham.getGiaBan()),  decimalFormat.format(sanpham.getGiaVon()),  sanpham.getNhomHang(), sanpham.getThuongHieu(), String.valueOf(sanpham.getTonKho()), String.valueOf(sanpham.getTrongLuong()), sanpham.getAnh());
+                itemController.setDataSanPham(sanpham.getMaHang(), sanpham.getTenHang(), dinhDangTien(sanpham.getGiaBan()),  dinhDangTien(sanpham.getGiaVon()),  sanpham.getNhomHang(), sanpham.getThuongHieu(), String.valueOf(sanpham.getTonKho()), String.valueOf(sanpham.getTrongLuong()), sanpham.getAnh());
 
             } else if (TypeButton.equals("view")) {
                 itemController.setTextButtonThem("Sửa sản phẩm", "view");
                 itemController.disableTextFieldEditing();
                 //set data
-                itemController.setDataSanPham(sanpham.getMaHang(), sanpham.getTenHang(), decimalFormat.format(sanpham.getGiaBan()),  decimalFormat.format(sanpham.getGiaVon()),  sanpham.getNhomHang(), sanpham.getThuongHieu(), String.valueOf(sanpham.getTonKho()), String.valueOf(sanpham.getTrongLuong()), sanpham.getAnh());
+                itemController.setDataSanPham(sanpham.getMaHang(), sanpham.getTenHang(), dinhDangTien(sanpham.getGiaBan()),  dinhDangTien(sanpham.getGiaVon()),  sanpham.getNhomHang(), sanpham.getThuongHieu(), String.valueOf(sanpham.getTonKho()), String.valueOf(sanpham.getTrongLuong()), sanpham.getAnh());
             }
             container.getChildren().clear();
             container.getChildren().add(screen);

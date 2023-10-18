@@ -2,6 +2,8 @@ package com.quanlybanhangquanao.quanlybanhangquanao;
 
 import com.quanlybanhangquanao.quanlybanhangquanao.models.KhachHang;
 import com.quanlybanhangquanao.quanlybanhangquanao.models.SanPham;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -10,6 +12,7 @@ import javafx.scene.layout.VBox;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -51,8 +54,11 @@ public class ChiTietKhachHangController {
     }
 
 
+    @FXML
     private void initialize() {
-
+        LocalDate currentTime = LocalDate.now(Clock.systemDefaultZone());
+        inputNgaySinh.setValue(currentTime); // Đặt ngày cho DatePicker
+        inputGioiTinh.setValue("nam"); // Đặt giá trị cho ChoiceBox
     }
 
 
@@ -61,6 +67,8 @@ public class ChiTietKhachHangController {
         String textGioiTinh = gioiTinh ? "nam" : "nữ";
 
         inputMaKhachHang.setText(maKhachHang);
+        inputMaKhachHang.setEditable(false);
+
         inputTenKhachHang.setText(tenKhachHang);
         inputDienThoai.setText(dienThoai);
         inputNgaySinh.setValue(ngaySinh); // Đặt ngày cho DatePicker
@@ -69,8 +77,12 @@ public class ChiTietKhachHangController {
     }
 
     public String[] getDataKhachHang() {
-        boolean gioiTinh = (inputGioiTinh.getValue()).equalsIgnoreCase("nam") ? true : false; // Lấy giá trị từ ChoiceBox
-        String ngaySinh = inputNgaySinh.getValue().toString(); // Lấy giá trị từ DatePicker
+        String gioiTinhValue = inputGioiTinh.getValue();
+        boolean gioiTinh = (gioiTinhValue != null && gioiTinhValue.equalsIgnoreCase("nam")) ? true : false;
+        // Lấy giá trị từ ChoiceBox
+        LocalDate ngaySinhValue = inputNgaySinh.getValue();
+        String ngaySinh = (ngaySinhValue != null) ? ngaySinhValue.toString() : null;
+
         return new String[]{
                 inputMaKhachHang.getText(),
                 inputTenKhachHang.getText(),
@@ -149,12 +161,11 @@ public class ChiTietKhachHangController {
     boolean handleThemKhachHang() throws ParseException {
         String[] data = getDataKhachHang();
         for (int i = 0; i < data.length; i++) {
-            if (data[i].isEmpty()) {
+            if (data[i] == null || data[i].equals("")) {
                 thongBao("Lỗi", "Dữ liệu không được để trống");
                 return false;
-            } else {
-//                System.out.println(data[i]);
             }
+
         }
 
         String tenKhachHang = data[1];
@@ -162,26 +173,28 @@ public class ChiTietKhachHangController {
 
 
         String maKhachHang = data[0];
-        if ( !maKhachHang.startsWith("kh")) {
-            thongBao("Lỗi", "Mã khách hàng phải bắt đầu bằng 'kh'");
+        if ( !maKhachHang.startsWith("kh") || !maKhachHang.startsWith("KH") ) {
+            thongBao("Lỗi", "Mã khách hàng phải bắt đầu bằng 'kh' hoặc 'KH'");
             return false;
         }
         if (maKhachHang.length() > 5) {
             thongBao("Lỗi", "Mã khách hàng có độ dài tối đa là 5 ký tự");
             return false;
         }
+
         if (tenKhachHang.matches(".*\\d+.*")) {
             thongBao("Lỗi", "Tên khách hàng không được chứa số");
             return false;
         }
 
-        if (SDT.matches("^\\d+(\\.\\d+)?$")) {
+        if (!SDT.matches("^\\d{10}$")) {
             thongBao("Lỗi", "Số điện thoại không hợp lệ");
             return false;
         }
 
 
-            KhachHang khachHang = new KhachHang(data[0], data[1], (data[4]).equals("true") ?true :false, convertStringToDate(data[3], "yyyy-MM-dd"), data[5], data[2]);
+
+        KhachHang khachHang = new KhachHang(data[0], data[1], (data[4]).equals("true") ?true :false, convertStringToDate(data[3], "yyyy-MM-dd"), data[5], data[2]);
             boolean isSuccess = ThemKhachHang(khachHang);
         if (isSuccess) {
             thongBao("Thành công", "Khách hàng đã được thêm thành công");
@@ -197,12 +210,32 @@ public class ChiTietKhachHangController {
     boolean handleUpdateKhachHang() throws ParseException {
         String[] data = getDataKhachHang();
         for (int i = 0; i < data.length; i++) {
-            if (data[i].isEmpty()) {
-
+            if (data[i] == null || data[i].equals("")) {
                 thongBao("Lỗi", "Dữ liệu không được để trống");
                 return false;
             }
+
         }
+        String tenKhachHang = data[1];
+        String SDT = data[2];
+
+
+        String maKhachHang = data[0];
+        if (!maKhachHang.toLowerCase().startsWith("kh")) {
+            thongBao("Lỗi", "Mã sản phẩm phải bắt đầu bằng 'KH'");
+            return false;
+        }
+
+        if (tenKhachHang.matches(".*\\d+.*")) {
+            thongBao("Lỗi", "Tên khách hàng không được chứa số");
+            return false;
+        }
+
+        if (!SDT.matches("^\\d{10}$")) {
+            thongBao("Lỗi", "Số điện thoại không hợp lệ");
+            return false;
+        }
+
 
         KhachHang khachHang = new KhachHang(data[0], data[1], (data[4]).equals("true") ?true :false, convertStringToDate(data[3], "yyyy-MM-dd"), data[5], data[2]);
 
