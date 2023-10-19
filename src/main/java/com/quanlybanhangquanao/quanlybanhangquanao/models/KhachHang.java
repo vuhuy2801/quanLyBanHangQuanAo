@@ -1,5 +1,7 @@
 package com.quanlybanhangquanao.quanlybanhangquanao.models;
 
+import oracle.jdbc.internal.OracleTypes;
+
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -71,16 +73,19 @@ public class KhachHang extends Nguoi {
         KhachHang khachHang = null;
 
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.kh_layThongTinKhachHang(?)}";
+            String storedProcedure = "{call kh_layThongTinKhachHang(?, ?)}";
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, maKhachHang);
+                callableStatement.registerOutParameter(2, OracleTypes.CURSOR); // Đăng ký tham số OUT
 
                 // Thực hiện stored procedure
-                ResultSet resultSet = callableStatement.executeQuery();
+                callableStatement.execute();
+
+                // Lấy giá trị trả về từ tham số OUT
+                ResultSet resultSet = (ResultSet) callableStatement.getObject(2);
 
                 if (resultSet.next()) {
-
                     // Lấy thông tin từ ResultSet
                     String maNguoi = resultSet.getString("KH_NguoiID");
                     String hoTen = resultSet.getString("hoTen");
@@ -90,7 +95,7 @@ public class KhachHang extends Nguoi {
                     String sdt = resultSet.getString("SDT");
 
                     // Tạo đối tượng KhachHang với thông tin lấy từ ResultSet
-                    khachHang = new KhachHang(maNguoi, hoTen, gioiTinh, ngaySinh, diaChi,sdt);
+                    khachHang = new KhachHang(maNguoi, hoTen, gioiTinh, ngaySinh, diaChi, sdt);
                 }
             }
         } catch (SQLException e) {
@@ -104,48 +109,48 @@ public class KhachHang extends Nguoi {
 
 
 
+
     @Override
     public boolean Them(Nguoi n) {
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.kh_themKhachHang(?, ?, ?, ?, ?, ?, ?, ?)}";
+            String storedProcedure = "{call kh_themKhachHang(?, ?, ?, ?, ?, ?, ?, ?)}";
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
-                callableStatement.setString(1, n.getMaNguoi()); // Đảm bảo bạn đã thêm getter cho maNguoi trong lớp cha Nguoi
+                callableStatement.setString(1, n.getMaNguoi());
                 callableStatement.setString(2, n.getHoTen());
-                callableStatement.setBoolean(3, n.getGioiTinh());
+                callableStatement.setInt(3, n.getGioiTinh() ? 1 : 0); // 1 cho true, 0 cho false
                 Date ngaySinhUtil = n.getNgaySinh();
                 java.sql.Date ngaySinhSql = new java.sql.Date(ngaySinhUtil.getTime());
                 callableStatement.setDate(4, ngaySinhSql);
                 callableStatement.setString(5, n.getDiaChi());
-                callableStatement.setString(6, n.getSDT()); // Chuyển SDT sang kiểu String
+                callableStatement.setString(6, n.getSDT());
                 callableStatement.setString(7, "NV001"); // Thay thế bằng nguoiTao thích hợp
+                callableStatement.setNull(8, Types.DATE); // Chúng ta không set ngayTao ở đây
 
-                callableStatement.setTimestamp(8, null);
                 callableStatement.execute();
-                    return true;
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
+
 
     @Override
     public boolean Sua(Nguoi n) {
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.kh_suaThongTinKhachHang(?, ?, ?, ?, ?, ?)}";
-
+            String storedProcedure = "{call kh_suaThongTinKhachHang(?, ?, ?, ?, ?, ?)}";
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
-                callableStatement.setString(1, n.getMaNguoi()); // Đảm bảo bạn đã thêm getter cho maNguoi trong lớp cha Nguoi
+                callableStatement.setString(1, n.getMaNguoi());
                 callableStatement.setString(2, n.getHoTen());
-                callableStatement.setBoolean(3, n.getGioiTinh());
+                callableStatement.setInt(3, n.getGioiTinh() ? 1 : 0); // 1 cho true, 0 cho false
                 Date ngaySinhUtil = n.getNgaySinh();
                 java.sql.Date ngaySinhSql = new java.sql.Date(ngaySinhUtil.getTime());
                 callableStatement.setDate(4, ngaySinhSql);
                 callableStatement.setString(5, n.getDiaChi());
-                callableStatement.setString(6, n.getSDT()); // Chuyển SDT sang kiểu String
+                callableStatement.setString(6, n.getSDT());
                 callableStatement.execute();
-
-                    return true; // Cập nhật thông tin thành công
+                return true; // Cập nhật thông tin thành công
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -154,16 +159,22 @@ public class KhachHang extends Nguoi {
     }
 
 
+
     @Override
-    public boolean Xoa(String id) {
+    public boolean Xoa(String maKhachHang) {
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.kh_xoaKhachHang(?)}";
+            String storedProcedure = "{call kh_xoaKhachHang(?, ?)}"; // Thêm tham số kết quả p_Result OUT VARCHAR2
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
-                callableStatement.setString(1, id); // Truyền mã khách hàng cần xóa
-                int rowsAffected = callableStatement.executeUpdate();
-                if (rowsAffected > 0) {
-                    return true;
+                callableStatement.setString(1, maKhachHang); // Truyền mã khách hàng cần xóa
+                callableStatement.registerOutParameter(2, Types.VARCHAR); // Đăng ký tham số OUT
+
+                callableStatement.execute();
+
+                String result = callableStatement.getString(2); // Lấy giá trị của tham số OUT
+
+                if ("true".equals(result)) {
+                    return true; // Xóa khách hàng thành công
                 }
             }
         } catch (SQLException e) {
@@ -174,34 +185,32 @@ public class KhachHang extends Nguoi {
     }
 
 
+
     @Override
-    public List<KhachHang> TimKiem(String key) {
+    public List<KhachHang> TimKiem(String keyword) {
         List<KhachHang> danhSachNguoi = new ArrayList<>();
 
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.kh_timKiemKhachHang(?)}";
+            String storedProcedure = "{call kh_timKiemKhachHang(?, ?)}"; // Thêm tham số p_Cursor OUT SYS_REFCURSOR
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
-                callableStatement.setString(1, key);  // Truyền từ khóa cần tìm kiếm
+                callableStatement.setString(1, keyword);  // Truyền từ khóa cần tìm kiếm
+                callableStatement.registerOutParameter(2, OracleTypes.CURSOR); // Đăng ký tham số OUT
 
-                // Thực hiện stored procedure và lấy kết quả
-                boolean hasResults = callableStatement.execute();
+                callableStatement.execute();
 
-                // Xử lý kết quả tìm kiếm và trả về danh sách người (khách hàng) tìm thấy
-                while (hasResults) {
-                    ResultSet resultSet = callableStatement.getResultSet();
-                    while (resultSet.next()) {
-                        String maKhachHang = resultSet.getString("KH_NguoiID");
-                        String hoTen = resultSet.getString("hoTen");
-                        String sdt = resultSet.getString("SDT");
-                        float tongTien = resultSet.getFloat("TongTien");
-                        int diemTichLuy = resultSet.getInt("diem");
+                ResultSet resultSet = (ResultSet) callableStatement.getObject(2); // Lấy giá trị của tham số OUT
 
-                        // Tạo đối tượng KhachHang với thông tin tìm thấy
-                        KhachHang khachHang = new KhachHang(maKhachHang, diemTichLuy, tongTien, hoTen, sdt);
-                        danhSachNguoi.add(khachHang);
-                    }
-                    hasResults = callableStatement.getMoreResults(); // Kiểm tra xem còn kết quả nào nữa không
+                while (resultSet.next()) {
+                    String maKhachHang = resultSet.getString("KH_NguoiID");
+                    String hoTen = resultSet.getString("hoTen");
+                    String sdt = resultSet.getString("SDT");
+                    float tongTien = resultSet.getFloat("TongTien");
+                    int diemTichLuy = resultSet.getInt("diem");
+
+                    // Tạo đối tượng KhachHang với thông tin tìm thấy
+                    KhachHang khachHang = new KhachHang(maKhachHang, diemTichLuy, tongTien, hoTen, sdt);
+                    danhSachNguoi.add(khachHang);
                 }
             }
         } catch (SQLException e) {
@@ -213,18 +222,20 @@ public class KhachHang extends Nguoi {
     }
 
 
+
     @Override
     public List<KhachHang> DanhSach() {
         List<KhachHang> danhSachKhachHang = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.kh_layDanhSachKhachHang}";
+            String storedProcedure = "{call kh_layDanhSachKhachHang(?)}"; // Thêm tham số p_Cursor OUT
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
+                callableStatement.registerOutParameter(1, OracleTypes.CURSOR); // Đăng ký tham số OUT
+
                 // Thực hiện stored procedure
                 callableStatement.execute();
 
-                // Xử lý kết quả và trả về danh sách khách hàng
-                ResultSet resultSet = callableStatement.getResultSet();
+                ResultSet resultSet = (ResultSet) callableStatement.getObject(1); // Lấy giá trị của tham số OUT
 
                 while (resultSet.next()) {
                     String maKhachHang = resultSet.getString("KH_NguoiID");
@@ -246,6 +257,7 @@ public class KhachHang extends Nguoi {
         }
         return null;
     }
+
 
 
 }

@@ -62,6 +62,15 @@ public class QuanLySanPhamViewController {
         loadSanPham(sanPham.DanhSach());
     }
 
+    private void showAlert(String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle("Thông báo");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
 
 
     void loadSanPham(List<SanPham> danhSachSanPham){
@@ -105,10 +114,14 @@ public class QuanLySanPhamViewController {
             confirmationAlert.getButtonTypes().setAll(buttonTypeOK, buttonTypeCancel);
             confirmationAlert.showAndWait().ifPresent(response -> {
                 if (response == buttonTypeOK) {
-                    sanPham.Xoa(id);
+                    if(sanPham.Xoa(id)){
+                        System.out.println("Xóa sản phẩm thành công");
+                    } else{
+                        showAlert("Xóa sản phẩm  thất bại", Alert.AlertType.ERROR);
+                    }
                     ListSanPham.getChildren().clear();
                     loadSanPham(sanPham.DanhSach());
-                    System.out.println("Xóa tệp thành công");
+
 
                 } else {
                     System.out.println("Xóa tệp đã bị hủy.");

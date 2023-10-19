@@ -173,7 +173,7 @@ public class ChiTietKhachHangController {
 
 
         String maKhachHang = data[0];
-        if ( !maKhachHang.startsWith("kh") || !maKhachHang.startsWith("KH") ) {
+        if ( !maKhachHang.startsWith("kh")) {
             thongBao("Lỗi", "Mã khách hàng phải bắt đầu bằng 'kh' hoặc 'KH'");
             return false;
         }

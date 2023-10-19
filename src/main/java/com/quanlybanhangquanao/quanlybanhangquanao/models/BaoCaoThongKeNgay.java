@@ -12,6 +12,7 @@ public class BaoCaoThongKeNgay extends BaoCaoThongKe {
     private int soHoaDon;
     private int soLuongHoaDonNgay;
     private int soLuongTraHang;
+
     public int getSoLuongTraHang() {
         return soLuongTraHang;
     }
@@ -19,7 +20,6 @@ public class BaoCaoThongKeNgay extends BaoCaoThongKe {
     public void setSoLuongTraHang(int soLuongTraHang) {
         this.soLuongTraHang = soLuongTraHang;
     }
-
 
     public int getSoLuongHoaDonNgay() {
         return soLuongHoaDonNgay;
@@ -33,14 +33,17 @@ public class BaoCaoThongKeNgay extends BaoCaoThongKe {
     public int getSoHoaDon() {
         return soHoaDon;
     }
+
     @Override
     public void setSoHoaDon(int soHoaDon) {
         this.soHoaDon = soHoaDon;
     }
+
     @Override
     public float getDoanhThu() {
         return doanhThu;
     }
+
     @Override
     public void setDoanhThu(float doanhThu) {
         this.doanhThu = doanhThu;
@@ -49,15 +52,17 @@ public class BaoCaoThongKeNgay extends BaoCaoThongKe {
     public BaoCaoThongKeNgay() {
         // Constructor
     }
+
     @Override
     public void thucHienBaoCaoDoanhThu(Date ngayBaoCao) {
         try (Connection connection = DatabaseConnection.getConnection();
-             CallableStatement callableStatement = connection.prepareCall("{call sp_ThongKeDoanhThuTrongNgay(?)}")) {
+             CallableStatement callableStatement = connection.prepareCall("{call sp_ThongKeDoanhThuTrongNgay(?, ?)}")) {
 
             callableStatement.setDate(1, ngayBaoCao);
+            callableStatement.registerOutParameter(2, Types.REF_CURSOR);
             callableStatement.execute();
 
-            try (ResultSet resultSet = callableStatement.getResultSet()) {
+            try (ResultSet resultSet = (ResultSet) callableStatement.getObject(2)) {
                 if (resultSet.next()) {
                     setSoHoaDon(resultSet.getInt("SoLuongDonHang"));
                     setDoanhThu(resultSet.getFloat("DoanhThu"));
@@ -69,42 +74,37 @@ public class BaoCaoThongKeNgay extends BaoCaoThongKe {
         }
     }
 
+
     @Override
     public void thucHienBaoCaoSoLuong(Date ngayBaoCao) {
         try (Connection connection = DatabaseConnection.getConnection();
-             CallableStatement callableStatement = connection.prepareCall("{call sp_SoLuongHangBanTrongNgay(?)}")) {
+             CallableStatement callableStatement = connection.prepareCall("{call sp_SoLuongHangBanTrongNgay(?, ?)}")) {
 
             callableStatement.setDate(1, ngayBaoCao);
+            callableStatement.registerOutParameter(2, Types.NUMERIC);
             callableStatement.execute();
 
-            try (ResultSet resultSet = callableStatement.getResultSet()) {
-                if (resultSet.next()) {
-                    setSoLuongHoaDonNgay(resultSet.getInt("SoLuongHangBan"));
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    @Override
-    public void thucHienBaoCaoTraHang(Date ngayBaoCao) {
-        try (Connection connection = DatabaseConnection.getConnection();
-             CallableStatement callableStatement = connection.prepareCall("{call sp_TraHang(?)}")) {
-
-            callableStatement.setDate(1, ngayBaoCao);
-            callableStatement.execute();
-
-            try (ResultSet resultSet = callableStatement.getResultSet()) {
-                if (resultSet.next()) {
-                    setSoLuongTraHang(resultSet.getInt("SoLuongTraHang"));
-                }
-            }
+            setSoLuongHoaDonNgay(callableStatement.getInt(2));
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+//    @Override
+//    public void thucHienBaoCaoTraHang(Date ngayBaoCao) {
+//        try (Connection connection = DatabaseConnection.getConnection();
+//             CallableStatement callableStatement = connection.prepareCall("{call sp_TraHang(?, ?)}")) {
+//
+//            callableStatement.setDate(1, ngayBaoCao);
+//            callableStatement.registerOutParameter(2, Types.NUMERIC);
+//            callableStatement.execute();
+//
+//            setSoLuongTraHang(callableStatement.getInt(2));
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

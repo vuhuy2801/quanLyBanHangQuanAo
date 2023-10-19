@@ -1,5 +1,7 @@
 package com.quanlybanhangquanao.quanlybanhangquanao.models;
 
+import oracle.jdbc.internal.OracleTypes;
+
 import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -135,21 +137,22 @@ public class ChiTietDonHang extends DonHang {
         try (Connection connection = DatabaseConnection.getConnection()) {
             connection.setAutoCommit(false); // Tắt tự động commit
 
-            try {
+            try (CallableStatement callableStatement = connection.prepareCall("{call hd_themChiTietHoaDon(?, ?, ?, ?)}")) {
                 for (ChiTietDonHang chiTietDonHang1 : listDonHangChiTiet) {
-                    String storedProcedure = "{call dbo.hd_themChiTietHoaDon(?, ?, ?, ?)}";
+                    callableStatement.setString(1, chiTietDonHang1.getMaDonHang());
+                    callableStatement.setString(2, chiTietDonHang1.getMaHangSanPham());
+                    callableStatement.setInt(3, chiTietDonHang1.getSoLuong());
+                    callableStatement.setBigDecimal(4, chiTietDonHang1.getGiamGia());
+                    callableStatement.addBatch();
+                }
 
-                    try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
-                        callableStatement.setString(1, chiTietDonHang1.getMaDonHang());
-                        callableStatement.setString(2, chiTietDonHang1.getMaHangSanPham());
-                        callableStatement.setInt(3, chiTietDonHang1.getSoLuong());
-                        callableStatement.setBigDecimal(4, chiTietDonHang1.getGiamGia());
-                        int rowsUpdated = callableStatement.executeUpdate();
-                        if (rowsUpdated == 0) {
-                            // Không tìm thấy bản ghi nào để cập nhật
-                            connection.rollback(); // Rollback nếu có lỗi
-                            return false;
-                        }
+                int[] rowsUpdated = callableStatement.executeBatch();
+
+                for (int rows : rowsUpdated) {
+                    if (rows == 0) {
+                        // Không tìm thấy bản ghi nào để cập nhật
+                        connection.rollback(); // Rollback nếu có lỗi
+                        return false;
                     }
                 }
 
@@ -166,25 +169,30 @@ public class ChiTietDonHang extends DonHang {
     }
 
 
+
     public List<ChiTietDonHang> LayDanhSachSanPhamCuaHoaDon(String maDonHang) {
         List<ChiTietDonHang> danhSachSanPham = new ArrayList<>();
 
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String sql = "{call hd_layDanhSachSanPhamCuaHoaDon(?)}";
-            CallableStatement statement = connection.prepareCall(sql);
-            statement.setString(1, maDonHang);
-            ResultSet resultSet = statement.executeQuery();
+            String storedProcedure = "{call hd_layDanhSachSanPhamCuaHoaDon(?, ?)}";
+            try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
+                callableStatement.setString(1, maDonHang); // Truyền mã hóa đơn vào stored procedure
+                callableStatement.registerOutParameter(2, OracleTypes.CURSOR); // Đăng ký tham số OUT kiểu CURSOR
 
-            while (resultSet.next()) {
-                String maHangSanPham = resultSet.getString("maHang");
-                String tenHang = resultSet.getString("tenHang");
-                int soLuong = resultSet.getInt("SoLuong");
-                BigDecimal giaBan = resultSet.getBigDecimal("giaBan");
-                BigDecimal giamGia = resultSet.getBigDecimal("GiamGia");
-                float thanhTien = resultSet.getFloat("ThanhTien");
+                callableStatement.execute();
+                ResultSet resultSet = (ResultSet) callableStatement.getObject(2); // Lấy giá trị của tham số OUT kiểu CURSOR
 
-                ChiTietDonHang chiTiet = new ChiTietDonHang(maHangSanPham, tenHang, soLuong, giaBan, giamGia, thanhTien);
-                danhSachSanPham.add(chiTiet);
+                while (resultSet.next()) {
+                    String maHangSanPham = resultSet.getString("maHang");
+                    String tenHang = resultSet.getString("tenHang");
+                    int soLuong = resultSet.getInt("SoLuong");
+                    BigDecimal giaBan = resultSet.getBigDecimal("giaBan");
+                    BigDecimal giamGia = resultSet.getBigDecimal("GiamGia");
+                    float thanhTien = resultSet.getFloat("ThanhTien");
+
+                    ChiTietDonHang chiTiet = new ChiTietDonHang(maHangSanPham, tenHang, soLuong, giaBan, giamGia, thanhTien);
+                    danhSachSanPham.add(chiTiet);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -194,30 +202,35 @@ public class ChiTietDonHang extends DonHang {
     }
 
 
-    @Override
-    public ChiTietDonHang ChiTiet(String maDonHang) {
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.hd_layThongTinHoaDonChiTiet(?)}";
 
+    public ChiTietDonHang ChiTiet(String maDonHang) {
+        ChiTietDonHang chiTietDonHang = null;
+
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            String storedProcedure = "{call hd_layThongTinHoaDonChiTiet(?, ?)}";
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, maDonHang); // Truyền mã đơn hàng
+                callableStatement.registerOutParameter(2, OracleTypes.CURSOR); // Đăng ký tham số OUT kiểu CURSOR
 
-                ResultSet resultSet = callableStatement.executeQuery();
+                callableStatement.execute();
+                ResultSet resultSet = (ResultSet) callableStatement.getObject(2); // Lấy giá trị của tham số OUT kiểu CURSOR
 
                 if (resultSet.next()) {
-                    ChiTietDonHang chiTietDonHang = new ChiTietDonHang();
+                    chiTietDonHang = new ChiTietDonHang();
                     chiTietDonHang.setMaDonHang(resultSet.getString("maHD"));
                     chiTietDonHang.setNgayLap(resultSet.getTimestamp("ngayLap"));
                     chiTietDonHang.setHoTenKhachHang(resultSet.getString("TenKhachHang"));
                     chiTietDonHang.setHoTenNhanVien(resultSet.getString("TenNhanVien"));
-                    return chiTietDonHang;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+
+        return chiTietDonHang;
     }
+
+
 
 
     public boolean Sua(List<ChiTietDonHang> listDonHangChiTiet) {
@@ -225,20 +238,15 @@ public class ChiTietDonHang extends DonHang {
             connection.setAutoCommit(false); // Tắt tự động commit
 
             try {
-                for (ChiTietDonHang chiTietDonHang1 : listDonHangChiTiet) {
-                    String storedProcedure = "{call dbo.hd_suaChiTietHoaDon(?, ?, ?, ?)}";
+                for (ChiTietDonHang chiTietDonHang : listDonHangChiTiet) {
+                    String storedProcedure = "{call hd_suaChiTietHoaDon(?, ?, ?, ?)}";
 
                     try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
-                        callableStatement.setString(1, chiTietDonHang1.getMaDonHang());
-                        callableStatement.setString(2, chiTietDonHang1.getMaHangSanPham());
-                        callableStatement.setInt(3, chiTietDonHang1.getSoLuong());
-                        callableStatement.setBigDecimal(4, chiTietDonHang1.getGiamGia());
-                        int rowsUpdated = callableStatement.executeUpdate();
-                        if (rowsUpdated == 0) {
-                            // Không tìm thấy bản ghi nào để cập nhật
-                            connection.rollback(); // Rollback nếu có lỗi
-                            return false;
-                        }
+                        callableStatement.setString(1, chiTietDonHang.getMaDonHang());
+                        callableStatement.setString(2, chiTietDonHang.getMaHangSanPham());
+                        callableStatement.setInt(3, chiTietDonHang.getSoLuong());
+                        callableStatement.setBigDecimal(4, chiTietDonHang.getGiamGia());
+                        callableStatement.execute();
                     }
                 }
 
@@ -253,6 +261,8 @@ public class ChiTietDonHang extends DonHang {
         }
         return false;
     }
+
+
 
 
 

@@ -74,7 +74,7 @@ public class HomeViewController {
             baoCao.thucHienBaoCaoDoanhThu(ngaySQL);
             baoCao.thucHienBaoCaoSoLuong((ngaySQL));
             baoCao.thucHienBaoCaoTraHang((ngaySQL));
-            soLuongTraHang = baoCao.getSoLuongTraHang();
+//            soLuongTraHang = baoCao.getSoLuongTraHang();
             soHoaDon = baoCao.getSoLuongHoaDonNgay();
             doanhThu = baoCao.getDoanhThu();
 

@@ -1,7 +1,9 @@
 package com.quanlybanhangquanao.quanlybanhangquanao.models;
 
 import com.quanlybanhangquanao.quanlybanhangquanao.models.services.SanPhamService;
-
+import oracle.jdbc.internal.OracleTypes;
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.ByteArrayInputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +121,7 @@ public class SanPham implements SanPhamService {
     @Override
     public boolean Them(SanPham sanPham) {
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.sp_ThemSanPham(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+            String storedProcedure = "{call sp_ThemSanPham(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, sanPham.getMaHang());
@@ -130,9 +132,15 @@ public class SanPham implements SanPhamService {
                 callableStatement.setBigDecimal(6, sanPham.getGiaBan());
                 callableStatement.setInt(7, sanPham.getTonKho());
                 callableStatement.setBigDecimal(8, sanPham.getTrongLuong());
-                callableStatement.setBytes(9, sanPham.getAnh());
-                callableStatement.execute();
 
+                if (sanPham.getAnh() != null) {
+                    ByteArrayInputStream inputStream = new ByteArrayInputStream(sanPham.getAnh());
+                    callableStatement.setBinaryStream(9, inputStream);
+                } else {
+                    callableStatement.setNull(9, Types.BLOB);
+                }
+
+                callableStatement.execute();
                 return true;
             }
         } catch (SQLException e) {
@@ -141,24 +149,31 @@ public class SanPham implements SanPhamService {
         return false;
     }
 
+
+
     @Override
-    public boolean Sua(SanPham n) {
+    public boolean Sua(SanPham sanPham) {
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.sp_SuaSanPham(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+            String storedProcedure = "{call sp_SuaSanPham(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
-                callableStatement.setString(1, n.getMaHang());
-                callableStatement.setString(2, n.getTenHang());
-                callableStatement.setString(3, n.getNhomHang());
-                callableStatement.setString(4, n.getThuongHieu());
-                callableStatement.setBigDecimal(5, n.getGiaVon());
-                callableStatement.setBigDecimal(6, n.getGiaBan());
-                callableStatement.setInt(7, n.getTonKho());
-                callableStatement.setBigDecimal(8, n.getTrongLuong());
-                callableStatement.setBytes(9, n.getAnh());
+                callableStatement.setString(1, sanPham.getMaHang());
+                callableStatement.setString(2, sanPham.getTenHang());
+                callableStatement.setString(3, sanPham.getNhomHang());
+                callableStatement.setString(4, sanPham.getThuongHieu());
+                callableStatement.setBigDecimal(5, sanPham.getGiaVon());
+                callableStatement.setBigDecimal(6, sanPham.getGiaBan());
+                callableStatement.setInt(7, sanPham.getTonKho());
+                callableStatement.setBigDecimal(8, sanPham.getTrongLuong());
+
+                if (sanPham.getAnh() != null) {
+                    ByteArrayInputStream inputStream = new ByteArrayInputStream(sanPham.getAnh());
+                    callableStatement.setBinaryStream(9, inputStream);
+                } else {
+                    callableStatement.setNull(9, Types.BLOB);
+                }
 
                 callableStatement.execute();
-
                 return true; // Sửa sản phẩm thành công
             }
         } catch (SQLException e) {
@@ -167,16 +182,23 @@ public class SanPham implements SanPhamService {
         return false;
     }
 
+
     @Override
     public boolean Xoa(String maHang) {
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.sp_XoaSanPham(?)}";
+            String storedProcedure = "{call sp_XoaSanPham(?, ?)}";
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
-                callableStatement.setString(1, maHang);
-                int rowsAffected = callableStatement.executeUpdate();
-                if (rowsAffected > 0) {
-                    return true;
+                callableStatement.setString(1, maHang.replace(" ", ""));
+                callableStatement.registerOutParameter(2, Types.VARCHAR); // Đăng ký tham số OUT
+
+                callableStatement.execute();
+
+                // Lấy giá trị trả về từ thủ tục PL/SQL
+                String result = callableStatement.getString(2);
+
+                if ("true".equals(result)) {
+                    return true; // Xóa sản phẩm thành công
                 }
             }
         } catch (SQLException e) {
@@ -185,17 +207,22 @@ public class SanPham implements SanPhamService {
         return false;
     }
 
-    public List<SanPham> TimKiem(String key) {
-        List<SanPham> danhSachTimKiem = new ArrayList<>();
+
+
+    public List<SanPham> TimKiem(String keyword) {
+        List<SanPham> danhSachTimKiem = new ArrayList();
 
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.sp_TimKiemSanPham(?)}";
+            String storedProcedure = "{call sp_TimKiemSanPham(?, ?)}"; // Loại bỏ prefix dbo.
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
-                callableStatement.setString(1, key);
+                callableStatement.setString(1, keyword);
+                callableStatement.registerOutParameter(2, OracleTypes.CURSOR); // Đăng ký OUT parameter
 
-                // Thực hiện stored procedure
-                ResultSet resultSet = callableStatement.executeQuery();
+                callableStatement.execute();
+
+                // Nhận kết quả từ OUT parameter
+                ResultSet resultSet = (ResultSet) callableStatement.getObject(2);
 
                 while (resultSet.next()) {
                     // Đọc dữ liệu từ ResultSet và tạo đối tượng SanPham tương ứng
@@ -218,16 +245,23 @@ public class SanPham implements SanPhamService {
         return danhSachTimKiem;
     }
 
+
     @Override
     public List<SanPham> DanhSach() {
         List<SanPham> danhSachSanPham = new ArrayList<>();
 
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.viewSanPham}";
+            String storedProcedure = "{call viewSanPham(?)}"; // Thêm dấu ? cho OUT parameter
 
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
+                // Đăng ký OUT parameter
+                callableStatement.registerOutParameter(1, OracleTypes.CURSOR);
+
                 // Thực hiện stored procedure
-                ResultSet resultSet = callableStatement.executeQuery();
+                callableStatement.execute();
+
+                // Nhận kết quả từ OUT parameter
+                ResultSet resultSet = (ResultSet) callableStatement.getObject(1);
 
                 while (resultSet.next()) {
                     // Đọc dữ liệu từ ResultSet và tạo đối tượng SanPham tương ứng
@@ -241,7 +275,6 @@ public class SanPham implements SanPhamService {
 
                     danhSachSanPham.add(sanPham);
                 }
-
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -251,18 +284,21 @@ public class SanPham implements SanPhamService {
         return danhSachSanPham;
     }
 
-    @Override
+
     public SanPham ChiTiet(String maHang) {
         SanPham chiTietSanPham = null;
 
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String storedProcedure = "{call dbo.sp_viewChiTietSanPham(?)}";
-
+            String storedProcedure = "{call sp_viewChiTietSanPham(?, ?)}"; // Loại bỏ prefix dbo.
+            maHang = maHang.replace(" ","");
             try (CallableStatement callableStatement = connection.prepareCall(storedProcedure)) {
                 callableStatement.setString(1, maHang);
+                callableStatement.registerOutParameter(2, OracleTypes.CURSOR); // Đăng ký OUT parameter
 
-                // Thực hiện stored procedure
-                ResultSet resultSet = callableStatement.executeQuery();
+                callableStatement.execute();
+
+                // Nhận kết quả từ OUT parameter
+                ResultSet resultSet = (ResultSet) callableStatement.getObject(2);
 
                 if (resultSet.next()) {
                     // Đọc dữ liệu từ ResultSet và tạo đối tượng SanPham tương ứng
@@ -285,6 +321,7 @@ public class SanPham implements SanPhamService {
 
         return chiTietSanPham;
     }
+
 
     public BigDecimal getTrongLuong() {
         return trongLuong;

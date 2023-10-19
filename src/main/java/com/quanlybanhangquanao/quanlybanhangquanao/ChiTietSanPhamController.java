@@ -206,7 +206,7 @@ public class ChiTietSanPhamController {
         String tonKhoText = data[4];
         String trongLuongText = data[5];
 
-        if ( !maSanPham.startsWith("sp") || !maSanPham.startsWith("SP")) {
+        if ( !maSanPham.startsWith("sp")) {
             thongBao("Lỗi", "Mã sản phẩm phải bắt đầu bằng 'sp' hoặc 'SP'");
             return false;
         }

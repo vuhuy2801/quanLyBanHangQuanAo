@@ -6,6 +6,7 @@ module com.quanlybanhangquanao.quanlybanhangquanao {
     requires org.kordamp.ikonli.javafx;
     requires java.sql;
     requires com.oracle.database.jdbc;
+    requires java.sql.rowset;
 
     opens com.quanlybanhangquanao.quanlybanhangquanao to javafx.fxml;
     exports com.quanlybanhangquanao.quanlybanhangquanao;
