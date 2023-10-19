@@ -206,8 +206,8 @@ public class ChiTietSanPhamController {
         String tonKhoText = data[4];
         String trongLuongText = data[5];
 
-        if ( !maSanPham.startsWith("sp") || !maSanPham.startsWith("SP")) {
-            thongBao("Lỗi", "Mã sản phẩm phải bắt đầu bằng 'sp' hoặc 'SP'");
+        if (!maSanPham.startsWith("SP")) {
+            thongBao("Lỗi", "Mã sản phẩm phải bắt đầu bằng 'SP'");
             return false;
         }
 

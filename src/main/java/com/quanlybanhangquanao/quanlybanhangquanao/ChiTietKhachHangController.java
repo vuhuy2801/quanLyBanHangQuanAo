@@ -173,8 +173,8 @@ public class ChiTietKhachHangController {
 
 
         String maKhachHang = data[0];
-        if ( !maKhachHang.startsWith("kh") || !maKhachHang.startsWith("KH") ) {
-            thongBao("Lỗi", "Mã khách hàng phải bắt đầu bằng 'kh' hoặc 'KH'");
+        if ( !maKhachHang.startsWith("KH") ) {
+            thongBao("Lỗi", "Mã khách hàng phải bắt đầu bằng 'KH'");
             return false;
         }
         if (maKhachHang.length() > 5) {
